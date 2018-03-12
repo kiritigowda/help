@@ -45,9 +45,9 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd ~/deps/build/MIOpen; sudo -S apt-get install libssl-dev libboost-dev libboost-system-dev libboost-filesystem-dev  )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	os.system('(~/cd deps/build/MIOpen; cmake -DMIOPEN_BACKEND=OpenCL ../../MIOpen )');
-	os.system('(~/cd deps/build/MIOpen; make -j8 )');
-	os.system('(~/cd deps/build/MIOpen; make MIOpenDriver )');
+	os.system('(cd ~/deps/build/MIOpen; cmake -DMIOPEN_BACKEND=OpenCL ../../MIOpen )');
+	os.system('(cd ~/deps/build/MIOpen; make -j8 )');
+	os.system('(cd ~/deps/build/MIOpen; make MIOpenDriver )');
 	cmd='(cd ~/deps/build/MIOpen; sudo -S make install )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='sudo -S apt-get install autoconf automake libtool curl make g++ unzip'
