@@ -13,7 +13,7 @@ for opt, arg in opts:
         sudoPassword = arg
 
 if sudoPassword == '':
-    print('Invalid command line arguments. -s [Sudo Paasword] ')
+    print('Invalid command line arguments. -s [Sudo Password] ')
     exit()
 
 from subprocess import call
