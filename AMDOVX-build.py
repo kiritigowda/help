@@ -19,11 +19,9 @@ for opt, arg in opts:
         githubPassword = arg
 
 if sudoPassword == '' or githubUserName == '' or githubPassword == '':
-    print('Invalid command line arguments. -s [Sudo Paasword] ' \
+    print('Invalid command line arguments. -s [Sudo Password] ' \
           '-u [GitHub UserName] -p [GitHub Password] are required')
     exit()
-
-
 
 # AMDOVX Work Flow
 deps_dir = os.path.expanduser('~/AMDOVX/amdovx-testscripts')
