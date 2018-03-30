@@ -21,7 +21,10 @@ caffeModels_dir = os.path.expanduser('~/AMDOVX/caffeModels')
 if(os.path.exists(caffeModels_dir)):
 	print("\nCaffeModel Folder Exist\n")
 else:
-	os.system('(cd ~/AMDOVX; sshpass -p 'AMD12345' scp -r client@amdovx-file-server:~/caffeModels . )');
+	#os.system('(cd ~/AMDOVX; sshpass -p "AMD12345" scp -r client@amdovx-file-server:~/caffeModels . )');
+	cmd='(cd ~/AMDOVX; scp -r client@amdovx-file-server:~/caffeModels . )'
+	scpPassword = "AMD12345"
+	call('echo {} | {}'.format(scpPassword, cmd), shell=True)
 	if(os.path.exists(caffeModels_dir)):
 		print("\nCaffeModel Retrived from the amdovx-file-server\n")
 	else:
