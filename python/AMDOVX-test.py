@@ -21,7 +21,7 @@ caffeModels_dir = os.path.expanduser('~/AMDOVX/caffeModels')
 if(os.path.exists(caffeModels_dir)):
 	print("\nCaffeModel Folder Exist\n")
 else:
-	os.system('(cd ~/AMDOVX; scp -r kiriti@amdovx-file-server:~/dataBase/caffeModels .)');
+	os.system('(cd ~/AMDOVX; sshpass -p 'AMD12345' scp -r client@amdovx-file-server:~/caffeModels . )');
 	if(os.path.exists(caffeModels_dir)):
 		print("\nCaffeModel Retrived from the amdovx-file-server\n")
 	else:
@@ -36,7 +36,7 @@ if(os.path.exists(develop_dir)):
 
 os.system('(cd ~/AMDOVX; mkdir develop)');
 
-print("\nVGGnet-16-layer\n")
+print("\nvgg19 layer\n")
 os.system('(cd ~/AMDOVX/develop; mkdir vgg16)');
 os.system('(cd ~/AMDOVX/develop/vgg16; cp -r ../../caffeModels/vgg16 .)');
 for x in range(7):
@@ -44,12 +44,12 @@ for x in range(7):
 	print "\nVGGnet-16-layer - Batch size ", x 
 	x = str(x)
 	os.system('(cd ~/AMDOVX/develop/vgg16; mkdir build_'+x+')');
-	os.system('(cd ~/AMDOVX/develop/vgg16/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../vgg16/VGGnet-16-layer.caffemodel '+x+' 3 224 224)');
+	os.system('(cd ~/AMDOVX/develop/vgg16/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../vgg16/vgg16.caffemodel '+x+' 3 224 224)');
 	os.system('(cd ~/AMDOVX/develop/vgg16/build_'+x+'; cmake .; make)');
 	os.system('(cd ~/AMDOVX/develop/vgg16/build_'+x+'; echo VGGnet-16-layer - Batch size '+x+'  | tee -a ../../output.log)');
 	os.system('(cd ~/AMDOVX/develop/vgg16/build_'+x+'; ./anntest | tee -a ../../output.log)');
 
-print("\nVGGnet-19-layer\n")
+print("\nvgg19 layer\n")
 os.system('(cd ~/AMDOVX/develop; mkdir vgg19)');
 os.system('(cd ~/AMDOVX/develop/vgg19; cp -r ../../caffeModels/vgg19 .)');
 for x in range(7):
@@ -57,7 +57,7 @@ for x in range(7):
 	print "\nVGGnet-19-layer - Batch size ", x 
 	x = str(x)
 	os.system('(cd ~/AMDOVX/develop/vgg19; mkdir build_'+x+')');
-	os.system('(cd ~/AMDOVX/develop/vgg19/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../vgg19/net.caffemodel '+x+' 3 224 224)');
+	os.system('(cd ~/AMDOVX/develop/vgg19/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../vgg19/vgg19.caffemodel '+x+' 3 224 224)');
 	os.system('(cd ~/AMDOVX/develop/vgg19/build_'+x+'; cmake .; make)');
 	os.system('(cd ~/AMDOVX/develop/vgg19/build_'+x+'; echo VGGnet-19-layer - Batch size '+x+'  | tee -a ../../output.log)');
 	os.system('(cd ~/AMDOVX/develop/vgg19/build_'+x+'; ./anntest | tee -a ../../output.log)');
@@ -71,21 +71,21 @@ for x in range(7):
 	print "\ngooglenet - Batch size ", x 
 	x = str(x)
 	os.system('(cd ~/AMDOVX/develop/googlenet; mkdir build_'+x+')');
-	os.system('(cd ~/AMDOVX/develop/googlenet/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../googlenet/net.caffemodel '+x+' 3 224 224)');
+	os.system('(cd ~/AMDOVX/develop/googlenet/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../googlenet/googlenet.caffemodel '+x+' 3 224 224, caffe2openvx ../googlenet/googlenet.prototxt '+x+' 3 224 224)');
 	os.system('(cd ~/AMDOVX/develop/googlenet/build_'+x+'; cmake .; make)');
 	os.system('(cd ~/AMDOVX/develop/googlenet/build_'+x+'; echo googlenet - Batch size '+x+'  | tee -a ../../output.log)');
 	os.system('(cd ~/AMDOVX/develop/googlenet/build_'+x+'; ./anntest | tee -a ../../output.log)');
 
 # run inceptionV4
-print("\ninceptionV4\n")
+print("\inceptionv4\n")
 os.system('(cd ~/AMDOVX/develop; mkdir inceptionv4)');
 os.system('(cd ~/AMDOVX/develop/inceptionv4; cp -r ../../caffeModels/inceptionv4 .)');
 for x in range(7):
 	x = 2**x
-	print "\ninceptionV4 - Batch size ", x 
+	print "\inceptionv4 - Batch size ", x 
 	x = str(x)
 	os.system('(cd ~/AMDOVX/develop/inceptionv4; mkdir build_'+x+')');
-	os.system('(cd ~/AMDOVX/develop/inceptionv4/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../inceptionv4/inception-v4.caffemodel '+x+' 3 299 299)');
+	os.system('(cd ~/AMDOVX/develop/inceptionv4/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../inceptionv4/inceptionv4.caffemodel '+x+' 3 299 299)');
 	os.system('(cd ~/AMDOVX/develop/inceptionv4/build_'+x+'; cmake .; make)');
 	os.system('(cd ~/AMDOVX/develop/inceptionv4/build_'+x+'; echo inceptionv4 - Batch size '+x+'  | tee -a ../../output.log)');
 	os.system('(cd ~/AMDOVX/develop/inceptionv4/build_'+x+'; ./anntest | tee -a ../../output.log)');
@@ -93,13 +93,13 @@ for x in range(7):
 # run resnet50
 print("\nresnet50\n")
 os.system('(cd ~/AMDOVX/develop; mkdir resnet50)');
-os.system('(cd ~/AMDOVX/develop/resnet50; cp -r ../../caffeModels/resnet/resnet50 .)');
+os.system('(cd ~/AMDOVX/develop/resnet50; cp -r ../../caffeModels/resnet50 .)');
 for x in range(7):
 	x = 2**x
 	print "\nresnet50 - Batch size ", x 
 	x = str(x)
 	os.system('(cd ~/AMDOVX/develop/resnet50; mkdir build_'+x+')');
-	os.system('(cd ~/AMDOVX/develop/resnet50/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../resnet50/ResNet-50-model.caffemodel '+x+' 3 224 224)');
+	os.system('(cd ~/AMDOVX/develop/resnet50/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../resnet50/resnet50.caffemodel '+x+' 3 224 224)');
 	os.system('(cd ~/AMDOVX/develop/resnet50/build_'+x+'; cmake .; make)');
 	os.system('(cd ~/AMDOVX/develop/resnet50/build_'+x+'; echo resnet50 - Batch size '+x+'  | tee -a ../../output.log)');
 	os.system('(cd ~/AMDOVX/develop/resnet50/build_'+x+'; ./anntest | tee -a ../../output.log)');
@@ -107,13 +107,13 @@ for x in range(7):
 # run resnet101
 print("\nresnet101\n")
 os.system('(cd ~/AMDOVX/develop; mkdir resnet101)');
-os.system('(cd ~/AMDOVX/develop/resnet101; cp -r ../../caffeModels/resnet/resnet101 .)');
+os.system('(cd ~/AMDOVX/develop/resnet101; cp -r ../../caffeModels/resnet101 .)');
 for x in range(7):
 	x = 2**x
 	print "\nresnet101 - Batch size ", x 
 	x = str(x)
 	os.system('(cd ~/AMDOVX/develop/resnet101; mkdir build_'+x+')');
-	os.system('(cd ~/AMDOVX/develop/resnet101/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../resnet101/ResNet-101-model.caffemodel '+x+' 3 224 224)');
+	os.system('(cd ~/AMDOVX/develop/resnet101/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../resnet101/resnet101.caffemodel '+x+' 3 224 224)');
 	os.system('(cd ~/AMDOVX/develop/resnet101/build_'+x+'; cmake .; make)');
 	os.system('(cd ~/AMDOVX/develop/resnet101/build_'+x+'; echo resnet101 - Batch size '+x+'  | tee -a ../../output.log)');
 	os.system('(cd ~/AMDOVX/develop/resnet101/build_'+x+'; ./anntest | tee -a ../../output.log)');
@@ -121,19 +121,19 @@ for x in range(7):
 # run resnet152
 print("\nresnet152\n")
 os.system('(cd ~/AMDOVX/develop; mkdir resnet152)');
-os.system('(cd ~/AMDOVX/develop/resnet152; cp -r ../../caffeModels/resnet/resnet152 .)');
+os.system('(cd ~/AMDOVX/develop/resnet152; cp -r ../../caffeModels/resnet152 .)');
 for x in range(7):
 	x = 2**x
 	print "\nresnet152 - Batch size ", x 
 	x = str(x)
 	os.system('(cd ~/AMDOVX/develop/resnet152; mkdir build_'+x+')');
-	os.system('(cd ~/AMDOVX/develop/resnet152/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../resnet152/ResNet-152-model.caffemodel '+x+' 3 224 224)');
+	os.system('(cd ~/AMDOVX/develop/resnet152/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../resnet152/resnet152.caffemodel '+x+' 3 224 224)');
 	os.system('(cd ~/AMDOVX/develop/resnet152/build_'+x+'; cmake .; make)');
 	os.system('(cd ~/AMDOVX/develop/resnet152/build_'+x+'; echo resnet152 - Batch size '+x+'  | tee -a ../../output.log)');
 	os.system('(cd ~/AMDOVX/develop/resnet152/build_'+x+'; ./anntest | tee -a ../../output.log)');
 
 # run dmnet
-print("\nDMNet\n")
+print("\dmnet\n")
 os.system('(cd ~/AMDOVX/develop; mkdir dmnet)');
 os.system('(cd ~/AMDOVX/develop/dmnet; cp -r ../../caffeModels/dmnet .)');
 for x in range(1):
@@ -141,7 +141,7 @@ for x in range(1):
 	print "\nDMNet - Batch size ", x 
 	x = str(x)
 	os.system('(cd ~/AMDOVX/develop/dmnet; mkdir build_'+x+')');
-	os.system('(cd ~/AMDOVX/develop/dmnet/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../dmnet/weights.caffemodel '+x+' 3 1024 2048)');
+	os.system('(cd ~/AMDOVX/develop/dmnet/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../dmnet/dmnet.caffemodel '+x+' 3 1024 2048)');
 	os.system('(cd ~/AMDOVX/develop/dmnet/build_'+x+'; cmake .; make)');
 	os.system('(cd ~/AMDOVX/develop/dmnet/build_'+x+'; echo DMNet - Batch size '+x+'  | tee -a ../../output.log)');
 	os.system('(cd ~/AMDOVX/develop/dmnet/build_'+x+'; ./anntest | tee -a ../../output.log)');
