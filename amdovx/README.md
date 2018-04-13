@@ -1,7 +1,6 @@
 # AMDOVX Help 
 
-This folder contains scripts to setup, build and profile AMDOVX Neural Network Extension Library. The open source GitHub project can be found at [amdovx-modules
-](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules)
+This folder contains scripts to setup, build and profile AMDOVX Neural Network Extension Library. The open source GitHub project can be found at [amdovx-modules](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules)
 
 ## scripts 
 
@@ -23,7 +22,7 @@ usage:
 python AMDOVX-build.py -s [sudo password]
 ```` 
 
-3. AMDOVX-profile.py - This script downloads the caffe .models & .prototxt from a remote file server and runs every model with different batch sizes and dumps a output.log file.
+3. AMDOVX-profile.py - This script downloads the caffe .models & .prototxt from a remote file server and runs every model with different batch sizes and dumps an output.log file.
 
 usage:
 
