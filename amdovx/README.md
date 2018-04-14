@@ -1,13 +1,16 @@
 # AMDOVX Help 
 
-This folder contains scripts to setup, build and profile AMDOVX Neural Network Extension Library. The open source GitHub project can be found at [amdovx-modules](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules)
+This folder contains scripts to setup, build, and profile AMDOVX Neural Network Extension Library. The open source GitHub project can be found at [amdovx-modules](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules)
 
 ## scripts 
 
 Prerequisites for running the scripts
 1. [rocm](https://github.com/RadeonOpenCompute/ROCm#installing-from-amd-rocm-repositories)
-2. cmake
-3. git
+2. Install cmake and git
+''''
+sudo apt-get install cmake git
+''''
+
 
 This folder has the following python scripts
 
