@@ -4,6 +4,11 @@ This folder contains scripts to setup, build and profile AMDOVX Neural Network E
 
 ## scripts 
 
+Prerequisites for running the scripts
+1. [rocm](https://github.com/RadeonOpenCompute/ROCm#installing-from-amd-rocm-repositories)
+2. cmake
+3. git
+
 This folder has the following python scripts
 
 1. AMDOVX-setup.py - This scipts builds all the prerequisites required by amdovx modules. The setup script creates a deps folder in the home directory and installs all the prerequisites, this script only needs to be executed once.
