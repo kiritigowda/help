@@ -30,7 +30,7 @@ usage:
 python AMDOVX-build.py -s [sudo password]
 ```` 
 
-3. AMDOVX-profile.py - This script downloads the caffe .models & .prototxt from a remote file server and runs every model with different batch sizes and dumps an output.log file.
+3. AMDOVX-profile.py - This script downloads the caffe .models & .prototxt from a remote file server and runs every model with different batch sizes and dumps an output.log file, profile.csv & profile.txt.
 
 usage:
 
