@@ -47,22 +47,27 @@ for i in range(len(caffeModelConfig)):
 	os.system('(cd ~/AMDOVX/develop/'+modelName+'; cp -r ../../caffeModels/'+modelName+' .)');
 	if(modelName == 'dmnet'):
 			x = 1
-			print "\n",modelName,"-layer - Batch size ", x 
+			print "\n",modelName," - Batch size ", x 
 			x = str(x)
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'; mkdir build_'+x+')');
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; cmake .; make)');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; echo '+modelName+'-layer - Batch size '+x+'  | tee -a ../../output.log)');
+			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
 	else:
 		for x in range(7):
 			x = 2**x
-			print "\n",modelName,"-layer - Batch size ", x 
+			print "\n",modelName," - Batch size ", x 
 			x = str(x)
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'; mkdir build_'+x+')');
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; cmake .; make)');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; echo '+modelName+'-layer - Batch size '+x+'  | tee -a ../../output.log)');
+			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
 			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
+
+runAwk_csv = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s,%3d,%8.3f ms,%8.3f ms\n", net, bsize, $4, $4/bsize); }' AMDOVX/develop/output.log > AMDOVX/develop/profile.csv'''
+os.system(runAwk_csv);
+runAwk_txt = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s %3d %8.3f ms %8.3f ms\n", net, bsize, $4, $4/bsize); }' AMDOVX/develop/output.log > AMDOVX/develop/profile.txt'''
+os.system(runAwk_txt);
