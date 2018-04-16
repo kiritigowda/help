@@ -60,6 +60,7 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='sudo -S apt autoclean'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
+	os.system('(cd ~/deps/protobuf; git submodule update --init --recursive )');
 	os.system('(cd ~/deps/protobuf; ./autogen.sh )');
 	os.system('(cd ~/deps/protobuf; ./configure )');
 	os.system('(cd ~/deps/protobuf; make -j8 )');
