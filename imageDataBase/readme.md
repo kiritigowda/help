@@ -12,6 +12,11 @@ sudo apt-get install python-pip
 sudo apt-get install python-dev libjpeg-dev libfreetype6-dev zlib1g-dev
 sudo pip install pil
 ````
+Fix all file names in the inpt image folder by running the following command inside the image folder
+
+````
+ls | cat -n | while read n f; do mv "$f" "file-$n.jpg"; done
+````
 ### Windows
 - python
 - pil
