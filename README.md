@@ -8,6 +8,9 @@ The resources are placed as .MD files in the projet or as a topic in the project
 ### amdovx 
 This folder contains the scripts required to setup, build, and profile AMDOVX Neural Network Extension Library
 
+### imageDataBaseCreator 
+This folder contains the scripts required to image data base to run inference using AMDOVX Neural Network Extension Library
+
 ### python
 This folder contains generic help scripts
 
