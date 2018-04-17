@@ -50,15 +50,15 @@ else:
 	os.system('(cd ~/deps/build/MIOpen; make MIOpenDriver )');
 	cmd='(cd ~/deps/build/MIOpen; sudo -S make install )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='sudo -S apt autoremove'
+	cmd='(cd ~/deps/build/MIOpen; sudo -S apt autoremove )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='sudo -S apt autoclean'
+	cmd='(cd ~/deps/build/MIOpen; sudo -S apt autoclean )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='sudo -S apt-get install autoconf automake libtool curl make g++ unzip'
+	cmd='(cd ~/deps/protobuf; sudo -S apt-get install autoconf automake libtool curl make g++ unzip )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='sudo -S apt autoremove'
+	cmd='(cd ~/deps/protobuf; sudo -S apt autoremove )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='sudo -S apt autoclean'
+	cmd='(cd ~/deps/protobuf; sudo -S apt autoclean )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	os.system('(cd ~/deps/protobuf; git submodule update --init --recursive )');
 	os.system('(cd ~/deps/protobuf; ./autogen.sh )');
