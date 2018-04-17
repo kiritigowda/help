@@ -4,17 +4,17 @@ import sys
 import subprocess
 from subprocess import call
 
+# caffe models to benchmark
 caffeModelConfig =	[ 
-   					('vgg16',3,224,224),
-   					('vgg19',3,224,224),
-   					('resnet50',3,224,224),
-   					('resnet101',3,224,224),
-   					('resnet152',3,224,224),
-   					('googlenet',3,224,224),
-   					('inceptionv4',3,299,299),
-   					('dmnet',3,1024,2048)
+					('dmnet',3,1024,2048),
+					('googlenet',3,224,224),
+					('inceptionv4',3,299,299),
+					('resnet50',3,224,224),
+					('resnet101',3,224,224),
+					('resnet152',3,224,224),
+					('vgg16',3,224,224),
+					('vgg19',3,224,224)
 					]
-
 
 # Bring CaffeModels
 caffeModels_dir = os.path.expanduser('~/AMDOVX/caffeModels')

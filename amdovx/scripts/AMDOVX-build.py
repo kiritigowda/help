@@ -4,19 +4,13 @@ import sys
 import subprocess
  
 
-opts, args = getopt.getopt(sys.argv[1:], 's:u:p:')
+opts, args = getopt.getopt(sys.argv[1:], 's:')
  
 sudoPassword = ''
-githubUserName = ''
-githubPassword = ''
 
 for opt, arg in opts:
     if opt == '-s':
         sudoPassword = arg
-    elif opt == '-u':
-        githubUserName = arg
-    elif opt == '-p':
-        githubPassword = arg
 
 if sudoPassword == '':
     print('Invalid command line arguments. -s [Sudo Password] is required')

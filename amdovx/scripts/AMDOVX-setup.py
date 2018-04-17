@@ -63,8 +63,8 @@ else:
 	os.system('(cd ~/deps/protobuf; git submodule update --init --recursive )');
 	os.system('(cd ~/deps/protobuf; ./autogen.sh )');
 	os.system('(cd ~/deps/protobuf; ./configure )');
-	os.system('(cd ~/deps/protobuf; make -j8 )');
-	os.system('(cd ~/deps/protobuf; make check -j8 )');
+	os.system('(cd ~/deps/protobuf; make -j16 )');
+	os.system('(cd ~/deps/protobuf; make check -j16 )');
 	cmd='(cd ~/deps/protobuf; sudo -S make install )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd ~/deps/protobuf; sudo -S ldconfig )'
