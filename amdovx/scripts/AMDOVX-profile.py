@@ -16,12 +16,30 @@ caffeModelConfig =	[
 					('vgg19',3,224,224)
 					]
 
+
+opts, args = getopt.getopt(sys.argv[1:], 'd:')
+
+buildDir = ''
+
+for opt, arg in opts:
+    if opt == '-d':
+    	buildDir = arg
+
+if buildDir == '':
+    print('Invalid command line arguments. -d [build directory - required] ')
+    exit()
+
+if buildDir == '':
+	buildDir_AMDOVX = '~/AMDOVX'
+else:
+	buildDir_AMDOVX = buildDir+'AMDOVX'
+
 # Bring CaffeModels
-caffeModels_dir = os.path.expanduser('~/AMDOVX/caffeModels')
+caffeModels_dir = os.path.expanduser(buildDir_AMDOVX+'/caffeModels')
 if(os.path.exists(caffeModels_dir)):
 	print("\nCaffeModel Folder Exist\n")
 else:
-	os.system('(cd ~/AMDOVX; scp -r client@amdovx-file-server:~/caffeModels . )');
+	os.system('(cd '+buildDir_AMDOVX+'; scp -r client@amdovx-file-server:~/caffeModels . )');
 	if(os.path.exists(caffeModels_dir)):
 		print("\nCaffeModel Retrived from the amdovx-file-server\n")
 	else:
@@ -30,41 +48,45 @@ else:
 
 
 # run caffe models
-develop_dir = os.path.expanduser('~/AMDOVX/develop')
+develop_dir = os.path.expanduser(buildDir_AMDOVX+'/develop')
 if(os.path.exists(develop_dir)):
-	os.system('(cd ~/AMDOVX; rm -rf develop)');
+	os.system('(cd '+buildDir_AMDOVX+'; rm -rf develop)');
 
-os.system('(cd ~/AMDOVX; mkdir develop)');
+os.system('(cd '+buildDir_AMDOVX+'; mkdir develop)');
 
 
+# run caffe2openvx flow
 for i in range(len(caffeModelConfig)):
 	modelName, channel, width, height = caffeModelConfig[i]
 	print "\n",modelName,"\n"
-	os.system('(cd ~/AMDOVX/develop; mkdir '+modelName+')');
-	os.system('(cd ~/AMDOVX/develop/'+modelName+'; cp -r ../../caffeModels/'+modelName+' .)');
+	os.system('(cd '+develop_dir+'; mkdir '+modelName+')');
+	os.system('(cd '+develop_dir+'/'+modelName+'; cp -r ../../caffeModels/'+modelName+' .)');
 	if(modelName == 'dmnet'):
 			x = 1
 			print "\n",modelName," - Batch size ", x 
 			x = str(x)
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'; mkdir build_'+x+')');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; cmake .; make)');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
+			os.system('(cd '+develop_dir+'/'+modelName+'; mkdir build_'+x+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; cmake .; make)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
 	else:
 		for x in range(7):
 			x = 2**x
 			print "\n",modelName," - Batch size ", x 
 			x = str(x)
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'; mkdir build_'+x+')');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; cmake .; make)');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
-			os.system('(cd ~/AMDOVX/develop/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
+			os.system('(cd '+develop_dir+'/'+modelName+'; mkdir build_'+x+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; cmake .; make)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
 
-runAwk_csv = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s,%3d,%8.3f ms,%8.3f ms\n", net, bsize, $4, $4/bsize); }' AMDOVX/develop/output.log > AMDOVX/develop/profile.csv'''
+runAwk_csv = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s,%3d,%8.3f ms,%8.3f ms\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/output.log > '''+develop_dir+'''/caffe2openvx_profile.csv'''
 os.system(runAwk_csv);
-runAwk_txt = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s %3d %8.3f ms %8.3f ms\n", net, bsize, $4, $4/bsize); }' AMDOVX/develop/output.log > AMDOVX/develop/profile.txt'''
+runAwk_txt = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s %3d %8.3f ms %8.3f ms\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/output.log > '''+develop_dir+'''/caffe2openvx_profile.txt'''
 os.system(runAwk_txt);
+
+
+# run caffe2nnir2openvx flow
