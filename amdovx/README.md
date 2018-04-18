@@ -37,3 +37,6 @@ usage:
 ````
 python AMDOVX-profile.py -d [build directory - required]
 ```` 
+
+## output
+The AMDOVX-profile.py will generate profile.txt and profile.csv.
