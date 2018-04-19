@@ -79,6 +79,8 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt-get install python-pip )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
+	cmd='(cd '+deps_dir+'/protobuf; sudo -S pip uninstall protobuf )'
+	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/protobuf; sudo -S pip install protobuf )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	os.system('(cd '+deps_dir+'/build/OpenCV; cmake -DWITH_OPENCL=OFF -DWITH_OPENCLAMDFFT=OFF -DWITH_OPENCLAMDBLAS=OFF -DWITH_VA_INTEL=OFF -DWITH_OPENCL_SVM=OFF ../../opencv-3.3.0 )');
