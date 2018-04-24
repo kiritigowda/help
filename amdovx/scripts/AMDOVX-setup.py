@@ -51,7 +51,7 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/MIOpen; sudo -S cmake -P install_deps.cmake )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/build/MIOpen; sudo -S apt-get install libssl-dev libboost-dev libboost-system-dev libboost-filesystem-dev  )'
+	cmd='(cd '+deps_dir+'/build/MIOpen; sudo -S apt-get -y --allow-unauthenticated install libssl-dev libboost-dev libboost-system-dev libboost-filesystem-dev  )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	os.system('(cd '+deps_dir+'/build/MIOpen; cmake -DMIOPEN_BACKEND=OpenCL ../../MIOpen )');
 	os.system('(cd '+deps_dir+'/build/MIOpen; make -j8 )');
@@ -62,7 +62,7 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/build/MIOpen; sudo -S apt autoclean )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt-get install autoconf automake libtool curl make g++ unzip )'
+	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt-get -y --allow-unauthenticated install autoconf automake libtool curl make g++ unzip )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt autoremove )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
@@ -77,9 +77,13 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/protobuf; sudo -S ldconfig )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt-get install python-pip )'
+	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt-get -y --allow-unauthenticated install python-pip )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S pip install protobuf )'
+	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install protobuf )'
+	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
+	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install pytz )'
+	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
+	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install numpy )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	os.system('(cd '+deps_dir+'/build/OpenCV; cmake -DWITH_OPENCL=OFF -DWITH_OPENCLAMDFFT=OFF -DWITH_OPENCLAMDBLAS=OFF -DWITH_VA_INTEL=OFF -DWITH_OPENCL_SVM=OFF ../../opencv-3.3.0 )');
 	os.system('(cd '+deps_dir+'/build/OpenCV; make -j8 )');
