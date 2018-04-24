@@ -1,3 +1,5 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/9f54c6dcd01eb87d799c/maintainability)](https://codeclimate.com/github/kiritigowda/help/maintainability)
+
 # Project Help 
 
 This project is a compliation of all the resources and help needed to run a C/C++ project on a Windows/Linux setup.
@@ -10,8 +12,3 @@ This folder contains the scripts required to setup, build, and profile AMDOVX Ne
 
 ### imageDataBase
 This folder contains the scripts required to image data base to run inference using AMDOVX Neural Network Extension Library
-
-### python
-This folder contains generic help scripts
-
-
