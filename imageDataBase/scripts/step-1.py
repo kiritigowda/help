@@ -15,7 +15,7 @@ def make_square_image(img, width, height, padVal):
     new_img = new_img.convert("RGB")
     return new_img
 
-opts, args = getopt.getopt(sys.argv[1:], 'd:o:f:w:h:p:')
+opts, args = getopt.getopt(sys.argv[1:], 'd:o:f:w:h:p:c:')
  
 directory = ''
 outputDir = ''
@@ -23,6 +23,7 @@ fileName = ''
 width = -1
 height = -1
 padVal = -1
+userCount = -1
 
 for opt, arg in opts:
     if opt == '-d':
@@ -37,14 +38,19 @@ for opt, arg in opts:
         height = int(arg)
     elif opt == '-p':
         padVal = int(arg)
+    elif opt == '-c':
+        userCount = int(arg)
 
 if fileName == '' or directory == '' or outputDir == '':
     print('Invalid command line arguments. -d [input image directory] ' \
           '-o [output image directory] -f [new image file name] are required '\
-	      '-w [resize width] -h [resize height] -p [padding value] are optional')
+	      '-w [resize width] -h [resize height] -p [padding value] -c [image start count]are optional')
     exit()
 
 count = 0
+if userCount != -1:
+    count = userCount
+
 size = width, height 
 
 for image in sorted(os.listdir(directory)):
@@ -52,8 +58,8 @@ for image in sorted(os.listdir(directory)):
  
     img = Image.open(os.path.join(directory, image))
 
-    if width != '-1' and height != '-1':
-        if padVal != '-1':
+    if width != -1 and height != -1:
+        if padVal != -1:
             img = make_square_image(img,width,height,padVal)
         else:
             img = img.resize((width, height), Image.BILINEAR)

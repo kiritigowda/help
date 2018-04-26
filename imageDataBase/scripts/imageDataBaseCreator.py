@@ -3,14 +3,15 @@ import getopt
 import sys
 from PIL import Image
 
-opts, args = getopt.getopt(sys.argv[1:], 'd:o:f:w:h:p:')
+opts, args = getopt.getopt(sys.argv[1:], 'd:o:f:w:h:p:c:')
  
 directory = ''
 outputDir = ''
 fileName = ''
-width = -1
-height = -1
-padVal = -1
+width = ''
+height = ''
+padVal = ''
+count = ''
 
 for opt, arg in opts:
     if opt == '-d':
@@ -20,11 +21,22 @@ for opt, arg in opts:
     elif opt == '-f':
         fileName = arg
     elif opt == '-w':
-        width = int(arg)
+        width = arg
     elif opt == '-h':
-        height = int(arg)
+        height = arg
     elif opt == '-p':
-        padVal = int(arg)
+        padVal = arg
+    elif opt == '-c':
+        count = arg
+
+if width == '':
+    width = '-1'
+if height == '':
+    height = '-1'
+if padVal == '':
+    padVal = '-1'
+if count == '':
+    count = '-1'
 
 if fileName == '' or directory == '' or outputDir == '':
     print('Invalid command line arguments. -d [input image directory] ' \
@@ -32,11 +44,7 @@ if fileName == '' or directory == '' or outputDir == '':
 	      '-w [resize width] -h [resize height] -p [padding value] are optional')
     exit()
 
-width = str(width)
-height = str(height)
-padVal = str(padVal)
-
-os.system('python step-1.py -d '+directory+' -o '+outputDir+' -f '+fileName +' -w '+ width +' -h '+height+' -p' +padVal);
+os.system('python step-1.py -d '+directory+' -o '+outputDir+' -f '+fileName +' -w '+ width +' -h '+height+' -p ' +padVal+' -c ' +count);
 os.system('python step-2.py -d '+outputDir+' -f tag_file_name.txt');
 os.system('python step-3.py -l script-labels.txt -t CSV_tag_file_name.txt >> '+fileName+'-val.txt');
 
