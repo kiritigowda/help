@@ -1,6 +1,7 @@
 import os
 import getopt
 import sys
+import re
 from PIL import Image
 
 
@@ -53,7 +54,7 @@ if userCount != -1:
 
 size = width, height 
 
-for image in sorted(os.listdir(directory)):
+for image in sorted(os.listdir(directory),key=lambda var:[int(x) if x.isdigit() else x for x in re.findall(r'[^0-9]|[0-9]+', var)]):
     print('Processing Image ' + image)
  
     img = Image.open(os.path.join(directory, image))
