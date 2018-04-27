@@ -56,7 +56,7 @@ os.system('(cd '+buildDir_AMDOVX+'; mkdir develop)');
 
 # run caffe2openvx flow
 for i in range(len(caffeModelConfig)):
-	modelName, channel, width, height = caffeModelConfig[i]
+	modelName, channel, height, width = caffeModelConfig[i]
 	print "\n caffe2openvx -- ",modelName,"\n"
 	os.system('(cd '+develop_dir+'; mkdir '+modelName+')');
 	os.system('(cd '+develop_dir+'/'+modelName+'; cp -r ../../caffeModels/'+modelName+' .)');
@@ -65,8 +65,8 @@ for i in range(len(caffeModelConfig)):
 			print "\n",modelName," - Batch size ", x
 			x = str(x)
 			os.system('(cd '+develop_dir+'/'+modelName+'; mkdir build_'+x+')');
-			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
-			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(height)+' '+str(width)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(height)+' '+str(width)+')');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; cmake .; make)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
@@ -76,8 +76,8 @@ for i in range(len(caffeModelConfig)):
 			print "\n",modelName," - Batch size ", x
 			x = str(x)
 			os.system('(cd '+develop_dir+'/'+modelName+'; mkdir build_'+x+')');
-			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
-			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(width)+' '+str(height)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.caffemodel '+x+' '+str(channel)+' '+str(height)+' '+str(width)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(height)+' '+str(width)+')');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; cmake .; make)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
@@ -92,7 +92,7 @@ os.system(runAwk_txt);
 modelCompilerScripts_dir = os.path.expanduser(buildDir_AMDOVX+'/amdovx-modules/utils/model_compiler/python')
 print(modelCompilerScripts_dir)
 for i in range(len(caffeModelConfig)):
-	modelName, channel, width, height = caffeModelConfig[i]
+	modelName, channel, height, width = caffeModelConfig[i]
 	print "\n caffe2nnir2openvx --",modelName,"\n"
 	if(modelName == 'dmnet'):
 			x = 1
@@ -125,7 +125,7 @@ os.system(runAwk_txt);
 modelCompilerScripts_dir = os.path.expanduser(buildDir_AMDOVX+'/amdovx-modules/utils/model_compiler/python')
 print(modelCompilerScripts_dir)
 for i in range(len(caffeModelConfig)):
-	modelName, channel, width, height = caffeModelConfig[i]
+	modelName, channel, height, width = caffeModelConfig[i]
 	print "\n caffe2nnir2openvx --",modelName,"\n"
 	if(modelName == 'dmnet'):
 			x = 1
