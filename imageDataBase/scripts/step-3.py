@@ -73,4 +73,10 @@ with open(imageTaglist) as Tags:
 			if duplicate == 0:
 				print(outputString)
 					
+
+#orig_stdout = sys.stdout
+#logDir = fileName+'-scriptOutput'
+#sys.stdout = open(logDir+'/step3.py.log','wt')
+#print('step3.py inputs\n'\
+#    '\tlabel text: '+labels+'\n\timage list text: '+imageTaglist)
 #print('Image Labels from tag ist Generation Complete.')

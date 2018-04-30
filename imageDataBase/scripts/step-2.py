@@ -25,12 +25,18 @@ for image in sorted(os.listdir(directory)):
     os.system('exiftool -m -filename -subject -s -s -s -t '+ directory + image + ' >> ' + fileName);
 
 
+#orig_stdout = sys.stdout
+#logDir = fileName+'-scriptOutput'
+#sys.stdout = open(logDir+'/step2.py.log','wt')
+
 from sys import platform as _platform
 if _platform == "linux" or _platform == "linux2":
-    print('Linux Detected')
+    print('Script2.py Linux Detected')
     os.system('awk \'sub("\t", ",")\' ' + fileName +' >> ' + 'CSV_'+fileName)
 elif _platform == "win32" or _platform == "win64":
-    print('Windows Detected')
+    print('Script2.py Windows Detected')
     os.system('gawk \'sub("\t", ",")\' ' + fileName +' >> ' + 'CSV_'+fileName)
 
-print('Image Tag List Generation Complete.')
+#print('step2.py inputs\n'\
+#    '\tinput directory: '+directory+'\n\ttag fileName: '+fileName)
+#print('Image Tag List Generation Complete.')
