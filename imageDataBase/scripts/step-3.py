@@ -11,17 +11,20 @@ labels = ''
 imageTaglist = ''
 outputString = ''
 
+# get user variables
 for opt, arg in opts:
     if opt == '-l':
         labels = arg
     elif opt == '-t':
         imageTaglist = arg
 
+# error check and script help
 if labels == '' or imageTaglist == '':
-    print('Invalid command line arguments. -l [label.txt with 1000 labels without numbers] ' \
+    print('Invalid command line arguments. Usage python step-3.py -l [label.txt with 1000 labels without numbers] ' \
           '-t [image list .txt with file name & tags] are required')
     exit()
 
+# traverse through the image labels to find label IDs
 with open(imageTaglist) as Tags: 
 	for TAG in Tags:
 		TAG = TAG.strip().split(",")
@@ -62,11 +65,9 @@ with open(imageTaglist) as Tags:
 							labelNotFound = 0
 							duplicate = 1
 					count += 1
-
 				
 			if break_val == 0:
 				labelNotFound = 1
-
 			
 		if labelNotFound == 1:
 			outputString = TAG[0] + ' -1'

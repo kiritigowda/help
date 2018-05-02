@@ -25,6 +25,7 @@ height = -1
 padVal = -1
 userCount = -1
 
+# get user variables
 for opt, arg in opts:
     if opt == '-d':
         directory = arg
@@ -41,36 +42,44 @@ for opt, arg in opts:
     elif opt == '-c':
         userCount = int(arg)
 
+# error check and script help
 if fileName == '' or directory == '' or outputDir == '':
-    print('Invalid command line arguments. -d [input image directory] ' \
+    print('Invalid command line arguments. Usage python step-1.py -d [input image directory] ' \
           '-o [output image directory] -f [new image file name] are required '\
-	      '-w [resize width] -h [resize height] -p [padding value] -c [image start count]are optional')
+	      '-w [resize width] -h [resize height] -p [padding value] -c [image start count] are optional')
     exit()
 
+# user image start count
 count = 0
 if userCount != -1:
     count = userCount
 
+# image size
 size = width, height
 
+# script output folder
 logDir = fileName+'-scriptOutput'
 if not os.path.exists(logDir):
     os.makedirs(logDir)
+
+# original std out location 
 orig_stdout = sys.stdout
 
-
+# looping through user images in ascending order
 for image in sorted(os.listdir(directory),key=lambda var:[int(x) if x.isdigit() else x for x in re.findall(r'[^0-9]|[0-9]+', var)]):
  
     img = Image.open(os.path.join(directory, image))
-    sys.stdout = open(logDir+'/'+fileName+'-Translation.csv','a')
+    # setup filename dictionary for old and new file names
+    sys.stdout = open(logDir+'/'+fileName+'-FileNameTanslation.csv','a')
 
+    # resize and pad image
     if width != -1 and height != -1:
         if padVal != -1:
             img = make_square_image(img,width,height,padVal)
         else:
             img = img.resize((width, height), Image.BILINEAR)
 
-
+    # rename and save images in output folder
     if count < 10:
         img.save( outputDir + fileName + '_000' + str(count) + '.JPEG')
         print(image+', '+fileName+'_000'+str(count)+'.JPEG')
@@ -92,8 +101,7 @@ for image in sorted(os.listdir(directory),key=lambda var:[int(x) if x.isdigit() 
     print('image processed - '+image+' count:'+str(count+1))
     count += 1
 
-
-
+# remove system files and duplicates
 from sys import platform as _platform
 if _platform == "linux" or _platform == "linux2":
     print('Script1.py Linux Detected')
@@ -103,8 +111,8 @@ elif _platform == "win32" or _platform == "win64":
     os.system('DEL '+ outputDir + '*.JPEG_original');
     os.system('rm -rf '+ outputDir + '*.JPEG_original');
 
-#sys.stdout = open(logDir+'/step1.py.log','wt')
+# print script variables and report
 print('step1.py inputs\n'\
 	'\tinput directory: '+directory+'\n\toutput directory: '+outputDir+'\n\timage fileName: '+fileName+'\n\timage width: '+str(width)+'\n'\
 	'\timage height: '+str(height)+'\n\timage padding value: '+str(padVal)+'\n\timage count start: '+str(count))
-print('Image resize and name change complete.')
+print('Image resize and name change complete and successful.')
