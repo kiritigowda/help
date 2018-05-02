@@ -37,6 +37,6 @@ elif _platform == "win32" or _platform == "win64":
     print('Script2.py Windows Detected')
     os.system('gawk \'sub("\t", ",")\' ' + fileName +' >> ' + 'CSV_'+fileName)
 
-#print('step2.py inputs\n'\
-#    '\tinput directory: '+directory+'\n\ttag fileName: '+fileName)
-#print('Image Tag List Generation Complete.')
+print('step2.py inputs\n'\
+    '\tinput directory: '+directory+'\n\ttag fileName: '+fileName)
+print('Image Tag List Generation Complete.')
