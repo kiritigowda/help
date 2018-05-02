@@ -93,7 +93,7 @@ for image in sorted(os.listdir(directory),key=lambda var:[int(x) if x.isdigit() 
     count += 1
 
 
-sys.stdout = open(logDir+'/step1.py.log','wt')
+
 from sys import platform as _platform
 if _platform == "linux" or _platform == "linux2":
     print('Script1.py Linux Detected')
@@ -103,6 +103,7 @@ elif _platform == "win32" or _platform == "win64":
     os.system('DEL '+ outputDir + '*.JPEG_original');
     os.system('rm -rf '+ outputDir + '*.JPEG_original');
 
+#sys.stdout = open(logDir+'/step1.py.log','wt')
 print('step1.py inputs\n'\
 	'\tinput directory: '+directory+'\n\toutput directory: '+outputDir+'\n\timage fileName: '+fileName+'\n\timage width: '+str(width)+'\n'\
 	'\timage height: '+str(height)+'\n\timage padding value: '+str(padVal)+'\n\timage count start: '+str(count))

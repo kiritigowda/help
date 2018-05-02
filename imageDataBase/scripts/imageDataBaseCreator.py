@@ -111,5 +111,6 @@ with open(logDir+'/'+fileName+'-Translation.csv') as orig_filename:
                     imgFileCount += 1
 
                 if imgFileCount > 1:
+                    imgFileCount = 0
                     sys.stdout = open(logDir+'/'+fileName+'-filesWithMultipleLabels.csv','a')
                     print(fileList[0]+','+tagList[0]+','+tagList[1])
