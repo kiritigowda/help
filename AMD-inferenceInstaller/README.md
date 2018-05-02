@@ -1,4 +1,3 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/9f54c6dcd01eb87d799c/maintainability)](https://codeclimate.com/github/kiritigowda/help/maintainability)
 # AMDOVX Neural Network Inference Engine - ANNIE Installer
 
 This folder contains scripts to setup, build, and help run AMDOVX Neural Network Inference Engine. The open source GitHub project can be found at [amdovx-modules](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules)
@@ -8,21 +7,20 @@ This folder contains scripts to setup, build, and help run AMDOVX Neural Network
 Prerequisites for running the installer scripts
 
 1. ubuntu 16.04
-2. [rocm supported hardware] (https://rocm.github.io/hardware.html)
+2. [rocm supported hardware](https://rocm.github.io/hardware.html)
 3. [rocm](https://github.com/RadeonOpenCompute/ROCm#installing-from-amd-rocm-repositories)
 4. QTCreator, and QT5 or above
 ````
-sudo apt-get install qtcreator qt5-default
+sudo apt-get install qt5-default qtcreator
 ````
 5. install cmake and git
 ````
 sudo apt-get install cmake git
 ````
 
+This folder has the following python scripts in scripts folder
 
-This folder has the following python scripts
-
-1. inference-setup.py - This scipts builds all the prerequisites required by inference modules. The setup script creates a deps folder and installs all the prerequisites, this script only needs to be executed once. If the -d option for directory is not given the script will install deps folder in '~/'or 'home' directory by default, else in the user specified folder.
+1. inference-setup.py - This script builds all the prerequisites required by inference modules. The setup script creates a deps folder and installs all the prerequisites, this script only needs to be executed once. If the -d option for directory is not given the script will install deps folder in '~/'or 'home' directory by default, else in the user specified folder.
 
 usage:
 
@@ -30,7 +28,7 @@ usage:
 python inference-setup.py -s [sudo password] -d [setup directory - optional]
 ```` 
 
-2. inference-build.py - This scripts clones the latest inference modules from github, builds and installs the project. If the -d build directory is not given the script creates a AMDOVX folder in '~/' directory by default, else in the user specified folder.
+2. inference-build.py - This script clones the latest inference modules from github, builds and installs the project. If the -d build directory is not given the script creates a AMDOVX folder in '~/' directory by default, else in the user specified folder.
 
 usage:
 
