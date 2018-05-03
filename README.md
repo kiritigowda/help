@@ -12,3 +12,6 @@ This folder contains the scripts required to setup, build, and profile AMDOVX Ne
 
 ### imageDataBase
 This folder contains the scripts required to image data base to run inference using AMDOVX Neural Network Extension Library
+
+### radeonInferenceInstaller
+This folder contains the scripts required to install and run inference using AMDOVX Neural Network Extension Library server and client
