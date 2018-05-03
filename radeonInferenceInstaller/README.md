@@ -88,3 +88,8 @@ The client application section Inference Run-time needs the labels.txt, the AMD-
   * Image List: location to /radeonInferenceInstaller/sampleDataSet/AMD-tinyDataSet-val.txt (image validation text)
 
 6. Step 6 - Run Inference - Once all the required fields are completed on the client app the run button will turn green. You can now run the inference.
+
+
+# Inference RunTime Video
+
+[![Radeon Inference](images/inferenceVideo.png)](http://www.youtube.com/watch?v=0GLmnrpMSYs)
