@@ -62,6 +62,8 @@ annInferenceServer
 
 3. After launching the server and client applications on the system, you can connect them using the default port. The server and client could also be launched on two different machines.
 
-4. Once the connections are established, load the caffe model and prototxt to the server using the client application.
+4. Once the connections are established, load the caffe model and prototxt to the server using the client application. The client application section Inference Complier needs to be completed as shown in the above example.
 
-5. Now you can run a simple test inference using the tinyDataSet provided in this help project within the sampleDataSet folder. 
+5. Now you can run a simple test inference using the tinyDataSet provided in this help project within the sampleDataSet folder. The client application section Inference Run-time needs the labels.txt, the AMD-tinyDataSet folder location, & AMD-tinyDataSet-val.txt provided in the sampleDataSet folder.
+
+6. Once all the required fields are completed on the client app the run button will be green. You can now run the inference.
