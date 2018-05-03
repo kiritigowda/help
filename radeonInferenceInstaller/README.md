@@ -44,7 +44,7 @@ usage:
 python inference-build.py -s [sudo password] -d [build directory - optional]
 ```` 
 
-3.**RadeonInferenceInstaller.py** - This installer script will run the inference setup and build scripts mentioned above.
+3. **RadeonInferenceInstaller.py** - This installer script will run the inference setup and build scripts mentioned above.
 ````
 python RadeonInferenceInstaller.py -s [sudo password - required] -d [dependencies directory - optional] -b [build directory - optional]
 ````
