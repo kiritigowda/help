@@ -58,7 +58,7 @@ annInferenceServer
 ````
 2. **Inference Client Application** - The client Application is available in ~/AMDOVX/amdovx-modules/utils/annInferenceApp folder. Open annInferenceApp.pro with the QTCreator and build the client application and launch it.
 
-![Inference Client](images/AnnInference-client.png "Inference Client Application")
+![Inference Client](images/annInferenceClientApp.png "Inference Client Application")
 
 3. After launching the server and client applications on the system, you can connect them using the default port. The server and client could also be launched on two different machines.
 
