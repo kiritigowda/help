@@ -4,9 +4,7 @@
 
 This folder contains scripts to setup, build, and help run AMDOVX Neural Network Inference Engine. The open source GitHub project can be found at [amdovx-modules](https://github.com/GPUOpen-ProfessionalCompute-Libraries/amdovx-modules#amd-openvx-modules-amdovx-modules)
 
-## scripts 
-
-Prerequisites for running the installer scripts
+## Prerequisites for running the installer
 
 1. ubuntu 16.04
 2. [rocm supported hardware](https://rocm.github.io/hardware.html)
@@ -19,7 +17,14 @@ sudo apt-get install qt5-default qtcreator
 ````
 sudo apt-get install cmake git
 ````
+## Installer
 
+**RadeonInferenceInstaller.py** - Run this installer script to install all the dependencies and build the Inference Server
+````
+python RadeonInferenceInstaller.py -s [sudo password - required] -d [dependencies directory - optional] -b [build directory - optional]
+````
+
+## scripts 
 This folder has the following python scripts in scripts folder
 
 1. **inference-setup.py** - This script builds all the prerequisites required by inference modules. The setup script creates a deps folder and installs all the prerequisites, this script only needs to be executed once. If the -d option for directory is not given the script will install deps folder in '~/'or 'home' directory by default, else in the user specified folder.
