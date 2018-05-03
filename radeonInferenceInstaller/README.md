@@ -50,20 +50,41 @@ python RadeonInferenceInstaller.py -s [sudo password - required] -d [dependencie
 ````
 ## Running the Inference Engine 
 
-1. **Inference Server Application** - is built by the installer script. You can launch the server using the following commands 
+1. Step 1 - Launch **Inference Server Application** - is built by the installer script. You can launch the server using the following commands 
 ````
 export PATH=$PATH:/opt/rocm/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
 annInferenceServer
 ````
-2. **Inference Client Application** - The client Application is available in ~/AMDOVX/amdovx-modules/utils/annInferenceApp folder. Open annInferenceApp.pro with the QTCreator and build the client application and launch it.
+2. Step 2 - Launch **Inference Client Application** - The client Application is available in -b option directory (build directory passed to the installer) or the home directory if -b option was not used. 
+
+  * -B_DIR_OR_HOME_DIR/**AMDOVX/amdovx-modules/utils/annInferenceApp** folder. 
+
+  * Open annInferenceApp.pro with the QTCreator and build the client application. Once the client is built, launch the application. Below is the image of the client application
 
 ![Inference Client](images/annInferenceClientApp.png "Inference Client Application")
 
-3. After launching the server and client applications on the system, you can connect them using the default port. The server and client could also be launched on two different machines.
+3. Step 3 - Connect Server and Client - After launching the server and client applications on the system, you can connect them using the default port. The server and client could also be launched on two different machines.
 
-4. Once the connections are established, load the caffe model and prototxt to the server using the client application. The client application section Inference Complier needs to be completed as shown in the above example.
+![Inference Client Connect](images/serverConnect.png "Inference Client Connect")
 
-5. Now you can run a simple test inference using the tinyDataSet provided in this help project within the sampleDataSet folder. The client application section Inference Run-time needs the labels.txt, the AMD-tinyDataSet folder location, & AMD-tinyDataSet-val.txt provided in the sampleDataSet folder.
+4. Step 4 - Upload Caffe Model - Once the connection is established, load the caffe model and prototxt to the server using the client application. 
 
-6. Once all the required fields are completed on the client app the run button will be green. You can now run the inference.
+The client application section Inference Complier needs to be completed as shown in the below example.
+
+![Inference Client Model Upload](images/modelUploader.png "Inference Client Model Upload")
+  * CNN Model: upload or select preloaded models. (User needs to save models are preloaded on the server)
+  * CxHxW(inp): enter the height and width of the input images to the model
+  * Prototxt: give the location of the model .prototxt
+  * CaffeModel: give the location of the pretrained caffe model .caffemodel
+  * Options: BGR/RGB  Publishas: Model Name and password: radeon ( To load the models to the server)
+
+5. Step 5 - Load Image DataBase - Now you can run a simple test inference using the tinyDataSet provided in this help project within the sampleDataSet folder. 
+
+The client application section Inference Run-time needs the labels.txt, the AMD-tinyDataSet folder location, & AMD-tinyDataSet-val.txt provided in the sampleDataSet folder.
+![Inference Client Image Upload](images/inferenceRunTime.png "Inference Client Image Upload")
+  * Labels: location to /radeonInferenceInstaller/sampleDataSet/labels.txt
+  * Image Folder: location to /radeonInferenceInstaller/sampleDataSet/AMD-tinyDataSet folder
+  * Image List: location to /radeonInferenceInstaller/sampleDataSet/AMD-tinyDataSet-val.txt (image validation text)
+
+6. Step 6 - Run Inference - Once all the required fields are completed on the client app the run button will turn green. You can now run the inference.
