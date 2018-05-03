@@ -85,6 +85,8 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install numpy )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
+	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install progressbar )'
+	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	os.system('(cd '+deps_dir+'/build/OpenCV; cmake -DWITH_OPENCL=OFF -DWITH_OPENCLAMDFFT=OFF -DWITH_OPENCLAMDBLAS=OFF -DWITH_VA_INTEL=OFF -DWITH_OPENCL_SVM=OFF ../../opencv-3.3.0 )');
 	os.system('(cd '+deps_dir+'/build/OpenCV; make -j8 )');
 	cmd='(cd '+deps_dir+'/build/OpenCV; sudo -S make install )'
