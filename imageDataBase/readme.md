@@ -33,12 +33,28 @@ Run **imageDataBaseCreator.py** to create the image database with required width
 ````
 python imageDataBaseCreator.py	-d [input image directory] 	--- required 
 				-o [output image directory] 	--- required (valid dir)
-				-f [new image file name] 	--- required 
+				-f [new image file name] 	--- required (fileName)
 				-w [resize width] 		--- optional
 				-h [resize height] 		--- optional
 				-p [padding value] 		--- optional
 				-c [image start count]		--- optional
 ````
+## Outputs
+1. output image directory - this folder contains all the images resized and renamed
+
+2. fileName-val.txt - this is the classification label validation text file  (fileName -- -f option )
+	* output example (fileName.JPEG Label)
+````
+		imagename_1.JPEG 122
+		imagename_2.JPEG 928
+````
+	
+3. fileName-scriptOutput - this folder contains all the logs and error files
+	* fileName-fileNameTanslation.csv
+	* fileName-fileNameWithErrors.csv
+	* fileName-fileNameWithLabels.csv
+	* fileName-invalidLabelsFile.csv
+	* fileName-multipleLabelsFile.csv
 
 ## Scripts
 This scripts folder has the following python scripts.
