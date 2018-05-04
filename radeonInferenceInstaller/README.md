@@ -73,6 +73,7 @@ annInferenceServer
 The client application section Inference Complier needs to be completed as shown in the below example.
 
 ![Inference Client Model Upload](images/modelUploader.png "Inference Client Model Upload")
+
   * CNN Model: upload or select preloaded models. (User needs to save models are preloaded on the server)
   * CxHxW(inp): enter the height and width of the input images to the model
   * Prototxt: give the location of the model .prototxt
@@ -82,7 +83,9 @@ The client application section Inference Complier needs to be completed as shown
 **Step 5** - Load Image DataBase - Now you can run a simple test inference using the tinyDataSet provided in this help project within the sampleDataSet folder. 
 
 The client application section Inference Run-time needs the labels.txt, the AMD-tinyDataSet folder location, & AMD-tinyDataSet-val.txt provided in the sampleDataSet folder.
+
 ![Inference Client Image Upload](images/inferenceRunTime.png "Inference Client Image Upload")
+
   * Labels: location to /radeonInferenceInstaller/sampleDataSet/labels.txt
   * Image Folder: location to /radeonInferenceInstaller/sampleDataSet/AMD-tinyDataSet folder
   * Image List: location to /radeonInferenceInstaller/sampleDataSet/AMD-tinyDataSet-val.txt (image validation text)
