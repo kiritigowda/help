@@ -32,7 +32,7 @@ usage:
 python NNProfiler-build.py -s [sudo password] -d [build directory - optional]
 ```` 
 
-3. **NNProfiler-profile.py** - This script downloads the caffe .models & .prototxt from a remote file server and runs every model with different batch sizes and dumps an output.log file, profile.csv & profile.txt. The build directory should be the same director passed to the AMDOVX-build.py script. If no directory was given, pass '~/' for the directory option. 
+3. **NNProfiler-profile.py** - This script downloads the caffe .models & .prototxt from a remote file server and runs every model with different batch sizes and dumps an output.log file, profile.csv & profile.txt. The build directory should be the same director passed to the NNProfiler-build.py script. If no directory was given, pass '~/' for the directory option. 
 
 usage:
 
