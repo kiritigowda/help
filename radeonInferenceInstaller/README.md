@@ -50,13 +50,13 @@ python RadeonInferenceInstaller.py -s [sudo password - required] -d [dependencie
 ````
 ## Running the Inference Engine 
 
-1. Step 1 - Launch **Inference Server Application** - is built by the installer script. You can launch the server using the following commands 
+**Step 1** - Launch **Inference Server Application** - is built by the installer script. You can launch the server using the following commands 
 ````
 export PATH=$PATH:/opt/rocm/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
 annInferenceServer
 ````
-2. Step 2 - Launch **Inference Client Application** - The client Application is available in -b option directory (build directory passed to the installer) or the home directory if -b option was not used. 
+**Step 2** - Launch **Inference Client Application** - The client Application is available in -b option directory (build directory passed to the installer) or the home directory if -b option was not used. 
 
   * -B_DIR_OR_HOME_DIR/**AMDOVX/amdovx-modules/utils/annInferenceApp** folder. 
 
@@ -64,11 +64,11 @@ annInferenceServer
 
 ![Inference Client](images/annInferenceClientApp.png "Inference Client Application")
 
-3. Step 3 - Connect Server and Client - After launching the server and client applications on the system, you can connect them using the default port. The server and client could also be launched on two different machines.
+**Step 3** - Connect Server and Client - After launching the server and client applications on the system, you can connect them using the default port. The server and client could also be launched on two different machines.
 
 ![Inference Client Connect](images/serverConnect.png "Inference Client Connect")
 
-4. Step 4 - Upload Caffe Model - Once the connection is established, load the caffe model and prototxt to the server using the client application. 
+**Step 4** - Upload Caffe Model - Once the connection is established, load the caffe model and prototxt to the server using the client application. 
 
 The client application section Inference Complier needs to be completed as shown in the below example.
 
@@ -79,7 +79,7 @@ The client application section Inference Complier needs to be completed as shown
   * CaffeModel: give the location of the pretrained caffe model .caffemodel
   * Options: BGR/RGB  Publishas: Model Name and password: radeon ( To load the models to the server)
 
-5. Step 5 - Load Image DataBase - Now you can run a simple test inference using the tinyDataSet provided in this help project within the sampleDataSet folder. 
+**Step 5** - Load Image DataBase - Now you can run a simple test inference using the tinyDataSet provided in this help project within the sampleDataSet folder. 
 
 The client application section Inference Run-time needs the labels.txt, the AMD-tinyDataSet folder location, & AMD-tinyDataSet-val.txt provided in the sampleDataSet folder.
 ![Inference Client Image Upload](images/inferenceRunTime.png "Inference Client Image Upload")
@@ -87,7 +87,7 @@ The client application section Inference Run-time needs the labels.txt, the AMD-
   * Image Folder: location to /radeonInferenceInstaller/sampleDataSet/AMD-tinyDataSet folder
   * Image List: location to /radeonInferenceInstaller/sampleDataSet/AMD-tinyDataSet-val.txt (image validation text)
 
-6. Step 6 - Run Inference - Once all the required fields are completed on the client app the run button will turn green. You can now run the inference.
+**Step 6** - Run Inference - Once all the required fields are completed on the client app the run button will turn green. You can now run the inference.
 
 
 # Inference RunTime Video
