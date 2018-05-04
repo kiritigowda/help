@@ -6,15 +6,15 @@ from subprocess import call
 
 # caffe models to benchmark
 caffeModelConfig =	[ 
-					('dmnet',3,1024,2048),
-					('googlenet',3,224,224),
-					('inceptionv4',3,299,299),
-					('resnet50',3,224,224),
-					('resnet101',3,224,224),
-					('resnet152',3,224,224),
-					('vgg16',3,224,224),
-					('vgg19',3,224,224)
-					]
+			('dmnet',3,1024,2048),
+			('googlenet',3,224,224),
+			('inceptionv4',3,299,299),
+			('resnet50',3,224,224),
+			('resnet101',3,224,224),
+			('resnet152',3,224,224),
+			('vgg16',3,224,224),
+			('vgg19',3,224,224)
+			]
 
 opts, args = getopt.getopt(sys.argv[1:], 'd:')
 
