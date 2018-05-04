@@ -68,7 +68,7 @@ annInferenceServer
 
 ![Inference Client Connect](images/serverConnect.png "Inference Client Connect")
 
-**Step 4** - Upload Caffe Model - Once the connection is established, load the caffe model and prototxt to the server using the client application. 
+**Step 4** - Upload PreTrained Caffe Model - Once the connection is established, load the caffe model and prototxt to the server using the client application. 
 
 The client application section Inference Complier needs to be completed as shown in the below example.
 
@@ -80,7 +80,7 @@ The client application section Inference Complier needs to be completed as shown
   * CaffeModel: give the location of the pretrained caffe model .caffemodel
   * Options: BGR/RGB  Publishas: Model Name and password: radeon ( To load the models to the server)
 
-**Step 5** - Load Image DataBase - Now you can run a simple test inference using the tinyDataSet provided in this help project within the sampleDataSet folder. 
+**Step 5** - Load Image DataBase - Now you can run a simple test inference using the AMD-tinyDataSet provided in this help project within the sampleDataSet folder. 
 
 The client application section Inference Run-time needs the labels.txt, the AMD-tinyDataSet folder location, & AMD-tinyDataSet-val.txt provided in the sampleDataSet folder.
 
