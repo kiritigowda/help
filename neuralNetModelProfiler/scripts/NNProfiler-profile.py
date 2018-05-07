@@ -7,6 +7,7 @@ from subprocess import call
 # caffe models to benchmark
 caffeModelConfig =	[ 
 			('dmnet',3,1024,2048),
+			('dmnet_latest',3,1024,2048),
 			('googlenet',3,224,224),
 			('inceptionv4',3,299,299),
 			('resnet50',3,224,224),
@@ -60,7 +61,7 @@ for i in range(len(caffeModelConfig)):
 	print "\n caffe2openvx -- ",modelName,"\n"
 	os.system('(cd '+develop_dir+'; mkdir '+modelName+')');
 	os.system('(cd '+develop_dir+'/'+modelName+'; cp -r ../../caffeModels/'+modelName+' .)');
-	if(modelName == 'dmnet'):
+	if(modelName == 'dmnet' or modelName == 'dmnet_latest'):
 			x = 1
 			print "\n",modelName," - Batch size ", x
 			x = str(x)
@@ -94,7 +95,7 @@ print(modelCompilerScripts_dir)
 for i in range(len(caffeModelConfig)):
 	modelName, channel, height, width = caffeModelConfig[i]
 	print "\n caffe2nnir2openvx --",modelName,"\n"
-	if(modelName == 'dmnet'):
+	if(modelName == 'dmnet' or modelName == 'dmnet_latest'):
 			x = 1
 			print "\n",modelName," - Batch size ", x
 			x = str(x)
@@ -127,7 +128,7 @@ print(modelCompilerScripts_dir)
 for i in range(len(caffeModelConfig)):
 	modelName, channel, height, width = caffeModelConfig[i]
 	print "\n caffe2nnir2openvx --",modelName,"\n"
-	if(modelName == 'dmnet'):
+	if(modelName == 'dmnet' or modelName == 'dmnet_latest'):
 			x = 1
 			print "\n",modelName," - Batch size ", x 
 			x = str(x)
