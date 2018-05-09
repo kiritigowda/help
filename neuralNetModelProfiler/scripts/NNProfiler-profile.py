@@ -158,9 +158,9 @@ runAwk_txt = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = 
 os.system(runAwk_txt);
 
 
-echo_1 = "Model Name    | Batch Size | Time/Batch (ms) | Time/Image (ms)|"
+echo_1 = 'Model Name    | Batch Size | Time/Batch (ms) | Time/Image (ms)|'
 os.system('echo'+echo_1+' >>'+develop_dir+'/caffe2nnir2openvx_fuse_profile.md');
-echo_2 = "-----------------------|------------------|----------------------------|---------------------------|"
+echo_2 = '-----------------------|------------------|----------------------------|---------------------------|'
 os.system('echo'+echo_2+' >>'+develop_dir+'/caffe2nnir2openvx_fuse_profile.md');
 runAwk_md = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s|%3d|%8.3f|%8.3f\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_fuse_output.log > '''+develop_dir+'''/caffe2nnir2openvx_fuse_profile.md'''
 os.system(runAwk_md);
