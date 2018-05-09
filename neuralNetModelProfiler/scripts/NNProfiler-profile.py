@@ -157,10 +157,12 @@ os.system(runAwk_csv);
 runAwk_txt = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s %3d %8.3f ms %8.3f ms\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_fuse_output.log > '''+develop_dir+'''/caffe2nnir2openvx_fuse_profile.txt'''
 os.system(runAwk_txt);
 
-
-echo_1 = 'Model Name    | Batch Size | Time/Batch (ms) | Time/Image (ms)|'
-os.system('echo'+echo_1+' >>'+develop_dir+'/caffe2nnir2openvx_fuse_profile.md');
-echo_2 = '-----------------------|------------------|----------------------------|---------------------------|'
-os.system('echo'+echo_2+' >>'+develop_dir+'/caffe2nnir2openvx_fuse_profile.md');
+orig_stdout = sys.stdout
+sys.stdout = open(develop_dir+'/caffe2nnir2openvx_fuse_profile.md','a')
+echo_1 = '| Model Name | Batch Size | Time/Batch (ms) | Time/Image (ms) |'
+print(echo_1)
+echo_2 = '|------------|------------|-----------------|-----------------|'
+print(echo_2)
+sys.stdout = orig_stdout
 runAwk_md = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s|%3d|%8.3f|%8.3f\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_fuse_output.log > '''+develop_dir+'''/caffe2nnir2openvx_fuse_profile.md'''
 os.system(runAwk_md);
