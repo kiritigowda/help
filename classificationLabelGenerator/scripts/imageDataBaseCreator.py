@@ -82,7 +82,7 @@ print('Old FileName, New FileName, Labels')
 
 
 # generate reports for images with and without labels
-with open(logDir+'/'+fileName+'-FileNameTanslation.csv') as orig_filename:
+with open(logDir+'/'+fileName+'-FileNameTranslation.csv') as orig_filename:
     for file in orig_filename:
         fileList = file.strip().split(",")
         imgFileCount = 0
@@ -104,7 +104,7 @@ with open(logDir+'/'+fileName+'-FileNameTanslation.csv') as orig_filename:
 
 
 # generate report for multiple labels for single image
-with open(logDir+'/'+fileName+'-FileNameTanslation.csv') as orig_filename:
+with open(logDir+'/'+fileName+'-FileNameTranslation.csv') as orig_filename:
     for file in orig_filename:
         fileList = file.strip().split(",")
         multipleLabelFlag = 0
@@ -128,7 +128,7 @@ with open(logDir+'/'+fileName+'-FileNameTanslation.csv') as orig_filename:
 
 # generate report for invalid labels for single image
 sys.stdout = open(logDir+'/'+fileName+'-invalidLabelsFile.csv','a')
-with open(logDir+'/'+fileName+'-FileNameTanslation.csv') as orig_filename:
+with open(logDir+'/'+fileName+'-FileNameTranslation.csv') as orig_filename:
     for file in orig_filename:
         fileList = file.strip().split(",")
         
