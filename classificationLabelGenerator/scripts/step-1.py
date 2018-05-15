@@ -70,7 +70,7 @@ for image in sorted(os.listdir(directory),key=lambda var:[int(x) if x.isdigit() 
  
     img = Image.open(os.path.join(directory, image))
     # setup filename dictionary for old and new file names
-    sys.stdout = open(logDir+'/'+fileName+'-FileNameTanslation.csv','a')
+    sys.stdout = open(logDir+'/'+fileName+'-FileNameTranslation.csv','a')
 
     # resize and pad image
     if width != -1 and height != -1:
