@@ -42,9 +42,10 @@ if count == '':
 
 # error check and script help
 if fileName == '' or directory == '' or outputDir == '':
-    print('Invalid command line arguments. Usage python imageDataBaseCreator.py -d [input image directory] ' \
-          '-o [output image directory] -f [new image file name] are required '\
-	      '-w [resize width] -h [resize height] -p [padding value] -c [image start number] are optional')
+    print('Invalid command line arguments.\nUsage python imageDataBaseCreator.py \t\t\t\t-d [input image directory - required]\n ' \
+          '\t\t\t\t-o [output image directory - required] \n\t\t\t\t-f [new image file name - required]\n '\
+	      '\t\t\t\t-w [resize width - optional]\n \t\t\t\t-h [resize height  - optional]\n '\
+          '\t\t\t\t-p [padding value  - optional]\n \t\t\t\t-c [image start number  - optional]\n')
     exit()
 
 # set log output directory
