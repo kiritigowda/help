@@ -26,7 +26,7 @@ for opt, arg in opts:
     	buildDir = arg
 
 if buildDir == '':
-    print('Invalid command line arguments. -d [build directory - required] ')
+    print('Invalid command line arguments.\n \t\t\t\t-d [build directory - required]\n ')
     exit()
 
 if buildDir == '':

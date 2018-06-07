@@ -16,7 +16,7 @@ for opt, arg in opts:
     	buildDir = arg
 
 if sudoPassword == '':
-    print('Invalid command line arguments. -s [sudo password - required] -d [build directory - optional] ')
+    print('Invalid command line arguments.\n \t\t\t\t-s [sudo password - required]\n \t\t\t\t-d [build directory - optional]\n ')
     exit()
 
 if buildDir == '':

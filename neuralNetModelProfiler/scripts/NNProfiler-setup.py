@@ -16,7 +16,7 @@ for opt, arg in opts:
     	setupDir = arg
 
 if sudoPassword == '':
-    print('Invalid command line arguments. -s [sudo password - required] -d [setup directory - optional] ')
+    print('Invalid command line arguments.\n \t\t\t\t-s [sudo password - required]\n \t\t\t\t-d [setup directory - optional]\n ')
     exit()
 
 if setupDir == '':
