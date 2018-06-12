@@ -8,9 +8,9 @@ This folder contains scripts to setup, build, and profile AMDOVX Neural Network 
 1. ubuntu 16.04
 2. [rocm supported hardware](https://rocm.github.io/hardware.html)
 3. [rocm](https://github.com/RadeonOpenCompute/ROCm#installing-from-amd-rocm-repositories)
-4. Install cmake and git
+4. Install cmake, wget, and git
 ````
-sudo apt-get install cmake git
+sudo apt-get install cmake git wget
 ````
 
 ## scripts 
