@@ -44,3 +44,5 @@ sudo docker pull kiritigowda/ubuntu_16.04.3:amdovx-drop
 ````
 sudo docker run -it --device=/dev/kfd --device=/dev/dri --group-add video --network host kiritigowda/ubuntu_16.04.3:amdovx-drop
 ````
+## Step 4 - *Run Resnet50 Test*
+
