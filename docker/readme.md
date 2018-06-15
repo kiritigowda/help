@@ -46,3 +46,30 @@ sudo docker run -it --device=/dev/kfd --device=/dev/dri --group-add video --netw
 ````
 ## Step 4 - *Run Resnet50 Test*
 
+### caffe2openvx flow - Trained Caffe Model conversion to OpenVX Graph
+````
+. ~/rocmrc 
+cd ~/AMDOVX/
+mkdir build
+cd build/
+caffe2openvx ../caffeModels/resnet50/resnet50.caffemodel 1 3 224 224
+cmake .
+make
+./anntest 
+````
+
+### caffe2nnir & nnir2openvx - Trained Caffe Model conversion to Neural Net Intermeditate Format (NNIR) to OpenVX Graph
+
+````
+. ~/rocmrc 
+cd ~/AMDOVX/
+mkdir build
+cd build/
+python ../amdovx-modules/utils/model_compiler/python/caffe2nnir.py ../caffeModels/resnet50/resnet50.caffemodel resnet50 --input-dims 1,3,224,224
+python ../amdovx-modules/utils/model_compiler/python/nnir2openvx.py resnet50/ resnet50-build
+cd resnet50-build/
+cmake .
+make
+./anntest weights.bin 
+````
+
