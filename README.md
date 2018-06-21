@@ -15,3 +15,6 @@ This folder contains the scripts required to create an image data base to run in
 
 ### radeonInferenceInstaller
 This folder contains the scripts required to install and run inference using AMDOVX Neural Network Extension Library server and client
+
+### docker
+This folder has help text to setup and run dockers
