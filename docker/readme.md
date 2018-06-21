@@ -16,10 +16,10 @@ sudo systemctl status docker
 
 ## Step 2 - *Get Docker Image*
 ````
-sudo docker pull kiritigowda/ubuntu_16.04.3:amdovx-drop
+sudo docker pull kiritigowda/ubuntu_16.04.3
 ````
 
 ## Step 3 - *Run the docker image*
 ````
-sudo docker run -it --device=/dev/kfd --device=/dev/dri --group-add video --network host kiritigowda/ubuntu_16.04.3:amdovx-drop
+sudo docker run -it --group-add video --network host kiritigowda/ubuntu_16.04.3
 ````
