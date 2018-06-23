@@ -12,4 +12,4 @@
 
 * lspci - list all PCI devices
 
-* lshw -C display
+* lshw -C display - display GPU info
