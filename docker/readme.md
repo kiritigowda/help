@@ -23,3 +23,19 @@ sudo docker pull kiritigowda/ubuntu_16.04.3
 ````
 sudo docker run -it --group-add video --network host kiritigowda/ubuntu_16.04.3
 ````
+
+
+# Docker Commands
+
+1. View docker images in use
+````
+sudo docker ps
+````
+2. View all docker images on the system
+````
+sudo docker images
+````
+3. Remove docker images
+````
+sudo docker rm $(sudo docker ps -aq)
+````
