@@ -85,6 +85,10 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install numpy )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
+	cmd='sudo -S apt-get -y --allow-unauthenticated install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev'
+	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
+	cmd='sudo -S apt-get -y --allow-unauthenticated install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev'
+	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	os.system('(cd '+deps_dir+'/build/OpenCV; cmake -DWITH_OPENCL=OFF -DWITH_OPENCLAMDFFT=OFF -DWITH_OPENCLAMDBLAS=OFF -DWITH_VA_INTEL=OFF -DWITH_OPENCL_SVM=OFF ../../opencv-3.3.0 )');
 	os.system('(cd '+deps_dir+'/build/OpenCV; make -j8 )');
 	cmd='(cd '+deps_dir+'/build/OpenCV; sudo -S make install )'
