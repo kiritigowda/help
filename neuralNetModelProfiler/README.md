@@ -37,8 +37,26 @@ python NNProfiler-build.py -s [sudo password] -d [build directory - optional]
 usage:
 
 ````
-python NNProfiler-profile.py -d [build directory - required]
+python NNProfiler-profile.py -d [build directory - required] -l [profile level - optional (1-8, default:7)]
+```` 
+
+4. **NNProfiler-generatePlatformReport.py** - This Scripts generates the platfrom report for the system.
+
+usage:
+
+````
+python NNProfiler-generatePlatformReport.py -d [build directory - required]
+```` 
+
+5. **NNProfiler-generateFullReport.py** - This Scripts generates the platfrom report & benchmark reports for the system.
+
+usage:
+
+````
+python NNProfiler-generateFullReport.py -d [build directory - required]
 ```` 
 
 ## outputs
-The NNProfiler-profile.py will generate profile.txt and profile.csv.
+* The NNProfiler-profile.py will generate profile.txt and profile.csv.
+* The NNProfiler-generatePlatformReport.py will generate platform report .md file.
+* The NNProfiler-generateFullReport.py will generate platform and benchmark report .md file.
