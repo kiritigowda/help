@@ -17,16 +17,19 @@ caffeModelConfig =	[
 			('vgg19',3,224,224)
 			]
 
-opts, args = getopt.getopt(sys.argv[1:], 'd:')
+opts, args = getopt.getopt(sys.argv[1:], 'd:l:')
 
 buildDir = ''
+profileLevel = 0
 
 for opt, arg in opts:
     if opt == '-d':
     	buildDir = arg
+    elif opt =='-l':
+    	profileLevel = int(arg)
 
 if buildDir == '':
-    print('Invalid command line arguments.\n \t\t\t\t-d [build directory - required]\n ')
+    print('Invalid command line arguments.\n \t\t\t\t-d [build directory - required]\n  \t\t\t\t-l [profile level - optional (level 1-8, default:7)]\n ')
     exit()
 
 if buildDir == '':
@@ -34,6 +37,8 @@ if buildDir == '':
 else:
 	buildDir_AMDOVX = buildDir+'AMDOVX'
 
+if profileLevel == 0:
+	profileLevel = 7
 # Bring CaffeModels
 caffeModels_dir = os.path.expanduser(buildDir_AMDOVX+'/caffeModels')
 if(os.path.exists(caffeModels_dir)):
@@ -72,7 +77,7 @@ for i in range(len(caffeModelConfig)):
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
 	else:
-		for x in range(7):
+		for x in range(profileLevel):
 			x = 2**x
 			print "\n",modelName," - Batch size ", x
 			x = str(x)
@@ -116,7 +121,7 @@ for i in range(len(caffeModelConfig)):
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_output.log)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; ./anntest weights.bin | tee -a ../../nnir_output.log)');
 	else:
-		for x in range(7):
+		for x in range(profileLevel):
 			x = 2**x
 			print "\n",modelName," - Batch size ", x
 			x = str(x)
@@ -160,7 +165,7 @@ for i in range(len(caffeModelConfig)):
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_fuse_output.log)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; ./anntest weights.bin | tee -a ../../nnir_fuse_output.log)');
 	else:
-		for x in range(7):
+		for x in range(profileLevel):
 			x = 2**x
 			print "\n",modelName," - Batch size ", x 
 			x = str(x)
