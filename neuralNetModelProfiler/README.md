@@ -57,4 +57,6 @@ python NNProfiler-generateFullReport.py -d [build directory - required]
 ```` 
 
 ## outputs
-The NNProfiler-profile.py will generate profile.txt and profile.csv.
+* The NNProfiler-profile.py will generate profile.txt and profile.csv.
+* The NNProfiler-generatePlatformReport.py will generate platform report .md file.
+* The NNProfiler-generateFullReport.py will generate platform and benchmark report .md file.
