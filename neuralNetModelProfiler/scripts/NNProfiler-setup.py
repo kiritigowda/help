@@ -95,3 +95,5 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/build/OpenCV; sudo -S ldconfig )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
+	cmd='sudo -S apt-get -y --allow-unauthenticated install inxi'
+	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
