@@ -15,3 +15,5 @@
 * sudo lshw -C display - display GPU info
 
 * diff -y --suppress-common-lines file1 file2 | aha --black --title 'report-diff' > reportDiff.html
+
+* lsmod | grep kfd - - Show the status of modules in the Linux Kernel
