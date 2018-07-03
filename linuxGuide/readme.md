@@ -17,3 +17,7 @@
 * diff -y --suppress-common-lines file1 file2 | aha --black --title 'report-diff' > reportDiff.html
 
 * lsmod | grep kfd - - Show the status of modules in the Linux Kernel
+
+* lsb_release -a for information related to the Ubuntu version
+
+* uname -r
