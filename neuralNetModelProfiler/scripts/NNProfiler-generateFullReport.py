@@ -63,6 +63,7 @@ def strip_libtree_addresses(lib_tree):
 if __name__ == "__main__":
 
     # generate annie .so
+    print("\nGenerating .so File...\n")
     logOutput = shell ('mkdir '+buildDir_AMDOVX+'/buildLog')
     logOutput = shell ('cd '+buildDir_AMDOVX+'/buildLog')
     logOutput = shell ('python '+buildDir_AMDOVX+'/amdovx-modules/utils/model_compiler/python/caffe2nnir.py '+buildDir_AMDOVX+'/caffeModels/resnet50/resnet50.caffemodel '+buildDir_AMDOVX+'/buildLog/resnet50 --input-dims 1,3,224,224')
@@ -109,7 +110,7 @@ if __name__ == "__main__":
     rocm_packages = shell('dpkg-query -W | grep rocm').split('\n')    
 
     # write report
-
+    print("\nGenerating Report File...\n")
     with open(report_filename, 'w') as f:
 
         f.write("Full Report\n")
@@ -164,4 +165,17 @@ if __name__ == "__main__":
 
         f.write("\n\n---\nCopyright AMD 2018\n")
 
-    exit(0)
+    ## File diff generator
+    diffFolder = '~/.AMDOVX-Diff'
+    diffFolder_dir = os.path.expanduser(diffFolder)
+
+    if(os.path.exists(diffFolder_dir)):
+        print("\nGenerating Diff File...\n")
+        titleName = 'Diff-Report'
+        os.system('diff -y --suppress-common-lines '+report_filename+' '+diffFolder_dir+'/latestReportFile.md | aha --black --title '+titleName+' > reportDiff.html');
+        os.system(' cp '+report_filename+' '+diffFolder_dir+'/latestReportFile.md');
+    else:
+        os.system('(cd ; mkdir '+diffFolder_dir+')');
+        os.system(' cp '+report_filename+' '+diffFolder_dir+'/latestReportFile.md');
+
+exit(0)
