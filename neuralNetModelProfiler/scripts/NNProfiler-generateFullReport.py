@@ -121,7 +121,7 @@ if __name__ == "__main__":
         f.write("\n\nBenchmark Report\n")
         f.write("--------\n")
         f.write("\n")
-        with open(buildDir_AMDOVX+'/develop/caffe2nnir2openvx_fuse_profile.md') as benchmarkFile:
+        with open(buildDir_AMDOVX+'/develop/caffe2nnir2openvx_noFuse_profile.md') as benchmarkFile:
             for line in benchmarkFile:
                 f.write("%s" % line)
 
