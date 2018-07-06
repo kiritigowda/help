@@ -47,6 +47,7 @@ if profileLevel == 0:
 
 if profileMode == 0:
 	profileMode = 6
+
 # Bring CaffeModels
 caffeModels_dir = os.path.expanduser(buildDir_AMDOVX+'/caffeModels')
 if(os.path.exists(caffeModels_dir)):
