@@ -32,7 +32,9 @@ for opt, arg in opts:
     	profileMode = int(arg)
 
 if buildDir == '':
-    print('Invalid command line arguments.\n \t\t\t\t-d [build directory - required]\n  \t\t\t\t-l [profile level - optional (level 1-8, default:7)]\n ')
+    print('Invalid command line arguments.\n \t\t\t\t-d [build directory - required]\n  '\
+    										'\t\t\t\t-l [profile level - optional (level 1-8, default:7)]\n'\
+    										'\t\t\t\t-l [profile mode - optional (level 1-6, default:6)]\n')
     exit()
 
 if buildDir == '':
