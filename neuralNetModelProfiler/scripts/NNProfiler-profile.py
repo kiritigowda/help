@@ -67,14 +67,18 @@ if(os.path.exists(develop_dir)):
 
 os.system('(cd '+buildDir_AMDOVX+'; mkdir develop)');
 
+print("\nCaffe Models access ..\n")
+for i in range(len(caffeModelConfig)):
+	modelName, channel, height, width = caffeModelConfig[i]
+	os.system('(cd '+develop_dir+'; mkdir '+modelName+')');
+	os.system('(cd '+develop_dir+'/'+modelName+'; cp -r ../../caffeModels/'+modelName+' .)');
+
 
 # run caffe2openvx flow
 if profileMode == 6 or profileMode == 1 or profileMode == 4:
 	for i in range(len(caffeModelConfig)):
 		modelName, channel, height, width = caffeModelConfig[i]
 		print "\n caffe2openvx -- ",modelName,"\n"
-		os.system('(cd '+develop_dir+'; mkdir '+modelName+')');
-		os.system('(cd '+develop_dir+'/'+modelName+'; cp -r ../../caffeModels/'+modelName+' .)');
 		if(modelName == 'xyznet' or modelName == 'xyznet_18-04'):
 			x = 1
 			print "\n",modelName," - Batch size ", x
@@ -116,7 +120,6 @@ if profileMode == 6 or profileMode == 1 or profileMode == 4:
 # run caffe2nnir2openvx no fuse flow
 if profileMode == 6 or profileMode == 2 or profileMode == 4 or profileMode == 5:
 	modelCompilerScripts_dir = os.path.expanduser(buildDir_AMDOVX+'/amdovx-modules/utils/model_compiler/python')
-	print(modelCompilerScripts_dir)
 	for i in range(len(caffeModelConfig)):
 		modelName, channel, height, width = caffeModelConfig[i]
 		print "\n caffe2nnir2openvx --",modelName,"\n"
@@ -160,7 +163,6 @@ if profileMode == 6 or profileMode == 2 or profileMode == 4 or profileMode == 5:
 # run caffe2nnir2openvx with fuse flow
 if profileMode == 6 or profileMode == 3 or profileMode == 5:
 	modelCompilerScripts_dir = os.path.expanduser(buildDir_AMDOVX+'/amdovx-modules/utils/model_compiler/python')
-	print(modelCompilerScripts_dir)
 	for i in range(len(caffeModelConfig)):
 		modelName, channel, height, width = caffeModelConfig[i]
 		print "\n caffe2nnir2openvx --",modelName,"\n"
