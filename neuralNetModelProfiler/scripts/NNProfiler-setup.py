@@ -4,25 +4,33 @@ import sys
 import subprocess
  
 
-opts, args = getopt.getopt(sys.argv[1:], 's:d:')
+opts, args = getopt.getopt(sys.argv[1:], 's:d:m:')
  
 sudoPassword = ''
 setupDir = ''
+MIOpenVersion = ''
 
 for opt, arg in opts:
     if opt == '-s':
         sudoPassword = arg
     elif opt =='-d':
     	setupDir = arg
+    elif opt =='-m':
+    	MIOpenVersion = arg
 
 if sudoPassword == '':
-    print('Invalid command line arguments.\n \t\t\t\t-s [sudo password - required]\n \t\t\t\t-d [setup directory - optional]\n ')
+    print('Invalid command line arguments.\n \t\t\t\t-s [sudo password - required]\n '\
+                                            '\t\t\t\t-d [setup directory - optional]\n '\
+                                            '\t\t\t\t-m [MIOpen Version - optional (default:1.3.0)]\n')
     exit()
 
 if setupDir == '':
 	setupDir_deps = '~/deps'
 else:
 	setupDir_deps = setupDir+'deps'
+
+if MIOpenVersion == '':
+	MIOpenVersion = '1.3.0'
 
 from subprocess import call
 deps_dir = os.path.expanduser(setupDir_deps)
@@ -35,7 +43,8 @@ else:
 	os.system('(cd '+setupDir+'; mkdir deps)');
 	os.system('(cd '+deps_dir+'; git clone https://github.com/RadeonOpenCompute/rocm-cmake.git )');
 	os.system('(cd '+deps_dir+'; git clone https://github.com/ROCmSoftwarePlatform/MIOpenGEMM.git )');
-	os.system('(cd '+deps_dir+'; git clone https://github.com/ROCmSoftwarePlatform/MIOpen.git )');
+	os.system('(cd '+deps_dir+'; wget https://github.com/ROCmSoftwarePlatform/MIOpen/archive/'+MIOpenVersion+'.zip )');
+	os.system('(cd '+deps_dir+'; unzip '+MIOpenVersion+'.zip )');
 	os.system('(cd '+deps_dir+'; git clone https://github.com/google/protobuf.git )');
 	os.system('(cd '+deps_dir+'; wget https://github.com/opencv/opencv/archive/3.3.0.zip )');
 	os.system('(cd '+deps_dir+'; unzip 3.3.0.zip )');
@@ -49,11 +58,11 @@ else:
 	os.system('(cd '+deps_dir+'/build/MIOpenGEMM; make -j8 )');
 	cmd='(cd '+deps_dir+'/build/MIOpenGEMM; sudo -S make install )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/MIOpen; sudo -S cmake -P install_deps.cmake )'
+	cmd='(cd '+deps_dir+'/MIOpen-'+MIOpenVersion+'; sudo -S cmake -P install_deps.cmake )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/build/MIOpen; sudo -S apt-get -y --allow-unauthenticated install libssl-dev libboost-dev libboost-system-dev libboost-filesystem-dev  )'
+	cmd='(cd '+deps_dir+'/build/MIOpen-'+MIOpenVersion+'; sudo -S apt-get -y --allow-unauthenticated install libssl-dev libboost-dev libboost-system-dev libboost-filesystem-dev  )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	os.system('(cd '+deps_dir+'/build/MIOpen; cmake -DMIOPEN_BACKEND=OpenCL ../../MIOpen )');
+	os.system('(cd '+deps_dir+'/build/MIOpen; cmake -DMIOPEN_BACKEND=OpenCL ../../MIOpen-'+MIOpenVersion+' )');
 	os.system('(cd '+deps_dir+'/build/MIOpen; make -j8 )');
 	os.system('(cd '+deps_dir+'/build/MIOpen; make MIOpenDriver )');
 	cmd='(cd '+deps_dir+'/build/MIOpen; sudo -S make install )'
