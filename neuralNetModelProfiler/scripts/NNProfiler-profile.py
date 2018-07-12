@@ -17,11 +17,12 @@ caffeModelConfig =	[
 			('vgg19',3,224,224)
 			]
 
-opts, args = getopt.getopt(sys.argv[1:], 'd:l:m:')
+opts, args = getopt.getopt(sys.argv[1:], 'd:l:m:f:')
 
 buildDir = ''
 profileLevel = 0
 profileMode = 0
+miopenFind = 0
 
 for opt, arg in opts:
     if opt == '-d':
@@ -30,11 +31,14 @@ for opt, arg in opts:
     	profileLevel = int(arg)
     elif opt =='-m':
     	profileMode = int(arg)
+    elif opt =='-f':
+    	miopenFind = int(arg)
 
 if buildDir == '':
     print('Invalid command line arguments.\n \t\t\t\t-d [build directory - required]\n  '\
     										'\t\t\t\t-l [profile level - optional (level 1-8, default:7)]\n'\
-    										'\t\t\t\t-l [profile mode - optional (level 1-6, default:6)]\n')
+    										'\t\t\t\t-m [profile mode - optional (level 1-6, default:6)]\n'\
+    										'\t\t\t\t-f [MIOPEN_FIND_ENFORCE mode - optional (level 1-5, default:0)]\n')
     exit()
 
 if buildDir == '':
@@ -89,7 +93,7 @@ if profileMode == 6 or profileMode == 1 or profileMode == 4:
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(height)+' '+str(width)+')');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; cmake .; make)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
-			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; MIOPEN_FIND_ENFORCE='+str(miopenFind)+' ./anntest | tee -a ../../output.log)');
 		else:
 			for x in range(profileLevel):
 				x = 2**x
@@ -100,7 +104,7 @@ if profileMode == 6 or profileMode == 1 or profileMode == 4:
 				os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; export PATH=$PATH:/opt/rocm/bin; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib; caffe2openvx ../'+modelName+'/'+modelName+'.prototxt '+x+' '+str(channel)+' '+str(height)+' '+str(width)+')');
 				os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; cmake .; make)');
 				os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../output.log)');
-				os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; ./anntest | tee -a ../../output.log)');
+				os.system('(cd '+develop_dir+'/'+modelName+'/build_'+x+'; MIOPEN_FIND_ENFORCE='+str(miopenFind)+' ./anntest | tee -a ../../output.log)');
 
 	runAwk_csv = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s,%3d,%8.3f ms,%8.3f ms\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/output.log > '''+develop_dir+'''/caffe2openvx_profile.csv'''
 	os.system(runAwk_csv);
@@ -133,7 +137,7 @@ if profileMode == 6 or profileMode == 2 or profileMode == 4 or profileMode == 5:
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir2openvx.py . .)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; cmake .; make)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_output.log)');
-			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; ./anntest weights.bin | tee -a ../../nnir_output.log)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; MIOPEN_FIND_ENFORCE='+str(miopenFind)+' ./anntest weights.bin | tee -a ../../nnir_output.log)');
 		else:
 			for x in range(profileLevel):
 				x = 2**x
@@ -144,7 +148,7 @@ if profileMode == 6 or profileMode == 2 or profileMode == 4 or profileMode == 5:
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir2openvx.py . .)');
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; cmake .; make)');
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_output.log)');
-				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; ./anntest weights.bin | tee -a ../../nnir_output.log)');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_build_'+x+'; MIOPEN_FIND_ENFORCE='+str(miopenFind)+' ./anntest weights.bin | tee -a ../../nnir_output.log)');
 
 	runAwk_csv = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s,%3d,%8.3f ms,%8.3f ms\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_output.log > '''+develop_dir+'''/caffe2nnir2openvx_noFuse_profile.csv'''
 	os.system(runAwk_csv);
@@ -177,7 +181,7 @@ if profileMode == 6 or profileMode == 3 or profileMode == 5:
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir2openvx.py . .)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; cmake .; make)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_fuse_output.log)');
-			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; ./anntest weights.bin | tee -a ../../nnir_fuse_output.log)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; MIOPEN_FIND_ENFORCE='+str(miopenFind)+' ./anntest weights.bin | tee -a ../../nnir_fuse_output.log)');
 		else:
 			for x in range(profileLevel):
 				x = 2**x
@@ -189,7 +193,7 @@ if profileMode == 6 or profileMode == 3 or profileMode == 5:
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir2openvx.py . .)');
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; cmake .; make)');
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_fuse_output.log)');
-				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; ./anntest weights.bin | tee -a ../../nnir_fuse_output.log)');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; MIOPEN_FIND_ENFORCE='+str(miopenFind)+' ./anntest weights.bin | tee -a ../../nnir_fuse_output.log)');
 
 	runAwk_csv = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s,%3d,%8.3f ms,%8.3f ms\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_fuse_output.log > '''+develop_dir+'''/caffe2nnir2openvx_fuse_profile.csv'''
 	os.system(runAwk_csv);
