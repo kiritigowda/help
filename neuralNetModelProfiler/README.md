@@ -37,7 +37,7 @@ python NNProfiler-build.py -s [sudo password] -d [build directory - optional]
 usage:
 
 ````
-python NNProfiler-profile.py -d [build directory - required] -l [profile level - optional (1-8, default:7)]
+python NNProfiler-profile.py -d [build directory - required] -l [profile level - optional (1-8, default:7)] -m [Profile Mode - optional (1-6, default:6)]
 ```` 
 
 4. **NNProfiler-generatePlatformReport.py** - This Scripts generates the platfrom report for the system.
