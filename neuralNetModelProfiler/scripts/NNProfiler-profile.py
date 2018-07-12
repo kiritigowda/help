@@ -22,7 +22,7 @@ opts, args = getopt.getopt(sys.argv[1:], 'd:l:m:f:')
 buildDir = ''
 profileLevel = 0
 profileMode = 0
-miopenFind = 0
+miopenFind = 1
 
 for opt, arg in opts:
     if opt == '-d':
@@ -38,7 +38,7 @@ if buildDir == '':
     print('Invalid command line arguments.\n \t\t\t\t-d [build directory - required]\n  '\
     										'\t\t\t\t-l [profile level - optional (level 1-8, default:7)]\n'\
     										'\t\t\t\t-m [profile mode - optional (level 1-6, default:6)]\n'\
-    										'\t\t\t\t-f [MIOPEN_FIND_ENFORCE mode - optional (level 1-5, default:0)]\n')
+    										'\t\t\t\t-f [MIOPEN_FIND_ENFORCE mode - optional (level 1-5, default:1)]\n')
     exit()
 
 if buildDir == '':
