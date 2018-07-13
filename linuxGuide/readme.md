@@ -21,3 +21,5 @@
 * lsb_release -a for information related to the Ubuntu version
 
 * uname -r
+
+* 2>&1 | tee output.log - save error & output stream
