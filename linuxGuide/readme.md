@@ -23,3 +23,5 @@
 * uname -r
 
 * 2>&1 | tee output.log - save error & output stream
+
+* sudo chmod -R a+wrX folder - write permission
