@@ -39,3 +39,26 @@ sudo docker images
 ````
 sudo docker rm $(sudo docker ps -aq)
 ````
+
+4. Run Camera from docker
+
+````
+sudo docker run -it 
+-v /home/kiriti/:/root/hostDrive/ 
+-v /dev/video0:/dev/video0 
+-v /tmp/.X11-unix:/tmp/.X11-unix 
+--volume="$HOME/.Xauthority:/root/.Xauthority:rw" 
+-e "PACKAGES=ffmpeg" 
+-e DISPLAY=$DISPLAY  
+-e DISPLAY  
+--device=/dev/kfd 
+--device=/dev/dri 
+--device=/dev/mem 
+--device /dev/video0 
+--device /dev/snd 
+--cap-add=SYS_RAWIO 
+--group-add video 
+--network host 
+--env="DISPLAY" 
+kiritigowda/annie
+````
