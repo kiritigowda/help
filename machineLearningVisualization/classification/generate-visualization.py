@@ -1,11 +1,11 @@
-__author__ = "Kiriti Nagesh Gowda"
-__copyright__ = "Copyright 2018, AMD Dataset Analysis Tool"
-__credits__ = ["Mike Schmit"]
-__license__ = "MIT"
-__version__ = "0.9.0"
-__maintainer__ = "Kiriti Nagesh Gowda"
-__email__ = "Kiriti.NageshGowda@amd.com"
-__status__ = "Alpha"
+__author__      = "Kiriti Nagesh Gowda"
+__copyright__   = "Copyright 2018, AMD Dataset Analysis Tool"
+__credits__     = ["Mike Schmit"]
+__license__     = "MIT"
+__version__     = "0.9.0"
+__maintainer__  = "Kiriti Nagesh Gowda"
+__email__       = "Kiriti.NageshGowda@amd.com"
+__status__      = "Alpha"
 
 import os
 import getopt
@@ -124,15 +124,223 @@ top1TotProb = top2TotProb = top3TotProb = top4TotProb = top5TotProb = totalFailP
 top1Count = top2Count = top3Count = top4Count = top5Count = 0;
 totalNoGroundTruth = totalMismatch = 0;
 
-topKPassFail = [];
-topKHierarchyPassFail = [];
-topLabelMatch = [];
-w, h = 100, 2;
-topKPassFail = [[0 for x in range(w)] for y in range(h)]
-w, h = 100, 12;
-topKHierarchyPassFail = [[0 for x in range(w)] for y in range(h)]
-w, h = 1000, 7;
-topLabelMatch = [[0 for x in range(w)] for y in range(h)] 
+
+topKPassFail = []
+topKHierarchyPassFail = []
+for i in xrange(100):
+    topKPassFail.append([])
+    topKHierarchyPassFail.append([])
+    for j in xrange(2):
+        topKPassFail[i].append(0)
+    for k in xrange(12):
+        topKHierarchyPassFail[i].append(0)
+
+
+topLabelMatch = []
+for i in xrange(1000):
+    topLabelMatch.append([])
+    for j in xrange(7):
+        topLabelMatch[i].append(0)
+
+# Generate Comphrehensive Results
+print "resultsComphrehensive.csv generation .."
+orig_stdout = sys.stdout
+sys.stdout = open(toolKit_dir+'/resultsComphrehensive.csv','w')
+print(  'FileName,outputLabel-1,outputLabel-2,outputLabel-3,outputLabel-4,outputLabel-5,'\
+        'groundTruthLabel,Matched,outputLabelText-1,outputLabelText-2,outputLabelText-3,outputLabelText-4,outputLabelText-5,'\
+        'groundTruthLabelText,Prob-1,Prob-2,Prob-3,Prob-4,Prob-5' );
+imageDataSize = numElements;
+for x in range(numElements):
+    truth = int(resultDataBase[x][1]);
+    if truth >= 0:
+        match = 0;
+        label_1 = int(resultDataBase[x][2]);
+        label_2 = int(resultDataBase[x][3]);
+        label_3 = int(resultDataBase[x][4]);
+        label_4 = int(resultDataBase[x][5]);
+        label_5 = int(resultDataBase[x][6]);
+        prob_1 = float(resultDataBase[x][7]);
+        prob_2 = float(resultDataBase[x][8]);
+        prob_3 = float(resultDataBase[x][9]);
+        prob_4 = float(resultDataBase[x][10]);
+        prob_5 = float(resultDataBase[x][11]);
+
+        if(truth == label_1):
+            match = 1; 
+            top1Count+= 1;
+            top1TotProb += prob_1;
+            topLabelMatch[truth][0]+= 1;
+            topLabelMatch[truth][1]+= 1;
+
+        elif(truth == label_2):
+            match = 2; 
+            top2Count+= 1;
+            top2TotProb += prob_2;
+            topLabelMatch[truth][0]+= 1;
+            topLabelMatch[truth][2]+= 1;
+
+        elif(truth == label_3):
+            match = 3; 
+            top3Count+= 1; 
+            top3TotProb += prob_3;
+            topLabelMatch[truth][0]+= 1;
+            topLabelMatch[truth][3]+= 1;
+
+        elif(truth == label_4):
+            match = 4;
+            top4Count+= 1;
+            top4TotProb += prob_4;
+            topLabelMatch[truth][0]+= 1;
+            topLabelMatch[truth][4]+= 1;
+
+        elif(truth == label_5):
+            match = 5; 
+            top5Count+= 1;
+            top5TotProb += prob_5;
+            topLabelMatch[truth][0]+= 1;
+            topLabelMatch[truth][5]+= 1;
+
+        else:
+            totalMismatch+= 1;
+            totalFailProb += prob_1;
+            topLabelMatch[truth][0]+= 1;
+
+
+        if(truth != label_1):
+            topLabelMatch[label_1][6]+= 1;
+
+        print(resultDataBase[x][0]+','+str(label_1)+','+str(label_2)+','+str(label_3)+','+str(label_4)+','+str(label_5)+','+str(truth)+','+str(match)+',"'\
+            +(LabelLines[label_1].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[label_2].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[label_3].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[label_4].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[label_5].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[truth].split(' ', 1)[1].rstrip('\n'))+'",'\
+            +str(prob_1)+','+str(prob_2)+','+str(prob_3)+','+str(prob_4)+','+str(prob_5));
+
+        # Calculate hierarchy graph
+        if hierarchyFile != '':
+            if(truth == label_1): 
+                count = 0;
+                f = 0
+                while f < 1:
+                    if((prob_1 < (f + 0.01)) and prob_1 > f):
+                        topKPassFail[count][0]+= 1;
+
+                        topKHierarchyPassFail[count][0]+= 1;
+                        topKHierarchyPassFail[count][2]+= 1;
+                        topKHierarchyPassFail[count][4]+= 1;
+                        topKHierarchyPassFail[count][6]+= 1;
+                        topKHierarchyPassFail[count][8]+= 1;
+                        topKHierarchyPassFail[count][10]+= 1;
+
+                    count+= 1;
+                    f+= 0.01;
+            else:
+                count = 0;
+                f = 0
+                while f < 1:
+                    if((prob_1 < (f + 0.01)) and prob_1 > f):
+                        topKPassFail[count][1]+= 1;
+
+                        truthHierarchy = hierarchyDataBase[truth];
+                        resultHierarchy = hierarchyDataBase[label_1];
+                        token_result = '';
+                        token_truth = '';
+                        previousTruth = 0;
+                        catCount = 0;
+                        while catCount < 6:
+                            token_truth = truthHierarchy[catCount];
+                            token_result = resultHierarchy[catCount];
+                            if((token_truth != '') and (token_truth == token_result)):
+                                topKHierarchyPassFail[count][catCount*2]+= 1;
+                                previousTruth = 1;
+                            elif( (previousTruth == 1) and (token_truth == '' and token_result == '')):
+                                topKHierarchyPassFail[count][catCount*2]+= 1;
+                            else:
+                                topKHierarchyPassFail[count][catCount*2 + 1]+= 1;
+                                previousTruth = 0;
+                            catCount+= 1;
+                    count+= 1;
+                    f+= 0.01;
+
+    else: 
+        match = -1;
+        label_1 = int(resultDataBase[x][2]);
+        label_2 = int(resultDataBase[x][3]);
+        label_3 = int(resultDataBase[x][4]);
+        label_4 = int(resultDataBase[x][5]);
+        label_5 = int(resultDataBase[x][6]);
+        prob_1 = float(resultDataBase[x][7]);
+        prob_2 = float(resultDataBase[x][8]);
+        prob_3 = float(resultDataBase[x][9]);
+        prob_4 = float(resultDataBase[x][10]);
+        prob_5 = float(resultDataBase[x][11]);
+        print(resultDataBase[x][0]+','+str(label_1)+','+str(label_2)+','+str(label_3)+','+str(label_4)+','+str(label_5)+','+str(truth)+','+str(match)+',"'\
+            +(LabelLines[label_1].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[label_2].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[label_3].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[label_4].split(' ', 1)[1].rstrip('\n'))+'","'\
+            +(LabelLines[label_5].split(' ', 1)[1].rstrip('\n'))+'",Unknown,'\
+            +str(prob_1)+','+str(prob_2)+','+str(prob_3)+','+str(prob_4)+','+str(prob_5));
+                    
+        totalNoGroundTruth+= 1;
+
+sys.stdout = orig_stdout
+print "resultsComphrehensive.csv generated"
+
+print("\n\n ***************** INFERENCE SUMMARY ***************** \n\n");
+netSummaryImages =  imageDataSize - totalNoGroundTruth;
+passProb = top1TotProb+top2TotProb+top3TotProb+top4TotProb+top5TotProb;
+passCount = top1Count+top2Count+top3Count+top4Count+top5Count;
+avgPassProb = float(passProb/passCount);
+
+print('Images with Ground Truth -- '+str(netSummaryImages));
+print('Images without Ground Truth -- '+str(totalNoGroundTruth));
+print('Total image set for Inference -- '+str(imageDataSize));
+print("\n");
+print('Total Top K match -- '+str(passCount));
+accuracyPer = float((passCount / netSummaryImages)*100);
+print('Inference Accuracy on Top K -- '+str(accuracyPer));
+print('Average Pass Probability for Top K -- '+str(avgPassProb));
+print("\n");    
+print('Total mismatch -- '+str(totalMismatch));
+accuracyPer = float(totalMismatch/netSummaryImages);
+print('Inference mismatch Percentage -- '+str(accuracyPer*100));
+print('Average mismatch Probability for Top 1 -- '+str(totalFailProb/totalMismatch));
+
+print("\n*****Top1*****\n");
+print('Top1 matches -- '+str(top1Count));  
+accuracyPer = float(top1Count/netSummaryImages);
+print('Top1 match Percentage -- '+str(accuracyPer*100));          
+print('Avg Top1 pass prob -- '+str(top1TotProb/top1Count));
+         
+print("\n*****Top2*****\n");   
+print('Top2 matches -- '+str(top2Count));
+accuracyPer = float(top2Count/netSummaryImages);
+print('Top2 match Percentage -- '+str(accuracyPer*100));
+print('Avg Top2 pass prob -- '+str(top2TotProb/top2Count));
+
+print("\n*****Top3*****\n");
+print('Top3 matches -- '+str(top3Count));
+accuracyPer = float(top3Count/netSummaryImages);
+print('Top3 match Percentage -- '+str(accuracyPer*100));
+print('Avg Top3 pass prob -- '+str(top3TotProb/top3Count));
+
+print("\n*****Top4*****\n");
+print('Top4 matches -- '+str(top4Count));
+accuracyPer = float(top4Count/netSummaryImages);
+print('Top4 match Percentage -- '+str(accuracyPer*100));
+print('Avg Top4 pass prob -- '+str(top4TotProb/top4Count));
+
+print("\n*****Top5*****\n");
+print('Top5 matches -- '+str(top5Count));
+accuracyPer = float(top5Count/netSummaryImages);
+print('Top5 match Percentage -- '+str(accuracyPer*100));
+print('Avg Top5 pass prob -- '+str(top5TotProb/top5Count));
+print("\n\n");
+
+
 
 # generate detailed results.csv
 print "index.html generation .."
@@ -227,7 +435,7 @@ print ("\t\tfunction sortTable(coloum,descending) {\n");
 print ("\t\tvar table, rows, switching, i, x, y, shouldSwitch;\n");
 print ("\t\ttable = document.getElementById(id=\"resultsTable\"); switching = true;\n");
 print ("\t\twhile (switching) {  switching = false; rows = table.getElementsByTagName(\"TR\");\n");
-print ("\t\t\tfor (i = 1; i < (rows.length - 1); i++) { shouldSwitch = false;\n");
+print ("\t\t\tfor (i = 1; i < (rows.length - 1); i+= 1) { shouldSwitch = false;\n");
 print ("\t\t\t\tx = rows[i].getElementsByTagName(\"TD\")[coloum];\n");
 print ("\t\t\t\ty = rows[i + 1].getElementsByTagName(\"TD\")[coloum];\n");
 print ("\t\t\t\tif(descending){if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {\n");
@@ -242,7 +450,7 @@ print ("\t\tfunction sortLabelsTable(coloum,descending) {\n");
 print ("\t\tvar table, rows, switching, i, x, y, shouldSwitch;\n");
 print ("\t\ttable = document.getElementById(id=\"labelsTable\"); switching = true;\n");
 print ("\t\twhile (switching) {  switching = false; rows = table.getElementsByTagName(\"TR\");\n");
-print ("\t\t\tfor (i = 1; i < (rows.length - 1); i++) { shouldSwitch = false;\n");
+print ("\t\t\tfor (i = 1; i < (rows.length - 1); i+= 1) { shouldSwitch = false;\n");
 print ("\t\t\t\tx = rows[i].getElementsByTagName(\"TD\")[coloum];\n");
 print ("\t\t\t\ty = rows[i + 1].getElementsByTagName(\"TD\")[coloum];\n");
 print ("\t\t\t\tif(descending){if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {\n");
@@ -262,7 +470,7 @@ print ("\t\tinput = document.getElementById(DataVar);\n");
 print ("\t\tfilter = input.value.toUpperCase();\n");
 print ("\t\ttable = document.getElementById(\"resultsTable\");\n");
 print ("\t\ttr = table.getElementsByTagName(\"tr\");\n");
-print ("\t\tfor (i = 1; i < tr.length; i++) {\n");
+print ("\t\tfor (i = 1; i < tr.length; i+= 1) {\n");
 print ("\t\ttd = tr[i].getElementsByTagName(\"td\")[rowNum];\n");
 print ("\t\tif (td) { if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {tr[i].style.display = \"\"; }\n");
 print ("\t\telse { tr[i].style.display = \"none\";}}}}\n");
@@ -276,7 +484,7 @@ print ("\t\tinput = document.getElementById(DataVar);\n");
 print ("\t\tfilter = input.value.toUpperCase();\n");
 print ("\t\ttable = document.getElementById(\"labelsTable\");\n");
 print ("\t\ttr = table.getElementsByTagName(\"tr\");\n");
-print ("\t\tfor (i = 1; i < tr.length; i++) {\n");
+print ("\t\tfor (i = 1; i < tr.length; i+= 1) {\n");
 print ("\t\ttd = tr[i].getElementsByTagName(\"td\")[rowNum];\n");
 print ("\t\tif (td) { if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {tr[i].style.display = \"\"; }\n");
 print ("\t\telse { tr[i].style.display = \"none\";}}}}\n");
@@ -369,7 +577,7 @@ print ("\t\tinput = document.getElementById(DataVar);\n");
 print ("\t\tfilter = input.value.toUpperCase();\n");
 print ("\t\ttable = document.getElementById(\"resultsTable\");\n");
 print ("\t\ttr = table.getElementsByTagName(\"tr\");\n");
-print ("\t\tfor (i = 1; i < tr.length; i++) {\n");
+print ("\t\tfor (i = 1; i < tr.length; i+= 1) {\n");
 print ("\t\ttd = tr[i].getElementsByTagName(\"td\")[rowNum];\n");
 print ("\t\tif (td) { if (td.innerHTML.toUpperCase().indexOf(filter) <= -1) {tr[i].style.display = \"\"; }\n");
 print ("\t\telse { tr[i].style.display = \"none\";}}}}\n");
@@ -384,40 +592,40 @@ print ("\t\tfunction notResultFilter( ) {\n");
 print ("\t\tvar input, filter, table, tr, td, i, rowNum, count;\n");
 print ("\t\tcount=0;\n");
 print ("\t\tif(document.getElementById('GroundTruthText').value != ''){\n");
-print ("\t\tinput = document.getElementById('GroundTruthText');  rowNum = 2;count++;}\n");
+print ("\t\tinput = document.getElementById('GroundTruthText');  rowNum = 2;count+= 1;}\n");
 print ("\t\tif(document.getElementById('GroundTruthID').value != ''){\n");
-print ("\t\tinput = document.getElementById('GroundTruthID'); rowNum = 3;count++;}\n");
+print ("\t\tinput = document.getElementById('GroundTruthID'); rowNum = 3;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Matched').value != ''){\n");
-print ("\t\tinput = document.getElementById('Matched');  rowNum = 9;count++;}\n");
+print ("\t\tinput = document.getElementById('Matched');  rowNum = 9;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top1').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top1'); rowNum = 4;count++; }\n");
+print ("\t\tinput = document.getElementById('Top1'); rowNum = 4;count+= 1; }\n");
 print ("\t\tif(document.getElementById('Top1Prob').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top1Prob');rowNum = 15;count++;}\n");
+print ("\t\tinput = document.getElementById('Top1Prob');rowNum = 15;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Text1').value != ''){\n");
-print ("\t\tinput = document.getElementById('Text1');rowNum = 10;count++;}\n");
+print ("\t\tinput = document.getElementById('Text1');rowNum = 10;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top2').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top2');rowNum = 5;count++;}\n");
+print ("\t\tinput = document.getElementById('Top2');rowNum = 5;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top2Prob').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top2Prob');rowNum = 16;count++;}\n");
+print ("\t\tinput = document.getElementById('Top2Prob');rowNum = 16;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top3').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top3');rowNum = 6;count++;}\n");
+print ("\t\tinput = document.getElementById('Top3');rowNum = 6;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top3Prob').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top3Prob');rowNum = 17;count++;}\n");
+print ("\t\tinput = document.getElementById('Top3Prob');rowNum = 17;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top4').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top4');rowNum = 7;count++;}\n");
+print ("\t\tinput = document.getElementById('Top4');rowNum = 7;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top4Prob').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top4Prob');rowNum = 18;count++;}\n");
+print ("\t\tinput = document.getElementById('Top4Prob');rowNum = 18;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top5').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top5');rowNum = 8;count++;}\n");
+print ("\t\tinput = document.getElementById('Top5');rowNum = 8;count+= 1;}\n");
 print ("\t\tif(document.getElementById('Top5Prob').value != ''){\n");
-print ("\t\tinput = document.getElementById('Top5Prob');rowNum = 19;count++;}\n");
+print ("\t\tinput = document.getElementById('Top5Prob');rowNum = 19;count+= 1;}\n");
 print ("\t\tif(count == 0){alert(\"Not Filter ERROR: No filter variable entered\");}\n");
 print ("\t\telse if(count > 1){\n");
 print ("\t\talert(\"Not Filter ERROR: Only one variable filtering supported. Use Clear Filter and enter one filter variable\");}\n");
 print ("\t\tfilter = input.value.toUpperCase();\n");
 print ("\t\ttable = document.getElementById(\"resultsTable\");\n");
 print ("\t\ttr = table.getElementsByTagName(\"tr\");\n");
-print ("\t\tfor (i = 1; i < tr.length; i++) {\n");
+print ("\t\tfor (i = 1; i < tr.length; i+= 1) {\n");
 print ("\t\ttd = tr[i].getElementsByTagName(\"td\")[rowNum];\n");
 print ("\t\tif (td) { if (td.innerHTML.toUpperCase().indexOf(filter) <= -1) {tr[i].style.display = \"\"; }\n");
 print ("\t\telse { tr[i].style.display = \"none\";}}}}\n");
@@ -427,61 +635,61 @@ print ("\t\tvar inputOne, inputTwo, filterOne, filterTwo, table, tr, tdOne, tdTw
 print ("\t\tcount=0;\n");
 print ("\t\trowNumOne=0;\n");
 print ("\t\tif(document.getElementById('GroundTruthText').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('GroundTruthText');   rowNumOne = 2;count++;}\n");
+print ("\t\tinputOne = document.getElementById('GroundTruthText');   rowNumOne = 2;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('GroundTruthID').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('GroundTruthID'); rowNumOne = 3;count++;}\n");
+print ("\t\tinputOne = document.getElementById('GroundTruthID'); rowNumOne = 3;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Matched').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Matched');   rowNumOne = 9;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Matched');   rowNumOne = 9;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top1').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top1'); rowNumOne = 4;count++; }\n");
+print ("\t\tinputOne = document.getElementById('Top1'); rowNumOne = 4;count+= 1; }\n");
 print ("\t\telse if(document.getElementById('Top1Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top1Prob');rowNumOne = 15;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top1Prob');rowNumOne = 15;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Text1').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Text1');rowNumOne = 10;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Text1');rowNumOne = 10;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top2').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top2');rowNumOne = 5;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top2');rowNumOne = 5;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top2Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top2Prob');rowNumOne = 16;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top2Prob');rowNumOne = 16;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top3').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top3');rowNumOne = 6;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top3');rowNumOne = 6;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top3Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top3Prob');rowNumOne = 17;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top3Prob');rowNumOne = 17;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top4').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top4');rowNumOne = 7;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top4');rowNumOne = 7;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top4Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top4Prob');rowNumOne = 18;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top4Prob');rowNumOne = 18;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top5').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top5');rowNumOne = 8;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top5');rowNumOne = 8;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top5Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top5Prob');rowNumOne = 19;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top5Prob');rowNumOne = 19;count+= 1;}\n");
 print ("\t\tif(document.getElementById('GroundTruthText').value != '' && rowNumOne  != 2){\n");
-print ("\t\tinputTwo = document.getElementById('GroundTruthText');   rowNumTwo = 2;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('GroundTruthText');   rowNumTwo = 2;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('GroundTruthID').value != '' && rowNumOne  != 3){\n");
-print ("\t\tinputTwo = document.getElementById('GroundTruthID'); rowNumTwo = 3;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('GroundTruthID'); rowNumTwo = 3;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Matched').value != '' && rowNumOne  != 9){\n");
-print ("\t\tinputTwo = document.getElementById('Matched');   rowNumTwo = 9;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Matched');   rowNumTwo = 9;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top1').value != '' && rowNumOne  != 4){\n");
-print ("\t\tinputTwo = document.getElementById('Top1'); rowNumTwo = 4;count++; }\n");
+print ("\t\tinputTwo = document.getElementById('Top1'); rowNumTwo = 4;count+= 1; }\n");
 print ("\t\telse if(document.getElementById('Top1Prob').value != '' && rowNumOne  != 215){\n");
-print ("\t\tinputTwo = document.getElementById('Top1Prob');rowNumTwo = 15;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top1Prob');rowNumTwo = 15;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Text1').value != '' && rowNumOne  != 10){\n");
-print ("\t\tinputTwo = document.getElementById('Text1');rowNumTwo = 10;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Text1');rowNumTwo = 10;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top2').value != '' && rowNumOne  != 5){\n");
-print ("\t\tinputTwo = document.getElementById('Top2');rowNumTwo = 5;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top2');rowNumTwo = 5;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top2Prob').value != '' && rowNumOne  != 16){\n");
-print ("\t\tinputTwo = document.getElementById('Top2Prob');rowNumTwo = 16;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top2Prob');rowNumTwo = 16;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top3').value != '' && rowNumOne  != 6){\n");
-print ("\t\tinputTwo = document.getElementById('Top3');rowNumTwo = 6;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top3');rowNumTwo = 6;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top3Prob').value != '' && rowNumOne  != 17){\n");
-print ("\t\tinputTwo = document.getElementById('Top3Prob');rowNumTwo = 17;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top3Prob');rowNumTwo = 17;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top4').value != '' && rowNumOne  != 7){\n");
-print ("\t\tinputTwo = document.getElementById('Top4');rowNumTwo = 7;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top4');rowNumTwo = 7;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top4Prob').value != '' && rowNumOne  != 18){\n");
-print ("\t\tinputTwo = document.getElementById('Top4Prob');rowNumTwo = 18;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top4Prob');rowNumTwo = 18;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top5').value != '' && rowNumOne  != 8){\n");
-print ("\t\tinputTwo = document.getElementById('Top5');rowNumTwo = 8;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top5');rowNumTwo = 8;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top5Prob').value != '' && rowNumOne  != 19){\n");
-print ("\t\tinputTwo = document.getElementById('Top5Prob');rowNumTwo = 19;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top5Prob');rowNumTwo = 19;count+= 1;}\n");
 print ("\t\tif(count == 0){alert(\"AND Filter ERROR: No filter variable entered\");}\n");
 print ("\t\telse if(count == 1){alert(\"AND Filter ERROR: Enter two variables\");}\n");
 print ("\t\telse if(count > 2){\n");
@@ -490,7 +698,7 @@ print ("\t\tfilterOne = inputOne.value.toUpperCase();\n");
 print ("\t\tfilterTwo = inputTwo.value.toUpperCase();\n");
 print ("\t\ttable = document.getElementById(\"resultsTable\");\n");
 print ("\t\ttr = table.getElementsByTagName(\"tr\");\n");
-print ("\t\tfor (i = 1; i < tr.length; i++) {\n");
+print ("\t\tfor (i = 1; i < tr.length; i+= 1) {\n");
 print ("\t\ttdOne = tr[i].getElementsByTagName(\"td\")[rowNumOne];\n");
 print ("\t\ttdTwo = tr[i].getElementsByTagName(\"td\")[rowNumTwo];\n");
 print ("\t\tif (tdOne && tdTwo) { \n");
@@ -503,61 +711,61 @@ print ("\t\tvar inputOne, inputTwo, filterOne, filterTwo, table, tr, tdOne, tdTw
 print ("\t\tcount=0;\n");
 print ("\t\trowNumOne=0;\n");
 print ("\t\tif(document.getElementById('GroundTruthText').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('GroundTruthText');   rowNumOne = 2;count++;}\n");
+print ("\t\tinputOne = document.getElementById('GroundTruthText');   rowNumOne = 2;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('GroundTruthID').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('GroundTruthID'); rowNumOne = 3;count++;}\n");
+print ("\t\tinputOne = document.getElementById('GroundTruthID'); rowNumOne = 3;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Matched').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Matched');   rowNumOne = 9;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Matched');   rowNumOne = 9;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top1').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top1'); rowNumOne = 4;count++; }\n");
+print ("\t\tinputOne = document.getElementById('Top1'); rowNumOne = 4;count+= 1; }\n");
 print ("\t\telse if(document.getElementById('Top1Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top1Prob');rowNumOne = 15;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top1Prob');rowNumOne = 15;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Text1').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Text1');rowNumOne = 10;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Text1');rowNumOne = 10;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top2').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top2');rowNumOne = 5;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top2');rowNumOne = 5;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top2Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top2Prob');rowNumOne = 16;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top2Prob');rowNumOne = 16;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top3').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top3');rowNumOne = 6;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top3');rowNumOne = 6;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top3Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top3Prob');rowNumOne = 17;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top3Prob');rowNumOne = 17;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top4').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top4');rowNumOne = 7;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top4');rowNumOne = 7;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top4Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top4Prob');rowNumOne = 18;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top4Prob');rowNumOne = 18;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top5').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top5');rowNumOne = 8;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top5');rowNumOne = 8;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top5Prob').value != ''){\n");
-print ("\t\tinputOne = document.getElementById('Top5Prob');rowNumOne = 19;count++;}\n");
+print ("\t\tinputOne = document.getElementById('Top5Prob');rowNumOne = 19;count+= 1;}\n");
 print ("\t\tif(document.getElementById('GroundTruthText').value != '' && rowNumOne  != 2){\n");
-print ("\t\tinputTwo = document.getElementById('GroundTruthText');   rowNumTwo = 2;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('GroundTruthText');   rowNumTwo = 2;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('GroundTruthID').value != '' && rowNumOne  != 3){\n");
-print ("\t\tinputTwo = document.getElementById('GroundTruthID'); rowNumTwo = 3;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('GroundTruthID'); rowNumTwo = 3;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Matched').value != '' && rowNumOne  != 9){\n");
-print ("\t\tinputTwo = document.getElementById('Matched');   rowNumTwo = 9;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Matched');   rowNumTwo = 9;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top1').value != '' && rowNumOne  != 4){\n");
-print ("\t\tinputTwo = document.getElementById('Top1'); rowNumTwo = 4;count++; }\n");
+print ("\t\tinputTwo = document.getElementById('Top1'); rowNumTwo = 4;count+= 1; }\n");
 print ("\t\telse if(document.getElementById('Top1Prob').value != '' && rowNumOne  != 215){\n");
-print ("\t\tinputTwo = document.getElementById('Top1Prob');rowNumTwo = 15;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top1Prob');rowNumTwo = 15;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Text1').value != '' && rowNumOne  != 10){\n");
-print ("\t\tinputTwo = document.getElementById('Text1');rowNumTwo = 10;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Text1');rowNumTwo = 10;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top2').value != '' && rowNumOne  != 5){\n");
-print ("\t\tinputTwo = document.getElementById('Top2');rowNumTwo = 5;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top2');rowNumTwo = 5;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top2Prob').value != '' && rowNumOne  != 16){\n");
-print ("\t\tinputTwo = document.getElementById('Top2Prob');rowNumTwo = 16;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top2Prob');rowNumTwo = 16;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top3').value != '' && rowNumOne  != 6){\n");
-print ("\t\tinputTwo = document.getElementById('Top3');rowNumTwo = 6;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top3');rowNumTwo = 6;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top3Prob').value != '' && rowNumOne  != 17){\n");
-print ("\t\tinputTwo = document.getElementById('Top3Prob');rowNumTwo = 17;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top3Prob');rowNumTwo = 17;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top4').value != '' && rowNumOne  != 7){\n");
-print ("\t\tinputTwo = document.getElementById('Top4');rowNumTwo = 7;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top4');rowNumTwo = 7;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top4Prob').value != '' && rowNumOne  != 18){\n");
-print ("\t\tinputTwo = document.getElementById('Top4Prob');rowNumTwo = 18;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top4Prob');rowNumTwo = 18;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top5').value != '' && rowNumOne  != 8){\n");
-print ("\t\tinputTwo = document.getElementById('Top5');rowNumTwo = 8;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top5');rowNumTwo = 8;count+= 1;}\n");
 print ("\t\telse if(document.getElementById('Top5Prob').value != '' && rowNumOne  != 19){\n");
-print ("\t\tinputTwo = document.getElementById('Top5Prob');rowNumTwo = 19;count++;}\n");
+print ("\t\tinputTwo = document.getElementById('Top5Prob');rowNumTwo = 19;count+= 1;}\n");
 print ("\t\tif(count == 0){alert(\"OR Filter ERROR: No filter variable entered\");}\n");
 print ("\t\telse if(count == 1){alert(\"OR Filter ERROR: Enter two variables\");}\n");
 print ("\t\telse if(count > 2){\n");
@@ -566,7 +774,7 @@ print ("\t\tfilterOne = inputOne.value.toUpperCase();\n");
 print ("\t\tfilterTwo = inputTwo.value.toUpperCase();\n");
 print ("\t\ttable = document.getElementById(\"resultsTable\");\n");
 print ("\t\ttr = table.getElementsByTagName(\"tr\");\n");
-print ("\t\tfor (i = 1; i < tr.length; i++) {\n");
+print ("\t\tfor (i = 1; i < tr.length; i+= 1) {\n");
 print ("\t\ttdOne = tr[i].getElementsByTagName(\"td\")[rowNumOne];\n");
 print ("\t\ttdTwo = tr[i].getElementsByTagName(\"td\")[rowNumTwo];\n");
 print ("\t\tif (tdOne && tdTwo) { \n");
