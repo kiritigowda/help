@@ -290,6 +290,7 @@ sys.stdout = orig_stdout
 print "resultsComphrehensive.csv generated"
 
 print("\n\n ***************** INFERENCE SUMMARY ***************** \n\n");
+import numpy as np
 netSummaryImages =  imageDataSize - totalNoGroundTruth;
 passProb = top1TotProb+top2TotProb+top3TotProb+top4TotProb+top5TotProb;
 passCount = top1Count+top2Count+top3Count+top4Count+top5Count;
@@ -300,47 +301,72 @@ print('Images without Ground Truth -- '+str(totalNoGroundTruth));
 print('Total image set for Inference -- '+str(imageDataSize));
 print("\n");
 print('Total Top K match -- '+str(passCount));
-accuracyPer = float((passCount / netSummaryImages)*100);
-print('Inference Accuracy on Top K -- '+str(accuracyPer));
-print('Average Pass Probability for Top K -- '+str(avgPassProb));
+accuracyPer = float(passCount);
+accuracyPer = (accuracyPer / netSummaryImages) * 100;
+print('Inference Accuracy on Top K -- '+str(np.around(accuracyPer,decimals=2))+' %');
+print('Average Pass Probability for Top K -- '+str(np.around(avgPassProb,decimals=4)));
 print("\n");    
 print('Total mismatch -- '+str(totalMismatch));
-accuracyPer = float(totalMismatch/netSummaryImages);
-print('Inference mismatch Percentage -- '+str(accuracyPer*100));
-print('Average mismatch Probability for Top 1 -- '+str(totalFailProb/totalMismatch));
+accuracyPer = float(totalMismatch);
+accuracyPer = (accuracyPer/netSummaryImages) * 100;
+print('Inference mismatch Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
+print('Average mismatch Probability for Top 1 -- '+str(np.around(totalFailProb/totalMismatch,decimals=4)));
 
 print("\n*****Top1*****\n");
 print('Top1 matches -- '+str(top1Count));  
-accuracyPer = float(top1Count/netSummaryImages);
-print('Top1 match Percentage -- '+str(accuracyPer*100));          
-print('Avg Top1 pass prob -- '+str(top1TotProb/top1Count));
+accuracyPer = float(top1Count);
+accuracyPer = (accuracyPer/netSummaryImages) * 100;
+print('Top1 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');          
+print('Avg Top1 pass prob -- '+str(np.around(top1TotProb/top1Count,decimals=4)));
          
 print("\n*****Top2*****\n");   
 print('Top2 matches -- '+str(top2Count));
-accuracyPer = float(top2Count/netSummaryImages);
-print('Top2 match Percentage -- '+str(accuracyPer*100));
-print('Avg Top2 pass prob -- '+str(top2TotProb/top2Count));
+accuracyPer = float(top2Count);
+accuracyPer = (accuracyPer/netSummaryImages) * 100;
+print('Top2 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
+print('Avg Top2 pass prob -- '+str(np.around(top2TotProb/top2Count,decimals=4)));
 
 print("\n*****Top3*****\n");
 print('Top3 matches -- '+str(top3Count));
-accuracyPer = float(top3Count/netSummaryImages);
-print('Top3 match Percentage -- '+str(accuracyPer*100));
-print('Avg Top3 pass prob -- '+str(top3TotProb/top3Count));
+accuracyPer = float(top3Count);
+accuracyPer = (accuracyPer/netSummaryImages) * 100;
+print('Top3 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
+print('Avg Top3 pass prob -- '+str(np.around(top3TotProb/top3Count,decimals=4)));
 
 print("\n*****Top4*****\n");
 print('Top4 matches -- '+str(top4Count));
-accuracyPer = float(top4Count/netSummaryImages);
-print('Top4 match Percentage -- '+str(accuracyPer*100));
-print('Avg Top4 pass prob -- '+str(top4TotProb/top4Count));
+accuracyPer = float(top4Count);
+accuracyPer = (accuracyPer/netSummaryImages) * 100;
+print('Top4 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
+print('Avg Top4 pass prob -- '+str(np.around(top4TotProb/top4Count,decimals=4)));
 
 print("\n*****Top5*****\n");
 print('Top5 matches -- '+str(top5Count));
-accuracyPer = float(top5Count/netSummaryImages);
-print('Top5 match Percentage -- '+str(accuracyPer*100));
-print('Avg Top5 pass prob -- '+str(top5TotProb/top5Count));
+accuracyPer = float(top5Count);
+accuracyPer = (accuracyPer/netSummaryImages) * 100;
+print('Top5 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
+print('Avg Top5 pass prob -- '+str(np.around(top5TotProb/top5Count,decimals=4)));
 print("\n\n");
 
 
+print("\n********Pass/Fail in Probability Range********\n");
+print("\nProbability,Pass,Fail,cat-1 pass,cat-1 fail,cat-2 pass, cat-2 fail,"
+                          "cat-3 pass,cat-3 fail,cat-4 pass,cat-4 fail,cat-5 pass,cat-5 fail,cat-6 pass,cat-6 fail\n");
+i = 99;
+f=0.99;
+while i >= 0:
+    print(np.around(f,decimals=2),topKPassFail[i][0],topKPassFail[i][1],topKHierarchyPassFail[i][0],topKHierarchyPassFail[i][1],
+        topKHierarchyPassFail[i][2],topKHierarchyPassFail[i][3],topKHierarchyPassFail[i][4],topKHierarchyPassFail[i][5],
+        topKHierarchyPassFail[i][6],topKHierarchyPassFail[i][7],topKHierarchyPassFail[i][8],topKHierarchyPassFail[i][9],
+        topKHierarchyPassFail[i][10],topKHierarchyPassFail[i][11]);
+    f= np.around( f - 0.01, decimals = 2);
+    i= i - 1;
+
+print("\n******** Labels Count ********\n");
+print("\nLabel,Images in DataBase, Matched with Top1, Matched with Top2, Matched with Top3, Matched with Top4, Matched with Top5,Top1 Label Match, Label Description\n");
+
+for i in xrange(1000):
+    print i,topLabelMatch[i][0],topLabelMatch[i][1],topLabelMatch[i][2],topLabelMatch[i][3],topLabelMatch[i][4],topLabelMatch[i][5],topLabelMatch[i][6],(LabelLines[i].split(' ', 1)[1].rstrip('\n'))
 
 # generate detailed results.csv
 print "index.html generation .."
