@@ -289,6 +289,10 @@ for x in range(numElements):
 sys.stdout = orig_stdout
 print "resultsComphrehensive.csv generated"
 
+# Generate Comphrehensive Results
+print "resultsSummary.txt generation .."
+orig_stdout = sys.stdout
+sys.stdout = open(toolKit_dir+'/resultsSummary.txt','w')
 print("\n\n ***************** INFERENCE SUMMARY ***************** \n\n");
 import numpy as np
 netSummaryImages =  imageDataSize - totalNoGroundTruth;
@@ -347,30 +351,44 @@ accuracyPer = (accuracyPer/netSummaryImages) * 100;
 print('Top5 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
 print('Avg Top5 pass prob -- '+str(np.around(top5TotProb/top5Count,decimals=4)));
 print("\n\n");
+sys.stdout = orig_stdout
+print "resultsSummary.txt generated"
 
-
-print("\n********Pass/Fail in Probability Range********\n");
-print("\nProbability,Pass,Fail,cat-1 pass,cat-1 fail,cat-2 pass, cat-2 fail,"
-                          "cat-3 pass,cat-3 fail,cat-4 pass,cat-4 fail,cat-5 pass,cat-5 fail,cat-6 pass,cat-6 fail\n");
+# Hierarchy Summary
+print "hierarchySummary.csv generation .."
+orig_stdout = sys.stdout
+sys.stdout = open(toolKit_dir+'/hierarchySummary.csv','w')
+print("Probability,Pass,Fail,cat-1 pass,cat-1 fail,cat-2 pass, cat-2 fail,"
+      "cat-3 pass,cat-3 fail,cat-4 pass,cat-4 fail,cat-5 pass,cat-5 fail,cat-6 pass,cat-6 fail\n");
 i = 99;
 f=0.99;
 while i >= 0:
-    print(np.around(f,decimals=2),topKPassFail[i][0],topKPassFail[i][1],topKHierarchyPassFail[i][0],topKHierarchyPassFail[i][1],
+    print( (np.around(f,decimals=2)),topKPassFail[i][0],topKPassFail[i][1],topKHierarchyPassFail[i][0],topKHierarchyPassFail[i][1],
         topKHierarchyPassFail[i][2],topKHierarchyPassFail[i][3],topKHierarchyPassFail[i][4],topKHierarchyPassFail[i][5],
         topKHierarchyPassFail[i][6],topKHierarchyPassFail[i][7],topKHierarchyPassFail[i][8],topKHierarchyPassFail[i][9],
         topKHierarchyPassFail[i][10],topKHierarchyPassFail[i][11]);
-    f= np.around( f - 0.01, decimals = 2);
-    i= i - 1;
+    f = f - 0.01;
+    i = i - 1;
+    
+sys.stdout = orig_stdout;
+print "hierarchySummary.csv generated .."
 
-print("\n******** Labels Count ********\n");
-print("\nLabel,Images in DataBase, Matched with Top1, Matched with Top2, Matched with Top3, Matched with Top4, Matched with Top5,Top1 Label Match, Label Description\n");
 
+# Label Summary
+print "labelSummary.csv generation .."
+orig_stdout = sys.stdout
+sys.stdout = open(toolKit_dir+'/labelSummary.csv','w')
+print("Label,Images in DataBase, Matched with Top1, Matched with Top2, Matched with Top3, Matched with Top4, Matched with Top5,Top1 Label Match, Label Description");
 for i in xrange(1000):
-    print i,topLabelMatch[i][0],topLabelMatch[i][1],topLabelMatch[i][2],topLabelMatch[i][3],topLabelMatch[i][4],topLabelMatch[i][5],topLabelMatch[i][6],(LabelLines[i].split(' ', 1)[1].rstrip('\n'))
+    print ( str(i)+','+str(topLabelMatch[i][0])+','+str(topLabelMatch[i][1])+','+str(topLabelMatch[i][2])
+        +','+str(topLabelMatch[i][3])+','+str(topLabelMatch[i][4])+','+str(topLabelMatch[i][5])
+        +','+str(topLabelMatch[i][6])+',"'+(LabelLines[i].split(' ', 1)[1].rstrip('\n'))+'"')
+sys.stdout = orig_stdout
+print "labelSummary.csv generated"
 
 # generate detailed results.csv
 print "index.html generation .."
-orig_stdout = sys.stdout
+#orig_stdout = sys.stdout
 sys.stdout = open(toolKit_dir+'/index.html','w')
 
 print ("<!DOCTYPE HTML PUBLIC \" -//W3C//DTD HTML 4.0 Transitional//EN\">\n");
