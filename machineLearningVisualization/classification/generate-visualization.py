@@ -14,8 +14,9 @@ import random
 import collections
 import csv
 import numpy
+import datetime
 
-opts, args = getopt.getopt(sys.argv[1:], 'i:d:l:h:o:f:')
+opts, args = getopt.getopt(sys.argv[1:], 'i:d:l:h:o:f:m:')
 
 inputCSVFile = '';
 inputImageDirectory = '';
@@ -23,6 +24,7 @@ labelFile = '';
 hierarchyFile = '';
 outputDirectory = '';
 fileName = '';
+modelName = '';
 
 for opt, arg in opts:
     if opt == '-i':
@@ -37,6 +39,8 @@ for opt, arg in opts:
         outputDirectory = arg;
     elif opt == '-f':
         fileName = arg;
+    elif opt == '-m':
+        modelName = arg;
 
 # report error
 if inputCSVFile == '' or inputImageDirectory == '' or labelFile == '' or outputDirectory == '' or fileName == '':
@@ -55,6 +59,9 @@ if not os.path.exists(inputImageDirectory):
 
 if not os.path.exists(outputDirectory):
     os.makedirs(outputDirectory);
+
+if modelName == '':
+    modelName = 'Generic Model';
 
 # read results.csv
 numElements = 0;
@@ -359,17 +366,18 @@ print "hierarchySummary.csv generation .."
 orig_stdout = sys.stdout
 sys.stdout = open(toolKit_dir+'/hierarchySummary.csv','w')
 print("Probability,Pass,Fail,cat-1 pass,cat-1 fail,cat-2 pass, cat-2 fail,"
-      "cat-3 pass,cat-3 fail,cat-4 pass,cat-4 fail,cat-5 pass,cat-5 fail,cat-6 pass,cat-6 fail\n");
+      "cat-3 pass,cat-3 fail,cat-4 pass,cat-4 fail,cat-5 pass,cat-5 fail,cat-6 pass,cat-6 fail");
 i = 99;
 f=0.99;
 while i >= 0:
-    print( (np.around(f,decimals=2)),topKPassFail[i][0],topKPassFail[i][1],topKHierarchyPassFail[i][0],topKHierarchyPassFail[i][1],
-        topKHierarchyPassFail[i][2],topKHierarchyPassFail[i][3],topKHierarchyPassFail[i][4],topKHierarchyPassFail[i][5],
-        topKHierarchyPassFail[i][6],topKHierarchyPassFail[i][7],topKHierarchyPassFail[i][8],topKHierarchyPassFail[i][9],
-        topKHierarchyPassFail[i][10],topKHierarchyPassFail[i][11]);
+    print("%.2f,%d,%d,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f" %(f,topKPassFail[i][0],topKPassFail[i][1],
+        topKHierarchyPassFail[i][0],topKHierarchyPassFail[i][1],topKHierarchyPassFail[i][2],
+        topKHierarchyPassFail[i][3],topKHierarchyPassFail[i][4],topKHierarchyPassFail[i][5],
+        topKHierarchyPassFail[i][6],topKHierarchyPassFail[i][7],topKHierarchyPassFail[i][8],
+        topKHierarchyPassFail[i][9],topKHierarchyPassFail[i][10],topKHierarchyPassFail[i][11]));
     f = f - 0.01;
     i = i - 1;
-    
+
 sys.stdout = orig_stdout;
 print "hierarchySummary.csv generated .."
 
@@ -380,9 +388,9 @@ orig_stdout = sys.stdout
 sys.stdout = open(toolKit_dir+'/labelSummary.csv','w')
 print("Label,Images in DataBase, Matched with Top1, Matched with Top2, Matched with Top3, Matched with Top4, Matched with Top5,Top1 Label Match, Label Description");
 for i in xrange(1000):
-    print ( str(i)+','+str(topLabelMatch[i][0])+','+str(topLabelMatch[i][1])+','+str(topLabelMatch[i][2])
-        +','+str(topLabelMatch[i][3])+','+str(topLabelMatch[i][4])+','+str(topLabelMatch[i][5])
-        +','+str(topLabelMatch[i][6])+',"'+(LabelLines[i].split(' ', 1)[1].rstrip('\n'))+'"')
+    print("%d,%d,%d,%d,%d,%d,%d,%d,\"%s\""%(i,topLabelMatch[i][0],topLabelMatch[i][1],topLabelMatch[i][2],
+    topLabelMatch[i][3],topLabelMatch[i][4],topLabelMatch[i][5],
+    topLabelMatch[i][6],(LabelLines[i].split(' ', 1)[1].rstrip('\n'))));
 sys.stdout = orig_stdout
 print "labelSummary.csv generated"
 
@@ -847,11 +855,409 @@ print ("\t<img \" src=\"icons/ADAT_500x100.png\" alt=\"AMD Inference ToolKit\" h
 print ("\t</div>\n");
 print ("\t\n");
 
-#TBD: Sections
+# graph script
+print("\t<script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n");
+print("\t<script type=\"text/javascript\">\n");
+print("\t\n");
+#overall summary
+print("\tgoogle.charts.load('current', {'packages':['bar']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawChart);\n");
+print("\tfunction drawChart(){\n");
+print("\tvar data = google.visualization.arrayToDataTable([\n");
+print("\t['  '     ,  'Match'  , 'Mismatch', 'No Label' ],\n");
+print("\t['Summary',   %d     , %d        , %d         ]\n"%(passCount,totalMismatch,totalNoGroundTruth));
+print("\t]);\n");
+print("\tvar options = { title: 'Overall Result Summary', vAxis: { title: 'Images' }, width: 800, height: 400 };\n");
+print("\tvar chart = new google.charts.Bar(document.getElementById('Model_Stats'));\n");
+print("\tchart.draw(data, google.charts.Bar.convertOptions(options));}\n");
+print("\t\n");
 
+#TopK pass fail summary
+topKValue = 5;
+print("\tgoogle.charts.load('current', {'packages':['corechart']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawTopKResultChart);\n");
+print("\tfunction drawTopKResultChart() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('string', 'Top K');\n");
+print("\tdata.addColumn('number', 'Matchs');\n");
+print("\tdata.addRows([\n");
+print("\t[ 'Matched Top%d Choice', %d  ],\n"%(topKValue,passCount));
+print("\t[ 'MisMatched', %d  ]]);\n"%(totalMismatch));
+print("\tvar options = { title:'Image Match/Mismatch Summary', width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.PieChart(document.getElementById('topK_result_chart_div'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
 
+#topK summary
+print("\tgoogle.charts.load('current', {'packages':['corechart']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawResultChart);\n");
+print("\tfunction drawResultChart() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('string', 'Top K');\n");
+print("\tdata.addColumn('number', 'Matchs');\n");
+print("\tdata.addRows([\n");
+print("\t[ 'Matched 1st Choice', %d  ],\n"%(top1Count));
+print("\t[ 'Matched 2nd Choice', %d  ],\n"%(top2Count));
+print("\t[ 'Matched 3rd Choice', %d  ],\n"%(top3Count));
+print("\t[ 'Matched 4th Choice', %d  ],\n"%(top4Count));
+print("\t[ 'Matched 5th Choice', %d  ]]);\n"%(top5Count));
+print("\tvar options = { title:'Image Matches', width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.PieChart(document.getElementById('result_chart_div'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+#Cummulative Success/Failure
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawPassFailGraph);\n");
+print("\tfunction drawPassFailGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Match');\n");
+print("\tdata.addColumn('number', 'Mismatch');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0],\n");
+fVal=0.99;
+sumPass = 0;
+sumFail = 0;
+i = 99;
+while i >= 0:
+    sumPass = float(sumPass + topKPassFail[i][0]);
+    sumFail = float(sumFail + topKPassFail[i][1]);
+    if(i == 0):
+        print("\t[%.2f,   %.4f,    %.4f]\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    else:
+        print("\t[%.2f,   %.4f,    %.4f],\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    fVal=fVal-0.01;
+    i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Cummulative Success/Failure', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Percentage of Dataset'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('pass_fail_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
 
+#Cummulative L1 Success/Failure
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawL1PassFailGraph);\n");
+print("\tfunction drawL1PassFailGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'L1 Match');\n");
+print("\tdata.addColumn('number', 'L1 Mismatch');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0],\n");
+fVal=0.99;
+sumPass = 0;
+sumFail = 0;
+i = 99;
+while i >= 0:
+    sumPass = float(sumPass + topKHierarchyPassFail[i][0]);
+    sumFail = float(sumFail + topKHierarchyPassFail[i][1]);
+    if(i == 0):
+        print("\t[%.2f,   %.4f,    %.4f]\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    else:
+        print("\t[%.2f,   %.4f,    %.4f],\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    fVal=fVal-0.01;
+    i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Cummulative L1 Success/Failure', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Percentage of Dataset'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('L1_pass_fail_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
 
+#Cummulative L2 Success/Failure
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawL2PassFailGraph);\n");
+print("\tfunction drawL2PassFailGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'L2 Match');\n");
+print("\tdata.addColumn('number', 'L2 Mismatch');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0],\n");
+fVal=0.99;
+sumPass = 0;
+sumFail = 0;
+i = 99;
+while i >= 0:
+    sumPass = float(sumPass + topKHierarchyPassFail[i][2]);
+    sumFail = float(sumFail + topKHierarchyPassFail[i][3]);
+    if(i == 0):
+        print("\t[%.2f,   %.4f,    %.4f]\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    else:
+        print("\t[%.2f,   %.4f,    %.4f],\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    fVal=fVal-0.01;
+    i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Cummulative L2 Success/Failure', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Percentage of Dataset'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('L2_pass_fail_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+
+#Cummulative L3 Success/Failure
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawL3PassFailGraph);\n");
+print("\tfunction drawL3PassFailGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'L3 Match');\n");
+print("\tdata.addColumn('number', 'L3 Mismatch');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0],\n");
+fVal=0.99;
+sumPass = 0;
+sumFail = 0;
+i = 99;
+while i >= 0:
+    sumPass = float(sumPass + topKHierarchyPassFail[i][4]);
+    sumFail = float(sumFail + topKHierarchyPassFail[i][5]);
+    if(i == 0):
+        print("\t[%.2f,   %.4f,    %.4f]\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    else:
+        print("\t[%.2f,   %.4f,    %.4f],\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    fVal=fVal-0.01;
+    i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Cummulative L3 Success/Failure', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Percentage of Dataset'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('L3_pass_fail_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+
+#Cummulative L4 Success/Failure
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawL4PassFailGraph);\n");
+print("\tfunction drawL4PassFailGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'L4 Match');\n");
+print("\tdata.addColumn('number', 'L4 Mismatch');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0],\n");
+fVal=0.99;
+sumPass = 0;
+sumFail = 0;
+i = 99;
+while i >= 0:
+    sumPass = float(sumPass + topKHierarchyPassFail[i][6]);
+    sumFail = float(sumFail + topKHierarchyPassFail[i][7]);
+    if(i == 0):
+        print("\t[%.2f,   %.4f,    %.4f]\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    else:
+        print("\t[%.2f,   %.4f,    %.4f],\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    fVal=fVal-0.01;
+    i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Cummulative L4 Success/Failure', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Percentage of Dataset'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('L4_pass_fail_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+
+#Cummulative L5 Success/Failure
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawL5PassFailGraph);\n");
+print("\tfunction drawL5PassFailGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'L5 Match');\n");
+print("\tdata.addColumn('number', 'L5 Mismatch');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0],\n");
+fVal=0.99;
+sumPass = 0;
+sumFail = 0;
+i = 99;
+while i >= 0:
+    sumPass = float(sumPass + topKHierarchyPassFail[i][8]);
+    sumFail = float(sumFail + topKHierarchyPassFail[i][9]);
+    if(i == 0):
+        print("\t[%.2f,   %.4f,    %.4f]\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    else:
+        print("\t[%.2f,   %.4f,    %.4f],\n"%(fVal,(sumPass/netSummaryImages),(sumFail/netSummaryImages)));
+    fVal=fVal-0.01;
+    i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Cummulative L5 Success/Failure', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Percentage of Dataset'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('L5_pass_fail_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+
+#Cummulative Hierarchy Success/Failure
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(drawHierarchyPassFailGraph);\n");
+print("\tfunction drawHierarchyPassFailGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'L1 Match');\n");
+print("\tdata.addColumn('number', 'L1 Mismatch');\n");
+print("\tdata.addColumn('number', 'L2 Match');\n");
+print("\tdata.addColumn('number', 'L2 Mismatch');\n");
+print("\tdata.addColumn('number', 'L3 Match');\n");
+print("\tdata.addColumn('number', 'L3 Mismatch');\n");
+print("\tdata.addColumn('number', 'L4 Match');\n");
+print("\tdata.addColumn('number', 'L4 Mismatch');\n");
+print("\tdata.addColumn('number', 'L5 Match');\n");
+print("\tdata.addColumn('number', 'L5 Mismatch');\n");
+print("\tdata.addColumn('number', 'L6 Match');\n");
+print("\tdata.addColumn('number', 'L6 Mismatch');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],\n");
+fVal=0.99;
+l1Pass = 0;
+l1Fail = 0;
+l2Pass = 0;
+l2Fail = 0;
+l3Pass = 0;
+l3Fail = 0;
+l4Pass = 0;
+l4Fail = 0;
+l5Pass = 0;
+l5Fail = 0;
+l6Pass = 0;
+l6Fail = 0;
+i = 99;
+while i >= 0:
+    l1Pass = float(l1Pass + topKHierarchyPassFail[i][0]);
+    l1Fail = float(l1Fail + topKHierarchyPassFail[i][1]);
+    l2Pass = float(l2Pass + topKHierarchyPassFail[i][2]);
+    l2Fail = float(l2Fail + topKHierarchyPassFail[i][3]);
+    l3Pass = float(l3Pass + topKHierarchyPassFail[i][4]);
+    l3Fail = float(l3Fail + topKHierarchyPassFail[i][5]);
+    l4Pass = float(l4Pass + topKHierarchyPassFail[i][6]);
+    l4Fail = float(l4Fail + topKHierarchyPassFail[i][7]);
+    l5Pass = float(l5Pass + topKHierarchyPassFail[i][8]);
+    l5Fail = float(l5Fail + topKHierarchyPassFail[i][9]);
+    l6Pass = float(l6Pass + topKHierarchyPassFail[i][10]);
+    l6Fail = float(l6Fail + topKHierarchyPassFail[i][11]);
+    if(i == 0):
+        print("\t[%.2f,   %.4f,    %.4f,   %.4f,    %.4f,   %.4f,    %.4f,   %.4f,    %.4f,   %.4f,    %.4f,   %.4f,    %.4f]\n"%(fVal,
+            (l1Pass/netSummaryImages),(l1Fail/netSummaryImages),
+            (l2Pass/netSummaryImages),(l2Fail/netSummaryImages),
+            (l3Pass/netSummaryImages),(l3Fail/netSummaryImages),
+            (l4Pass/netSummaryImages),(l4Fail/netSummaryImages),
+            (l5Pass/netSummaryImages),(l5Fail/netSummaryImages),
+            (l6Pass/netSummaryImages),(l6Fail/netSummaryImages)
+            ));
+    else:
+        print("\t[%.2f,   %.4f,    %.4f,   %.4f,    %.4f,   %.4f,    %.4f,   %.4f,    %.4f,   %.4f,    %.4f,   %.4f,    %.4f],\n"%(fVal,
+            (l1Pass/netSummaryImages),(l1Fail/netSummaryImages),
+            (l2Pass/netSummaryImages),(l2Fail/netSummaryImages),
+            (l3Pass/netSummaryImages),(l3Fail/netSummaryImages),
+            (l4Pass/netSummaryImages),(l4Fail/netSummaryImages),
+            (l5Pass/netSummaryImages),(l5Fail/netSummaryImages),
+            (l6Pass/netSummaryImages),(l6Fail/netSummaryImages)
+            ));
+    fVal=fVal-0.01;
+    i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Cummulative Hierarchy Levels Success/Failure', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Percentage of Dataset'}, series: { 0.01: {curveType: 'function'} }, width:1400, height:800 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('Hierarchy_pass_fail_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+print("\t</script>\n");
+
+#Overall Summary
+print("\t<!-- Overall Summary -->\n");
+print("\t<A NAME=\"table0\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>%s Overall Summary</em></font></h1></A>\n" %(modelName));
+print("\t<table align=\"center\">\n");
+print("\t<col width=\"265\">\n");
+print("\t<col width=\"50\">\n");
+print("\t<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\">Images <b>With Ground Truth</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\" onclick=\"findImagesWithGroundTruthLabel()\"><b>%d</b></font></td>\n"%(netSummaryImages));
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\">Images <b>Without Ground Truth</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\" onclick=\"findImagesWithNoGroundTruthLabel()\"><b>%d</b></font></td>\n"%(totalNoGroundTruth));
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\"><b>Total Images</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\" onclick=\"clearResultFilter();goToImageResults();\"><b>%d</b></font></td>\n"%(imageDataSize));
+print("\t</tr>\n");
+print("\t</table>\n<br><br><br>\n");
+print("\t<table align=\"center\">\n \t<col width=\"300\">\n \t<col width=\"100\">\n \t<col width=\"350\">\n \t<col width=\"100\">\n<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\">Total <b>Top %d Match</b></font></td>\n\n"%(topKValue));
+print("\t <td align=\"center\"><font color=\"black\" size=\"4\" onclick=\"findTopKMatch()\"><b>%d</b></font></td>\n"%(passCount));
+print("\t<td><font color=\"black\" size=\"4\">Total <b>Mismatch</b></font></td>\n");
+print("\t <td align=\"center\"><font color=\"black\" size=\"4\" onclick=\"findImageMisMatch()\"><b>%d</b></font></td>\n"%(totalMismatch));
+print("\t</tr>\n<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\"><b>Accuracy on Top %d</b></font></td>\n"%(topKValue));
+
+accuracyPer = float(passCount);
+accuracyPer = (accuracyPer / netSummaryImages)*100;
+print("\t <td align=\"center\"><font color=\"black\" size=\"4\"><b>%.2f %%</b></font></td>\n"%(accuracyPer));
+print("\t<td><font color=\"black\" size=\"4\"><b>Mismatch Percentage</b></font></td>\n");
+accuracyPer = float(totalMismatch);
+accuracyPer = (accuracyPer/netSummaryImages)*100;
+print("\t <td align=\"center\"><font color=\"black\" size=\"4\"><b>%.2f %%</b></font></td>\n"%(accuracyPer));
+print("\t</tr>\n<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\">Average Pass Confidence for Top %d</font></td>\n"%(topKValue));
+print("\t <td align=\"center\"><font color=\"black\" size=\"4\"><b>%.2f %%</b></font></td>\n"%((avgPassProb*100)));
+print("\t<td><font color=\"black\" size=\"4\">Average mismatch Confidence for Top 1</font></td>\n");
+print("\t <td align=\"center\"><font color=\"black\" size=\"4\"><b>%.2f %%</b></font></td>\n"%(((totalFailProb/totalMismatch)*100)));
+print("\t</tr>\n</table>\n<br><br><br>\n");
+#topK result
+print("\t<table align=\"center\" style=\"width: 40%\">\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>1st Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>2nd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>3rd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>4th Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>5th Match</b></font></td>\n");
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top2Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top3Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top4Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top5Count));
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+accuracyPer = float(top1Count);
+accuracyPer = (accuracyPer/netSummaryImages)*100;
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(accuracyPer));
+accuracyPer = float(top2Count);
+accuracyPer = (accuracyPer/netSummaryImages)*100;
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(accuracyPer));
+accuracyPer = float(top3Count);
+accuracyPer = (accuracyPer/netSummaryImages)*100;
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(accuracyPer));
+accuracyPer = float(top4Count);
+accuracyPer = (accuracyPer/netSummaryImages)*100;
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(accuracyPer));
+accuracyPer = float(top5Count);
+accuracyPer = (accuracyPer/netSummaryImages)*100;
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(accuracyPer));
+print("\t\t</tr>\n");
+print("</table>\n");
+
+#summary date and time
+print("\t<h1 align=\"center\"><font color=\"DodgerBlue\" size=\"4\"><br><em>Summary Generated On: </font><font color=\"black\" size=\"4\"> %s</font></em></h1>\n"%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')));
+
+#Graph
+print("\t<!-- Graph Summary -->\n");
+print("<A NAME=\"table1\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>Graphs</em></font></h1></A>\n");
+print("\t<center><div id=\"Model_Stats\" style=\"border: 1px solid #ccc\"></div></center>\n");
+print("\t<table align=\"center\" style=\"width: 90%\">\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"result_chart_div\" style=\"border: 0px solid #ccc\"></div></center></td>\n");
+print("\t <td><center><div id=\"topK_result_chart_div\" style=\"border: 0px solid #ccc\"></div></center></td>\n");
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"pass_fail_chart\" style=\"border: 0px solid #ccc\" ></div></center> </td>\n");
+print("\t <td><center><div id=\"L1_pass_fail_chart\" style=\"border: 0px solid #ccc\" ></div></center> </td>\n");
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"L2_pass_fail_chart\" style=\"border: 0px solid #ccc\" ></div></center> </td>\n");
+print("\t <td><center><div id=\"L3_pass_fail_chart\" style=\"border: 0px solid #ccc\" ></div></center> </td>\n");
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"L4_pass_fail_chart\" style=\"border: 0px solid #ccc\" ></div></center> </td>\n");
+print("\t <td><center><div id=\"L5_pass_fail_chart\" style=\"border: 0px solid #ccc\" ></div></center> </td>\n");
+print("\t</tr>\n");
+print("\t</table>\n");
+print("\t\n");
+print("\t <td><center><div id=\"Hierarchy_pass_fail_chart\" style=\"border: 0px solid #ccc\" ></div></center> </td>\n");
+print("\t\n");
+
+# Sections TBD:
 
 
 # HELP
