@@ -50,7 +50,8 @@ if inputCSVFile == '' or inputImageDirectory == '' or labelFile == '' or outputD
         '\t\t\t\t-l [input Label File - required]\n'\
         '\t\t\t\t-h [input Hierarchy File - optional]\n'\
         '\t\t\t\t-o [output Directory - required]\n'\
-        '\t\t\t\t-f [output file name - required]\n')
+        '\t\t\t\t-f [output file name - required]\n'\
+        '\t\t\t\t-m [neural net model name - optional]\n')
     exit();
 
 if not os.path.exists(inputImageDirectory):
