@@ -107,6 +107,8 @@ fromDirectory = dir_path+'/icons';
 toDirectory = toolKit_Dir+'/icons';
 copy_tree(fromDirectory, toDirectory)
 
+dataFolder = 'images';
+
 # generate detailed results.csv
 print "results.csv generation .."
 orig_stdout = sys.stdout
@@ -1440,6 +1442,163 @@ print("\t<td><font color=\"black\" size=\"4\">Labels <b>not in Ground Truth</b> 
 print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b></font></td>\n"%(totalLabelsUnfounded));
 print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b> images</font></td>\n"%(totalImagesWithFalseLabelFound));
 print("\t</tr>\n");
+print("</table>\n");
+
+
+#Image result
+print("\t<!-- Image Summary -->\n");
+print("<A NAME=\"table4\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>Image Results</em></font></h1></A>\n");
+print("\t\t<table id=\"filterTable\" align=\"center\" cellspacing=\"2\" border=\"0\" style=\"width: 60%\">\n");
+print("\t\t<tr>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"GroundTruthText\" onkeyup=\"filterResultTable(2,id)\" placeholder=\"Ground Truth Text\" title=\"Ground Truth Text\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"GroundTruthID\" onkeyup=\"filterResultTable(3,id)\" placeholder=\"Ground Truth ID\" title=\"Ground Truth ID\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" maxlength=\"2\" id=\"Matched\" onkeyup=\"filterResultTable(9,id)\" placeholder=\"Matched\" title=\"Type in a name\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top1\" onkeyup=\"filterResultTable(4,id)\" placeholder=\"1st Match\" title=\"1st Match\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top1Prob\" onkeyup=\"filterResultTable(15,id)\" placeholder=\"1st Match Conf\" title=\"1st Match Prob\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Text1\" onkeyup=\"filterResultTable(10,id)\" placeholder=\"Text 1\" title=\"Text1\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top2\" onkeyup=\"filterResultTable(5,id)\" placeholder=\"2nd Match\" title=\"2nd Match\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top2Prob\" onkeyup=\"filterResultTable(16,id)\" placeholder=\"2nd Match Conf\" title=\"2nd Match Prob\"></td>\n");
+print("\t\t</tr>\n\t\t<tr>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top3\" onkeyup=\"filterResultTable(6,id)\" placeholder=\"3rd Match\" title=\"3rd Match\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top3Prob\" onkeyup=\"filterResultTable(17,id)\" placeholder=\"3rd Match Conf\" title=\"3rd Match Prob\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top4\" onkeyup=\"filterResultTable(7,id)\" placeholder=\"4th Match\" title=\"4th Match\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top4Prob\" onkeyup=\"filterResultTable(18,id)\" placeholder=\"4th Match Conf\" title=\"4th Match Prob\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top5\" onkeyup=\"filterResultTable(8,id)\" placeholder=\"5th Match\" title=\"5th Match\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Top5Prob\" onkeyup=\"filterResultTable(19,id)\" placeholder=\"5th Match Conf\" title=\"5th Match Prob\"></td>\n");
+print("\t\t<td></td>\n");
+print("\t\t<td align=\"center\"><button style=\"background-color:yellow;\" onclick=\"clearResultFilter()\">Clear Filter</button></td>\n");
+print("\t\t</tr>\n");
+print("\t\t<tr>\n");
+print("\t\t<td align=\"center\"><button style=\"background-color:salmon;\" onclick=\"notResultFilter()\">Not Filter</button></td>\n");
+print("\t\t<td align=\"center\"><button style=\"background-color:salmon;\" onclick=\"andResultFilter()\">AND Filter</button></td>\n");
+print("\t\t<td align=\"center\"><button style=\"background-color:salmon;\" onclick=\"orResultFilter()\">OR Filter</button></td>\n");
+print("\t\t</tr>\n");
+print("\t\t</table>\n");
+print("\t\t<br>\n");
+print("\t\t\n");
+print("<table id=\"resultsTable\" class=\"sortable\" align=\"center\" cellspacing=\"2\" border=\"0\" style=\"width: 98%\">\n");
+print("\t<tr>\n");
+print("\t\t<td height=\"17\" align=\"center\"><font color=\"Maroon\" size=\"2\" ><b>Image</b></font></td>\n");
+print("\t\t<td height=\"17\" align=\"center\"><font color=\"Maroon\" size=\"2\"><b>FileName</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Ground Truth Text</b></font></td>\n");
+print("\t\t<td align=\"center\"><b><div class=\"tooltip\"><font color=\"Maroon\" size=\"2\">Ground Truth</font><span class=\"tooltiptext\">Input Image Label. Click on the Text to Sort</span></div></b></td>\n");
+print("\t\t<td align=\"center\"><b><div class=\"tooltip\"><font color=\"Maroon\" size=\"2\">1st</font><span class=\"tooltiptext\">Result With Highest Confidence. Click on the Text to Sort</span></div></b></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>2nd</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>3rd</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>4th</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>5th</b></font></td>\n");
+print("\t\t<td align=\"center\"><b><div class=\"tooltip\"><font color=\"Maroon\" size=\"2\">Matched</font><span class=\"tooltiptext\">TopK Result Matched with Ground Truth. Click on the Text to Sort</span></div></b></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Text-1</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Text-2</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Text-3</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Text-4</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Text-5</b></font></td>\n");
+print("\t\t<td align=\"center\"><b><div class=\"tooltip\"><font color=\"Maroon\" size=\"2\">Conf-1</font><span class=\"tooltiptext\">Confidence of the Top Match. Click on the Text to Sort</span></div></b></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Conf-2</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Conf-3</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Conf-4</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"2\"><b>Conf-5</b></font></td>\n");
+print("\t\t</tr>\n");
+for i in range(numElements):
+    print("\t\t<tr>\n");
+    truth = int(resultDataBase[i][1]);
+    labelTxt_1 = '';
+    labelTxt_2 = '';
+    labelTxt_3 = '';
+    labelTxt_4 = '';
+    labelTxt_5 = '';
+    truthLabel = '';
+    match = 0;
+    label_1 = int(resultDataBase[i][2]);
+    label_2 = int(resultDataBase[i][3]);
+    label_3 = int(resultDataBase[i][4]);
+    label_4 = int(resultDataBase[i][5]);
+    label_5 = int(resultDataBase[i][6]);
+    prob_1 = float(resultDataBase[i][7]);
+    prob_2 = float(resultDataBase[i][8]);
+    prob_3 = float(resultDataBase[i][9]);
+    prob_4 = float(resultDataBase[i][10]);
+    prob_5 = float(resultDataBase[i][11]);
+    labelTxt_1 = (LabelLines[label_1].split(' ', 1)[1].rstrip('\n').lower());
+    labelTxt_2 = (LabelLines[label_2].split(' ', 1)[1].rstrip('\n').lower());
+    labelTxt_3 = (LabelLines[label_3].split(' ', 1)[1].rstrip('\n').lower());
+    labelTxt_4 = (LabelLines[label_4].split(' ', 1)[1].rstrip('\n').lower());
+    labelTxt_5 = (LabelLines[label_5].split(' ', 1)[1].rstrip('\n').lower());
+    if(truth >= 0):
+        if(truth == label_1): 
+            match = 1;
+        elif(truth == label_2):
+            match = 2;
+        elif(truth == label_3):
+            match = 3;
+        elif(truth == label_4):
+            match = 4
+        elif(truth == label_5):
+            match = 5;
+        truthLabel = (LabelLines[truth].split(' ', 1)[1].rstrip('\n').lower());
+        print("\t\t<td height=\"17\" align=\"center\"><img id=\"myImg%d\" src=\"%s/%s\"alt=\"<b>GROUND TRUTH:</b> %s<br><b>CLASSIFIED AS:</b> %s\"width=\"30\" height=\"30\"></td>\n"
+            %(i,dataFolder,resultDataBase[i][0],truthLabel,labelTxt_1));
+        print("\t\t<td height=\"17\" align=\"center\"><a href=\"%s/%s\" target=\"_blank\">%s</a></td>\n"
+            %(dataFolder,resultDataBase[i][0],resultDataBase[i][0]));
+        print("\t\t<td align=\"left\">%s</td>\n"%(truthLabel));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(truth));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_1));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_2));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_3));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_4));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_5));
+        if(match):
+            print("\t\t<td align=\"center\"><font color=\"green\" size=\"2\"><b>%d</b></font></td>\n"%(match));
+        else:
+            print("\t\t<td align=\"center\"><font color=\"red\" size=\"2\"><b>%d</b></font></td>\n"%(match));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_1));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_2));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_3));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_4));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_5));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_1));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_2));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_3));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_4));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_5));
+    else:
+        print("\t\t<td height=\"17\" align=\"center\"><img id=\"myImg%d\" src=\"%s/%s\"alt=\"<b>GROUND TRUTH:</b> %s<br><b>CLASSIFIED AS:</b> %s\"width=\"30\" height=\"30\"></td>\n"
+            %(i,dataFolder,resultDataBase[i][0],truthLabel,labelTxt_1));
+        print("\t\t<td height=\"17\" align=\"center\"><a href=\"%s/%s\" target=\"_blank\">%s</a></td>\n"
+            %(dataFolder,resultDataBase[i][0],resultDataBase[i][0]));
+        print("\t\t<td align=\"left\"><b>unknown</b></td>\n");
+        print("\t\t<td align=\"center\">-1</td>\n");
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_1));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_2));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_3));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_4));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%d</font></td>\n"%(label_5));
+        print("\t\t<td align=\"center\"><font color=\"blue\"><b>-1</b></font></td>\n");
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_1));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_2));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_3));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_4));
+        print("\t\t<td align=\"left\">%s</td>\n"%(labelTxt_5));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_1));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_2));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_3));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_4));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\">%.4f</font></td>\n"%(prob_5));
+        
+    print("\t\t</tr>\n");
+    print("\t\t\n");
+    print("\t\t<script>\n");
+    print("\t\tvar modal = document.getElementById('myModal');\n");
+    print("\t\tvar img1 = document.getElementById('myImg%d');\n",i);
+                
+    print("\t\tvar modalImg = document.getElementById(\"img01\");\n");
+    print("\t\tvar captionText = document.getElementById(\"caption\");\n");
+    print("\t\timg1.onclick = function(){ modal.style.display = \"block\"; modalImg.src = this.src; captionText.innerHTML = this.alt; }\n");
+    print("\t\tvar span = document.getElementsByClassName(\"modal\")[0];\n");
+    print("\t\tspan.onclick = function() { modal.style.display = \"none\"; }\n");
+    print("\t\t</script>\n");
+    print("\t\t\n");
+
 print("</table>\n");
 
 
