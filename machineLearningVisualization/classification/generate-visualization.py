@@ -1257,6 +1257,192 @@ print("\t\n");
 print("\t <td><center><div id=\"Hierarchy_pass_fail_chart\" style=\"border: 0px solid #ccc\" ></div></center> </td>\n");
 print("\t\n");
 
+#hierarchy
+print("\t<!-- hierarchy Summary -->\n");
+print("<A NAME=\"table2\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>Hierarchy Summary (by Confidence level)</em></font></h1></A>\n");
+print("\t<table align=\"center\" style=\"width: 80%\">\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Confidence</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Pass</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Fail</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 1 Pass</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 1 Fail</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 2 Pass</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 2 Fail</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 3 Pass</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 3 Fail</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 4 Pass</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 4 Fail</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 5 Pass</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 5 Fail</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 6 Pass</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Category 6 Fail</b></font></td>\n");
+print("\t\t</tr>\n");
+
+f=0.99;
+i = 99;
+while i >= 0:
+    print("\t\t<tr>\n");
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%.2f</b></font></td>\n"%(f));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKPassFail[i][0]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKPassFail[i][1]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][0]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][1]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][2]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][3]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][4]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][5]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][6]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][7]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][8]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][9]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][10]));
+    print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topKHierarchyPassFail[i][11]));
+    print("\t\t</tr>\n");
+    f=f-0.01;
+    i=i-1;
+
+print("</table>\n");
+
+
+#label
+print("\t<!-- Label Summary -->\n");
+print("<A NAME=\"table3\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>Label Summary (stats per image class)</em></font></h1></A>\n");
+print("\t\t<table id=\"filterLabelTable\" align=\"center\" cellspacing=\"2\" border=\"0\" style=\"width: 70%\">\n");
+print("\t\t<tr>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Label ID\" onkeyup=\"filterLabelTable(0,id)\" placeholder=\"Label ID\" title=\"Label ID\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Label Description\" onkeyup=\"filterLabelTable(1,id)\" placeholder=\"Label Description\" title=\"Label Description\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Images in DataBase\" onkeyup=\"filterLabelTable(2,id)\" placeholder=\"Images in DataBase\" title=\"Images in DataBase\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Matched Top1 %\" onkeyup=\"filterLabelTable(3,id)\" placeholder=\"Matched Top1 %\" title=\"Matched Top1 %\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Matched Top5 %\" onkeyup=\"filterLabelTable(4,id)\" placeholder=\"Matched Top5 %\" title=\"Matched Top5 %\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Matched 1st\" onkeyup=\"filterLabelTable(5,id)\" placeholder=\"Matched 1st\" title=\"Matched 1st\"></td>\n");
+print("\t\t</tr>\n\t\t<tr>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Matched 2nd\" onkeyup=\"filterLabelTable(6,id)\" placeholder=\"Matched 2nd\" title=\"Matched 2nd\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Matched 3th\" onkeyup=\"filterLabelTable(7,id)\" placeholder=\"Matched 3th\" title=\"Matched 3th\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Matched 4th\" onkeyup=\"filterLabelTable(8,id)\" placeholder=\"Matched 4th\" title=\"Matched 4th\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"10\" id=\"Matched 5th\" onkeyup=\"filterLabelTable(9,id)\" placeholder=\"Matched 5th\" title=\"Matched 5th\"></td>\n");
+print("\t\t<td><input type=\"text\" size=\"14\" id=\"Misclassified Top1 Label\" onkeyup=\"filterLabelTable(10,id)\"placeholder=\"Misclassified Top1 Label\" title=\"Misclassified Top1 Label\"></td>\n");
+print("\t\t<td align=\"center\"><button style=\"background-color:yellow;\" onclick=\"clearLabelFilter()\">Clear Filter</button></td>\n");
+print("\t\t</tr>\n");
+print("\t\t</table>\n");
+print("\t\t<br>\n");
+print("\t\t\n");
+print("\t<table class=\"sortable\" id=\"labelsTable\" align=\"center\">\n");
+print("\t<col width=\"80\">\n");
+print("\t<col width=\"200\">\n");
+print("\t<col width=\"100\">\n");
+print("\t<col width=\"100\">\n");
+print("\t<col width=\"100\">\n");
+print("\t<col width=\"100\">\n");
+print("\t<col width=\"100\">\n");
+print("\t<col width=\"100\">\n");
+print("\t<col width=\"100\">\n");
+print("\t<col width=\"100\">\n");
+print("\t<col width=\"150\">\n");
+print("\t<col width=\"60\">\n");
+print("\t<tr>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Label ID</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Label Description</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Images in DataBase</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Matched Top1 %</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Matched Top5 %</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Matched 1st</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Matched 2nd</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Matched 3rd</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Matched 4th</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"maroon\" size=\"3\"><b>Matched 5th</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"blue\" size=\"3\"><b>Misclassified Top1 Label</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>Check</b></font></td>\n");
+print("\t\t</tr>\n");
+totalLabelsFound = 0;
+totalImagesWithLabelFound = 0;
+totalLabelsUnfounded = 0;
+totalImagesWithLabelNotFound = 0;
+totalLabelsNeverfound = 0;
+totalImagesWithFalseLabelFound = 0;
+i = 0;       
+while i < 1000:
+    if(topLabelMatch[i][0] or topLabelMatch[i][6]):
+        labelTxt = (LabelLines[i].split(' ', 1)[1].rstrip('\n'));
+        labelTxt = labelTxt.lower();
+        print("\t<tr>\n");
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\" onclick=\"findGroundTruthLabel('%s',%d)\"><b>%d</b></font></td>\n"%(labelTxt,i,i));
+        print("\t\t<td align=\"left\" onclick=\"findGroundTruthLabel('%s',%d)\"><b>%s</b></td>\n"%(labelTxt,i,labelTxt)); 
+        if(topLabelMatch[i][0]):
+            top1 = 0;
+            top5 = 0;
+            top1 = float(topLabelMatch[i][1]);
+            top1 = ((top1/topLabelMatch[i][0])*100);
+            top5 = float(topLabelMatch[i][1]+topLabelMatch[i][2]+topLabelMatch[i][3]+topLabelMatch[i][4]+topLabelMatch[i][5]);
+            top5 = (float(top5/topLabelMatch[i][0])*100);
+            imagesFound = (topLabelMatch[i][1]+topLabelMatch[i][2]+topLabelMatch[i][3]+topLabelMatch[i][4]+topLabelMatch[i][5]);
+            totalImagesWithLabelFound += imagesFound;
+            totalImagesWithLabelNotFound += topLabelMatch[i][0] - imagesFound;
+            if(top5 == 100.00):
+                print("\t\t<td align=\"center\"><font color=\"green\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][0]));
+            else:
+                print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][0]));
+            print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%.2f</b></font></td>\n"%(top1));  
+            print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%.2f</b></font></td>\n"%(top5));
+            totalLabelsFound+=1;
+            if(top5 == 0.00):
+                totalLabelsNeverfound+=1;
+        else:
+            print("\t\t<td align=\"center\"><font color=\"red\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][0]));                
+            print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>0.00</b></font></td>\n");
+            print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>0.00</b></font></td>\n");
+            totalLabelsUnfounded+=1;
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][1]));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][2]));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][3]));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][4]));
+        print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][5]));
+        if(topLabelMatch[i][0] and topLabelMatch[i][6] ):
+            print("\t\t<td align=\"center\"><font color=\"black\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][6]));
+        else:
+            if(topLabelMatch[i][0]):
+                print("\t\t<td align=\"center\"><font color=\"green\" size=\"2\"><b>%d</b></font></td>\n"%(topLabelMatch[i][6]));
+            else:
+                totalImagesWithFalseLabelFound += topLabelMatch[i][6];
+                print("\t\t<td align=\"center\"><font color=\"red\" size=\"2\" onclick=\"findMisclassifiedGroundTruthLabel('%s')\"><b>%d</b></font></td>\n"%(labelTxt,topLabelMatch[i][6]));
+        print("\t\t<td align=\"center\"><input id=\"id_%d\" name=\"id[%d]\" type=\"checkbox\" value=\"%d\" onClick=\"highlightRow(this);\"></td>\n"%(i,i,i));
+        print("\t\t</tr>\n");
+    i = i + 1;
+
+print("</table>\n");
+print("<h1 align=\"center\"><font color=\"DodgerBlue\" size=\"4\"><br><em>Label Summary</em></font></h1>\n");
+print("\t<table align=\"center\">\n");
+print("\t<col width=\"350\">\n");
+print("\t<col width=\"50\">\n");
+print("\t<col width=\"150\">\n");
+print("\t<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\">Labels in Ground Truth <b>found</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b></font></td>\n"%((totalLabelsFound-totalLabelsNeverfound)));
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b> images</font></td>\n"%(totalImagesWithLabelFound));
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\">Labels in Ground Truth <b>not found</b></font></td>\n");
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b></font></td>\n"%(totalLabelsNeverfound));
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b> images</font></td>\n"%(totalImagesWithLabelNotFound));
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\"><b>Total</b> Labels in Ground Truth</font></td>\n");
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b></font></td>\n"%(totalLabelsFound));
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b> images</font></td>\n"%((totalImagesWithLabelFound+totalImagesWithLabelNotFound)));
+print("\t</tr>\n");
+print("</table>\n");
+print("\t<br><br><table align=\"center\">\n");
+print("\t<col width=\"400\">\n");
+print("\t<col width=\"50\">\n");
+print("\t<col width=\"150\">\n");
+print("\t<tr>\n");
+print("\t<td><font color=\"black\" size=\"4\">Labels <b>not in Ground Truth</b> found in 1st Match</font></td>\n");
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b></font></td>\n"%(totalLabelsUnfounded));
+print("\t<td align=\"center\"><font color=\"black\" size=\"4\"><b>%d</b> images</font></td>\n"%(totalImagesWithFalseLabelFound));
+print("\t</tr>\n");
+print("</table>\n");
+
+
 # Sections TBD:
 
 
