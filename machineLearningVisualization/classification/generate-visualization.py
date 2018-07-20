@@ -1606,6 +1606,740 @@ print("</table>\n");
 # Sections TBD:
 
 
+#Model Score
+def calculateHierarchyPenalty(truth, result, hierarchyDataBase):
+  penaltyValue = 0;
+  penaltyMultiplier = 0;
+  truthHierarchy = hierarchyDataBase[truth];
+  resultHierarchy = hierarchyDataBase[result];
+  token_result = '';
+  token_truth = '';
+  previousTruth = 0;
+  catCount = 0;
+
+  while catCount < 6:
+    token_truth = truthHierarchy[catCount];
+    token_result = resultHierarchy[catCount];
+    if((token_truth != '') and (token_truth == token_result)):
+      previousTruth = 1;
+    elif( (previousTruth == 1) and (token_truth == '' and token_result == '')):
+      previousTruth = 1;
+    else:
+      previousTruth = 0;
+      penaltyMultiplier += 1;
+    catCount += 1;
+
+  penaltyMultiplier = float(penaltyMultiplier - 1);
+  penaltyValue = (0.2 * penaltyMultiplier);
+  return penaltyValue;
+
+print("\t<!-- Model Score -->\n");
+hierarchyPenalty = [];
+top5PassFail = [];
+for i in xrange(100):
+    hierarchyPenalty.append([])
+    top5PassFail.append([])
+    for j in xrange(5):
+        hierarchyPenalty[i].append(0)
+    for j in xrange(10):
+        top5PassFail[i].append(0)
+
+for i in xrange(100):
+  top5PassFail[i][0] = top5PassFail[i][1] = 0;
+  top5PassFail[i][2] = top5PassFail[i][3] = 0;
+  top5PassFail[i][4] = top5PassFail[i][5] = 0;
+  top5PassFail[i][6] = top5PassFail[i][7] = 0;
+  top5PassFail[i][8] = top5PassFail[i][9] = 0;
+  hierarchyPenalty[i][0] = hierarchyPenalty[i][1] = 0;
+  hierarchyPenalty[i][2] = hierarchyPenalty[i][3] = 0;
+  hierarchyPenalty[i][4] = 0;
+
+for x in range(numElements):
+  truth = int(resultDataBase[x][1]);
+  if truth >= 0:
+    match = 0;
+    label_1 = int(resultDataBase[x][2]);
+    label_2 = int(resultDataBase[x][3]);
+    label_3 = int(resultDataBase[x][4]);
+    label_4 = int(resultDataBase[x][5]);
+    label_5 = int(resultDataBase[x][6]);
+    prob_1 = float(resultDataBase[x][7]);
+    prob_2 = float(resultDataBase[x][8]);
+    prob_3 = float(resultDataBase[x][9]);
+    prob_4 = float(resultDataBase[x][10]);
+    prob_5 = float(resultDataBase[x][11]);
+
+    if(truth == label_1):
+      count = 0;
+      f = 0;
+      while f < 1:
+        if((prob_1 <= (f + 0.01)) and prob_1 > f):
+          top5PassFail[count][0]+=1;
+        count+=1;
+        f+=0.01
+        
+    elif(truth == label_2):
+      count = 0;
+      f = 0;
+      while f < 1:
+        if((prob_1 <= (f + 0.01)) and prob_1 > f):
+          top5PassFail[count][1]+=1;
+          hierarchyPenalty[count][0] += calculateHierarchyPenalty(truth,label_1,hierarchyDataBase);
+        if((prob_2 <= (f + 0.01)) and prob_2 > f):
+          top5PassFail[count][2]+=1;
+        count+=1;
+        f+=0.01;
+    elif(truth == label_3):
+      count = 0;
+      f = 0;
+      while f < 1:
+        if((prob_1 <= (f + 0.01)) and prob_1 > f):
+          top5PassFail[count][1]+=1;
+          hierarchyPenalty[count][0] += calculateHierarchyPenalty(truth,label_1,hierarchyDataBase);
+        if((prob_2 <= (f + 0.01)) and prob_2 > f):
+          top5PassFail[count][3]+=1;
+          hierarchyPenalty[count][1] += calculateHierarchyPenalty(truth,label_2,hierarchyDataBase);
+        if((prob_3 <= (f + 0.01)) and prob_3 > f):
+          top5PassFail[count][4]+=1;
+        count+=1;
+        f+=0.01;
+    elif(truth == label_4):
+      count = 0;
+      f = 0;
+      while f < 1:
+        if((prob_1 <= (f + 0.01)) and prob_1 > f):
+          top5PassFail[count][1]+=1;
+          hierarchyPenalty[count][0] += calculateHierarchyPenalty(truth,label_1,hierarchyDataBase);
+        if((prob_2 <= (f + 0.01)) and prob_2 > f):
+          top5PassFail[count][3]+=1;
+          hierarchyPenalty[count][1] += calculateHierarchyPenalty(truth,label_2,hierarchyDataBase);
+        if((prob_3 <= (f + 0.01)) and prob_3 > f):
+          top5PassFail[count][5]+=1;
+          hierarchyPenalty[count][2] += calculateHierarchyPenalty(truth,label_3,hierarchyDataBase);
+        if((prob_4 <= (f + 0.01)) and prob_4 > f):
+          top5PassFail[count][6]+=1;
+        count+=1;
+        f+=0.01;
+    elif(truth == label_5):
+      count = 0;
+      f = 0;
+      while f < 1:
+        if((prob_1 <= (f + 0.01)) and prob_1 > f):
+          top5PassFail[count][1]+=1;
+          hierarchyPenalty[count][0] += calculateHierarchyPenalty(truth,label_1,hierarchyDataBase);
+        if((prob_2 <= (f + 0.01)) and prob_2 > f):
+          top5PassFail[count][3]+=1;
+          hierarchyPenalty[count][1] += calculateHierarchyPenalty(truth,label_2,hierarchyDataBase);
+        if((prob_3 <= (f + 0.01)) and prob_3 > f):
+          top5PassFail[count][5]+=1;
+          hierarchyPenalty[count][2] += calculateHierarchyPenalty(truth,label_3,hierarchyDataBase);
+        if((prob_4 <= (f + 0.01)) and prob_4 > f):
+          top5PassFail[count][7]+=1;
+          hierarchyPenalty[count][3] += calculateHierarchyPenalty(truth,label_4,hierarchyDataBase);
+        if((prob_5 <= (f + 0.01)) and prob_5 > f):
+          top5PassFail[count][8]+=1;
+        count+=1;
+        f+=0.01;
+    else:
+      count = 0;
+      f = 0;
+      while f < 1:
+        if((prob_1 <= (f + 0.01)) and prob_1 > f):
+          top5PassFail[count][1]+=1;
+          hierarchyPenalty[count][0] += calculateHierarchyPenalty(truth,label_1,hierarchyDataBase);
+        if((prob_2 <= (f + 0.01)) and prob_2 > f):
+          top5PassFail[count][3]+=1;
+          hierarchyPenalty[count][1] += calculateHierarchyPenalty(truth,label_2,hierarchyDataBase);
+        if((prob_3 <= (f + 0.01)) and prob_3 > f):
+          top5PassFail[count][5]+=1;
+          hierarchyPenalty[count][2] += calculateHierarchyPenalty(truth,label_3,hierarchyDataBase);
+        if((prob_4 <= (f + 0.01)) and prob_4 > f):
+          top5PassFail[count][7]+=1;
+          hierarchyPenalty[count][3] += calculateHierarchyPenalty(truth,label_4,hierarchyDataBase);
+        if((prob_5 <= (f + 0.01)) and prob_5 > f):
+          top5PassFail[count][9]+=1;
+          hierarchyPenalty[count][4] += calculateHierarchyPenalty(truth,label_5,hierarchyDataBase);
+        count+=1;
+        f+=0.01;
+
+print("<A NAME=\"table6\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>Model Score</em></font></h1></A>\n");
+print("\t\n");
+Top1PassScore = 0;
+Top1FailScore = 0;
+Top2PassScore = 0;
+Top2FailScore = 0;
+Top3PassScore = 0;
+Top3FailScore = 0;
+Top4PassScore = 0;
+Top4FailScore = 0;
+Top5PassScore = 0;
+Top5FailScore = 0;
+Top1HierarchyPenalty = 0;
+Top2HierarchyPenalty = 0;
+Top3HierarchyPenalty = 0;
+Top4HierarchyPenalty = 0;
+Top5HierarchyPenalty = 0;
+confID=0.99;
+i = 99;
+while confID >= 0:
+  Top1PassScore += confID * top5PassFail[i][0];
+  Top1FailScore += confID * top5PassFail[i][1];
+  Top2PassScore += confID * top5PassFail[i][2];
+  Top2FailScore += confID * top5PassFail[i][3];
+  Top3PassScore += confID * top5PassFail[i][4];
+  Top3FailScore += confID * top5PassFail[i][5];
+  Top4PassScore += confID * top5PassFail[i][6];
+  Top4FailScore += confID * top5PassFail[i][7];
+  Top5PassScore += confID * top5PassFail[i][8];
+  Top5FailScore += confID * top5PassFail[i][9];
+
+  Top1HierarchyPenalty += hierarchyPenalty[i][0];
+  Top2HierarchyPenalty += hierarchyPenalty[i][1];
+  Top3HierarchyPenalty += hierarchyPenalty[i][2];
+  Top4HierarchyPenalty += hierarchyPenalty[i][3];
+  Top5HierarchyPenalty += hierarchyPenalty[i][4];
+
+  confID = confID - 0.01;
+  i = i - 1;
+
+# standard score result
+Top1Score = float(top1Count);
+ModelScoreTop1 = (Top1Score/netSummaryImages)*100;
+Top2Score = float(top1Count + top2Count);
+ModelScoreTop2 = (Top2Score/netSummaryImages)*100;
+Top3Score = float(top1Count + top2Count + top3Count);
+ModelScoreTop3 = (Top3Score/netSummaryImages)*100;
+Top4Score = float(top1Count + top2Count + top3Count + top4Count);
+ModelScoreTop4 = (Top4Score/netSummaryImages)*100;
+Top5Score = float(top1Count + top2Count + top3Count + top4Count + top5Count);
+ModelScoreTop5 = (Top5Score/netSummaryImages)*100;
+
+print("<br><h1 align=\"center\"><font color=\"DarkSalmon\" size=\"4\">Standard Scoring</font></h1></A>\n");
+print("\t<table align=\"center\" style=\"width: 40%\">\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>1st Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>2nd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>3rd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>4th Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>5th Match</b></font></td>\n");
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count + top4Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count + top4Count + top5Count));
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop1));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop2));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop3));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop4));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop5));
+print("\t\t</tr>\n");
+print("</table>\n");
+print("\t\n");
+
+#Method 1 result
+Top1Score = float(Top1PassScore);
+ModelScoreTop1 = (Top1Score/netSummaryImages)*100;
+Top2Score = float((Top1PassScore + Top2PassScore));
+ModelScoreTop2 = (Top2Score/netSummaryImages)*100;
+Top3Score = float((Top1PassScore + Top2PassScore + Top3PassScore));
+ModelScoreTop3 = (Top3Score/netSummaryImages)*100;
+Top4Score = float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore));
+ModelScoreTop4 = (Top4Score/netSummaryImages)*100;
+Top5Score = float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore + Top5PassScore));
+ModelScoreTop5 = (Top5Score/netSummaryImages)*100;
+
+print("<br><h1 align=\"center\"><font color=\"DarkSalmon\" size=\"4\">Method 1 Scoring - Confidence Aware</font></h1></A>\n");
+print("\t<table align=\"center\" style=\"width: 40%\">\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>1st Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>2nd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>3rd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>4th Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>5th Match</b></font></td>\n");
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count + top4Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count + top4Count + top5Count));
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop1));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop2));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop3));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop4));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop5));
+print("\t\t</tr>\n");
+print("</table>\n");
+print("\t\n");
+
+#Method 2 result
+Top1Score = float(Top1PassScore - Top1FailScore);
+ModelScoreTop1 = (Top1Score/netSummaryImages)*100;
+Top2Score = float((Top1PassScore + Top2PassScore) - Top2FailScore);
+ModelScoreTop2 = (Top2Score/netSummaryImages)*100;
+Top3Score = float((Top1PassScore + Top2PassScore + Top3PassScore) - Top3FailScore);
+ModelScoreTop3 = (Top3Score/netSummaryImages)*100;
+Top4Score = float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore) - Top4FailScore);
+ModelScoreTop4 = (Top4Score/netSummaryImages)*100;
+Top5Score = float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore + Top5PassScore) - Top5FailScore);
+ModelScoreTop5 = (Top5Score/netSummaryImages)*100;
+
+print("<br><h1 align=\"center\"><font color=\"DarkSalmon\" size=\"4\">Method 2 Scoring - Error Aware</font></h1></A>\n");
+print("\t<table align=\"center\" style=\"width: 40%\">\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>1st Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>2nd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>3rd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>4th Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>5th Match</b></font></td>\n");
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count + top4Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count + top4Count + top5Count));
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop1));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop2));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop3));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop4));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop5));
+print("\t\t</tr>\n");
+print("</table>\n");
+print("\t\n");
+
+#Method 3 result
+Top1Score = float(Top1PassScore - (Top1FailScore + Top1HierarchyPenalty));
+ModelScoreTop1 = (Top1Score/netSummaryImages)*100;
+Top2Score = float((Top1PassScore + Top2PassScore) - (Top2FailScore + Top2HierarchyPenalty));
+ModelScoreTop2 = (Top2Score/netSummaryImages)*100;
+Top3Score = float((Top1PassScore + Top2PassScore + Top3PassScore) - (Top3FailScore + Top3HierarchyPenalty));
+ModelScoreTop3 = (Top3Score/netSummaryImages)*100;
+Top4Score = float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore) - (Top4FailScore + Top4HierarchyPenalty));
+ModelScoreTop4 = (Top4Score/netSummaryImages)*100;
+Top5Score = float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore + Top5PassScore) - (Top5FailScore + Top5HierarchyPenalty));
+ModelScoreTop5 = (Top5Score/netSummaryImages)*100;
+
+print("<br><h1 align=\"center\"><font color=\"DarkSalmon\" size=\"4\">Method 3 Scoring - Hierarchy Aware</font></h1></A>\n");
+print("\t<table align=\"center\" style=\"width: 40%\">\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>1st Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>2nd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>3rd Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>4th Match</b></font></td>\n");
+print("\t\t<td align=\"center\"><font color=\"Maroon\" size=\"3\"><b>5th Match</b></font></td>\n");
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count + top4Count));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%d</b></font></td>\n"%(top1Count + top2Count + top3Count + top4Count + top5Count));
+print("\t\t</tr>\n");
+print("\t<tr>\n");
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop1));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop2));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop3));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop4));
+print("\t\t<td align=\"center\"><font color=\"black\" size=\"3\"><b>%.2f %%</b></font></td>\n"%(ModelScoreTop5));
+print("\t\t</tr>\n");
+print("</table>\n");
+print("\t\n");
+
+top5ModelScore = [];
+for i in xrange(100):
+  top5ModelScore.append([])
+  for j in xrange(20):
+    top5ModelScore[i].append(0)
+
+for i in xrange(100):
+  top5ModelScore[i][0] = 0;
+  top5ModelScore[i][1] = 0; 
+  top5ModelScore[i][2] = 0; 
+  top5ModelScore[i][3] = 0; 
+  top5ModelScore[i][4] = 0;
+  top5ModelScore[i][5] = 0; 
+  top5ModelScore[i][6] = 0; 
+  top5ModelScore[i][7] = 0; 
+  top5ModelScore[i][8] = 0; 
+  top5ModelScore[i][9] = 0;
+  top5ModelScore[i][10] = 0; 
+  top5ModelScore[i][11] = 0; 
+  top5ModelScore[i][12] = 0; 
+  top5ModelScore[i][13] = 0; 
+  top5ModelScore[i][10] = 0; 
+  top5ModelScore[i][14] = 0;
+  top5ModelScore[i][15] = 0; 
+  top5ModelScore[i][16] = 0; 
+  top5ModelScore[i][17] = 0; 
+  top5ModelScore[i][18] = 0; 
+  top5ModelScore[i][10] = 0; 
+  top5ModelScore[i][19] = 0;
+
+
+standardPassTop1 = 0;
+standardPassTop2 = 0;
+standardPassTop3 = 0;
+standardPassTop4 = 0;
+standardPassTop5 = 0;
+
+Top1PassScore = 0; 
+Top1FailScore = 0; 
+Top2PassScore = 0; 
+Top2FailScore = 0; 
+Top3PassScore = 0;
+Top3FailScore = 0; 
+Top4PassScore = 0; 
+Top4FailScore = 0; 
+Top5PassScore = 0; 
+Top5FailScore = 0;
+Top1HierarchyPenalty = 0;
+Top2HierarchyPenalty = 0;
+Top3HierarchyPenalty = 0;
+Top4HierarchyPenalty = 0;
+Top5HierarchyPenalty = 0;
+
+confID = 0.99;
+i = 99;
+while i >= 0:
+  Top1PassScore += confID * topKPassFail[i][0];
+  Top1FailScore += confID * topKPassFail[i][1];
+  Top2PassScore += confID * top5PassFail[i][2];
+  Top2FailScore += confID * top5PassFail[i][3];
+  Top3PassScore += confID * top5PassFail[i][4];
+  Top3FailScore += confID * top5PassFail[i][5];
+  Top4PassScore += confID * top5PassFail[i][6];
+  Top4FailScore += confID * top5PassFail[i][7];
+  Top5PassScore += confID * top5PassFail[i][8];
+  Top5FailScore += confID * top5PassFail[i][9];
+
+  Top1HierarchyPenalty += hierarchyPenalty[i][0];
+  Top2HierarchyPenalty += hierarchyPenalty[i][1];
+  Top3HierarchyPenalty += hierarchyPenalty[i][2];
+  Top4HierarchyPenalty += hierarchyPenalty[i][3];
+  Top5HierarchyPenalty += hierarchyPenalty[i][4];
+
+
+  # method 1
+  top5ModelScore[i][1] = (float(Top1PassScore)/netSummaryImages)*100;
+  top5ModelScore[i][3] = (float(Top1PassScore + Top2PassScore)/netSummaryImages)*100;
+  top5ModelScore[i][5] = (float(Top1PassScore + Top2PassScore + Top3PassScore)/netSummaryImages)*100;
+  top5ModelScore[i][7] = (float(Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore)/netSummaryImages)*100;
+  top5ModelScore[i][9] = (float(Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore + Top5PassScore)/netSummaryImages)*100;
+
+  # method 2
+  top5ModelScore[i][0] = (float(Top1PassScore - Top1FailScore)/netSummaryImages)*100;
+  top5ModelScore[i][4] = (float((Top1PassScore + Top2PassScore + Top3PassScore) - Top3FailScore)/netSummaryImages)*100;
+  top5ModelScore[i][6] = (float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore) - Top4FailScore)/netSummaryImages)*100;
+  top5ModelScore[i][8] = (float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore + Top5PassScore) - Top5FailScore)/netSummaryImages)*100;
+
+  # method 3
+  top5ModelScore[i][15] = (float(Top1PassScore - (Top1FailScore + Top1HierarchyPenalty))/netSummaryImages)*100;
+  top5ModelScore[i][16] = (float((Top1PassScore + Top2PassScore) - (Top2FailScore + Top2HierarchyPenalty))/netSummaryImages)*100;
+  top5ModelScore[i][17] = (float((Top1PassScore + Top2PassScore + Top3PassScore) - (Top3FailScore + Top3HierarchyPenalty))/netSummaryImages)*100;
+  top5ModelScore[i][18] = (float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore) - (Top4FailScore + Top4HierarchyPenalty))/netSummaryImages)*100;
+  top5ModelScore[i][19] = (float((Top1PassScore + Top2PassScore + Top3PassScore + Top4PassScore + Top5PassScore) - (Top5FailScore + Top5HierarchyPenalty))/netSummaryImages)*100;
+
+  # standard method
+  standardPassTop1 += float(topKPassFail[i][0]);
+  standardPassTop2 += float(topKPassFail[i][0] + top5PassFail[i][2]);
+  standardPassTop3 += float(topKPassFail[i][0] + top5PassFail[i][2] + top5PassFail[i][4]);
+  standardPassTop4 += float(topKPassFail[i][0] + top5PassFail[i][2] + top5PassFail[i][4] + top5PassFail[i][6]);
+  standardPassTop5 += float(topKPassFail[i][0] + top5PassFail[i][2] + top5PassFail[i][4] + top5PassFail[i][6] + top5PassFail[i][8]);
+  top5ModelScore[i][10] = (standardPassTop1/netSummaryImages)*100;
+  top5ModelScore[i][11] = (standardPassTop2/netSummaryImages)*100;
+  top5ModelScore[i][12] = (standardPassTop3/netSummaryImages)*100;
+  top5ModelScore[i][13] = (standardPassTop4/netSummaryImages)*100;
+  top5ModelScore[i][14] = (standardPassTop5/netSummaryImages)*100;
+
+  confID = confID - 0.01;
+  i = i - 1;
+
+print("\t<script type=\"text/javascript\">\n");
+print("\t\n");
+# Top 1 Score thresholds
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(Top1ScoreGraph);\n");
+print("\tfunction Top1ScoreGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Standard');\n");
+print("\tdata.addColumn('number', 'Method 1');\n");
+print("\tdata.addColumn('number', 'Method 2');\n");
+print("\tdata.addColumn('number', 'Method 3');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f,  %.4f,   %.4f,  %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][10],top5ModelScore[i][1],top5ModelScore[i][0],top5ModelScore[i][15]));
+  else:
+    print("\t[%.2f,  %.4f,   %.4f,   %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][10],top5ModelScore[i][1],top5ModelScore[i][0],top5ModelScore[i][15]));
+
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Model Score Top 1', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('Top1_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+# Top 2 Score thresholds
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(Top2ScoreGraph);\n");
+print("\tfunction Top2ScoreGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Standard');\n");
+print("\tdata.addColumn('number', 'Method 1');\n");
+print("\tdata.addColumn('number', 'Method 2');\n");
+print("\tdata.addColumn('number', 'Method 3');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f,  %.4f,   %.4f,   %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][11],top5ModelScore[i][3],top5ModelScore[i][2],top5ModelScore[i][16]));
+  else:
+    print("\t[%.2f,  %.4f,   %.4f,   %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][11],top5ModelScore[i][3],top5ModelScore[i][2],top5ModelScore[i][16]));
+  
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Model Score Top 2', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('Top2_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+# Top 3 Score thresholds
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(Top3ScoreGraph);\n");
+print("\tfunction Top3ScoreGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Standard');\n");
+print("\tdata.addColumn('number', 'Method 1');\n");
+print("\tdata.addColumn('number', 'Method 2');\n");
+print("\tdata.addColumn('number', 'Method 3');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f,    %.4f, %.4f, %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][12],top5ModelScore[i][5],top5ModelScore[i][4],top5ModelScore[i][17]));
+  else:
+    print("\t[%.2f,    %.4f, %.4f, %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][12],top5ModelScore[i][5],top5ModelScore[i][4],top5ModelScore[i][17]));
+  
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Model Score Top 3', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('Top3_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+# Top 4 Score thresholds
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(Top4ScoreGraph);\n");
+print("\tfunction Top4ScoreGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Standard');\n");
+print("\tdata.addColumn('number', 'Method 1');\n");
+print("\tdata.addColumn('number', 'Method 2');\n");
+print("\tdata.addColumn('number', 'Method 3');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f, %.4f,   %.4f,   %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][13],top5ModelScore[i][7],top5ModelScore[i][6],top5ModelScore[i][18]));
+  else:
+    print("\t[%.2f, %.4f,   %.4f,   %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][13],top5ModelScore[i][7],top5ModelScore[i][6],top5ModelScore[i][18]));
+        
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Model Score Top 4', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('Top4_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+# Top 5 Score thresholds
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(Top5ScoreGraph);\n");
+print("\tfunction Top5ScoreGraph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Standard');\n");
+print("\tdata.addColumn('number', 'Method 1');\n");
+print("\tdata.addColumn('number', 'Method 2');\n");
+print("\tdata.addColumn('number', 'Method 3');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f, %.4f,   %.4f,   %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][14],top5ModelScore[i][9],top5ModelScore[i][8],top5ModelScore[i][19]));
+  else:
+    print("\t[%.2f, %.4f,   %.4f,   %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][14],top5ModelScore[i][9],top5ModelScore[i][8],top5ModelScore[i][19]));
+        
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Model Score Top 5', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('Top5_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+# Standard Score Model
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(StandardTop5Graph);\n");
+print("\tfunction StandardTop5Graph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Top 1');\n");
+print("\tdata.addColumn('number', 'Top 2');\n");
+print("\tdata.addColumn('number', 'Top 3');\n");
+print("\tdata.addColumn('number', 'Top 4');\n");
+print("\tdata.addColumn('number', 'Top 5');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f, %.4f,    %.4f,   %.4f,   %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][10],top5ModelScore[i][11],top5ModelScore[i][12],top5ModelScore[i][13],top5ModelScore[i][14]));
+  else:
+    print("\t[%.2f, %.4f,    %.4f,   %.4f,   %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][10],top5ModelScore[i][11],top5ModelScore[i][12],top5ModelScore[i][13],top5ModelScore[i][14]));
+        
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Standard Scoring Method', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('standard_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+# method 1 Score Model
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(Method1Top5Graph);\n");
+print("\tfunction Method1Top5Graph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Top 1');\n");
+print("\tdata.addColumn('number', 'Top 2');\n");
+print("\tdata.addColumn('number', 'Top 3');\n");
+print("\tdata.addColumn('number', 'Top 4');\n");
+print("\tdata.addColumn('number', 'Top 5');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f, %.4f,    %.4f,   %.4f,   %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][1],top5ModelScore[i][3],top5ModelScore[i][5],top5ModelScore[i][7],top5ModelScore[i][9]));
+  else:
+    print("\t[%.2f, %.4f,    %.4f,   %.4f,   %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][1],top5ModelScore[i][3],top5ModelScore[i][5],top5ModelScore[i][7],top5ModelScore[i][9]));
+        
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Method 1 Scoring', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('method_1_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+# method 2 Score Model
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(Method2Top5Graph);\n");
+print("\tfunction Method2Top5Graph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Top 1');\n");
+print("\tdata.addColumn('number', 'Top 2');\n");
+print("\tdata.addColumn('number', 'Top 3');\n");
+print("\tdata.addColumn('number', 'Top 4');\n");
+print("\tdata.addColumn('number', 'Top 5');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f, %.4f,    %.4f,   %.4f,   %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][0],top5ModelScore[i][2],top5ModelScore[i][4],top5ModelScore[i][6],top5ModelScore[i][8]));
+  else:
+    print("\t[%.2f, %.4f,    %.4f,   %.4f,   %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][0],top5ModelScore[i][2],top5ModelScore[i][4],top5ModelScore[i][6],top5ModelScore[i][8]));
+        
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Method 2 Scoring', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('method_2_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+# method 3 Score Model
+print("\tgoogle.charts.load('current', {packages: ['corechart', 'line']});\n");
+print("\tgoogle.charts.setOnLoadCallback(Method3Top5Graph);\n");
+print("\tfunction Method3Top5Graph() {\n");
+print("\tvar data = new google.visualization.DataTable();\n");
+print("\tdata.addColumn('number', 'X');\n");
+print("\tdata.addColumn('number', 'Top 1');\n");
+print("\tdata.addColumn('number', 'Top 2');\n");
+print("\tdata.addColumn('number', 'Top 3');\n");
+print("\tdata.addColumn('number', 'Top 4');\n");
+print("\tdata.addColumn('number', 'Top 5');\n");
+print("\tdata.addRows([\n");
+print("\t[1, 0, 0, 0, 0, 0],\n");
+fVal=0.99;
+i = 99;
+while i >= 0:
+  if(i == 0):
+    print("\t[%.2f, %.4f,    %.4f,   %.4f,   %.4f,    %.4f]\n"%(fVal,top5ModelScore[i][15],top5ModelScore[i][16],top5ModelScore[i][17],top5ModelScore[i][18],top5ModelScore[i][19]));
+  else:
+    print("\t[%.2f, %.4f,    %.4f,   %.4f,   %.4f,    %.4f],\n"%(fVal,top5ModelScore[i][15],top5ModelScore[i][16],top5ModelScore[i][17],top5ModelScore[i][18],top5ModelScore[i][19]));
+        
+  fVal=fVal-0.01;
+  i = i - 1;
+print("\t]);\n");
+print("\tvar options = {  title:'Method 3 Scoring', hAxis: { title: 'Confidence', direction: '-1' }, vAxis: {title: 'Score Percentage'}, series: { 0.01: {curveType: 'function'} }, width:750, height:400 };\n");
+print("\tvar chart = new google.visualization.LineChart(document.getElementById('method_3_model_score_chart'));\n");
+print("\tchart.draw(data, options);}\n");
+print("\t\n");
+print("\t\n");
+print("\t</script>\n");
+print("\t\n");
+print("\t\n");
+print("\t<table align=\"center\" style=\"width: 90%\">\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"Top1_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t <td><center><div id=\"Top2_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"Top3_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t <td><center><div id=\"Top4_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"Top5_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t <td><center><div id=\"standard_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"method_1_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t <td><center><div id=\"method_2_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t</tr>\n");
+print("\t<tr>\n");
+print("\t <td><center><div id=\"method_3_model_score_chart\" style=\"border: 0px solid #ccc\" ></div></center></td>\n");
+print("\t <td><center></center></td>\n");
+print("\t</tr>\n");
+print("\t</table>\n");
+print("\t\n");
+
 # HELP
 print ("\t<!-- HELP -->\n");
 print ("<A NAME=\"table7\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>HELP</em></font></h1></A>\n");
