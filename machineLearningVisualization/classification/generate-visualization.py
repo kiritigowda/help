@@ -460,7 +460,7 @@ print ("\t.tooltip .tooltiptext { visibility: hidden; width: 150px; background-c
 print ("\t\ttext-align: center;  border-radius: 6px;  padding: 5px; position: absolute; z-index: 3;}");
 print ("\t.tooltip:hover .tooltiptext { visibility: visible;}");
 print ("\t");
-print ("\t\t.footer { position: fixed; left: 0;    bottom: 0;  width: 100%;    background-color: #333;  color: white;  text-align: center;}");
+print ("\t.footer { position: fixed; left: 0;    bottom: 0;  width: 100%;    background-color: #333;  color: white;  text-align: center;}");
 print ("\t");
 print ("\t</style>");
 print ("\n</head>");
@@ -1597,7 +1597,7 @@ for i in range(numElements):
     print("\t\t");
     print("\t\t<script>");
     print("\t\tvar modal = document.getElementById('myModal');");
-    print("\t\tvar img1 = document.getElementById('myImg%d');",i);
+    print("\t\tvar img1 = document.getElementById('myImg%d');"%(i));
                 
     print("\t\tvar modalImg = document.getElementById(\"img01\");");
     print("\t\tvar captionText = document.getElementById(\"caption\");");
