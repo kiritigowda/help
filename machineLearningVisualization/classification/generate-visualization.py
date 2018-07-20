@@ -1694,12 +1694,14 @@ print("\t<center><div id=\"Model_Stats_master\" style=\"border: 1px solid #ccc\"
 print("\t");
 print("\t<table align=\"center\" style=\"width: 90%\">");
 print("\t<tr>");
-for i in range(savedResultElements):
+i = 1;
+while i <= savedResultElements:
     print("\t");
     print("\t<td><center><div id=\"Model_Stats_%d\" style=\"border: 1px solid #ccc\"></div></center></td>"%(i));
-    if(i%3 == 0):
+    if( i % 3 == 0):
         print("\t</tr>");
         print("\t<tr>");
+    i += 1;
 
 print("\t</tr>");
 print("\t</table>");
