@@ -1610,7 +1610,99 @@ for i in range(numElements):
 print("</table>");
 
 
-# Sections TBD:
+# Compare result summary
+print("\t<!-- Compare ResultSummary -->");
+print("<A NAME=\"table5\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>Compare Results Summary</em></font></h1></A>");
+SummaryFileName = '';
+FolderName = os.path.expanduser("~/.adatCompare")
+if not os.path.exists(FolderName):
+    os.makedirs(FolderName);
+
+ModelFolderName = FolderName; ModelFolderName +="/"; ModelFolderName += modelName;
+if not os.path.exists(ModelFolderName):
+    os.makedirs(ModelFolderName);
+
+SummaryFileName = FolderName; SummaryFileName += "/modelRunHistoryList.csv";
+
+sys.stdout = orig_stdout
+print "results saved in backup drive"
+
+# write summary details into csv
+if os.path.exists(SummaryFileName):
+    sys.stdout = open(SummaryFileName,'a')
+    print("%s, %s, %d, %d, %d"%(modelName,dataFolder,numElements,passCount,totalMismatch));
+else:
+    sys.stdout = open(SummaryFileName,'w')
+    print("Model Name, Image DataBase, Number Of Images, Match, MisMatch");
+    print("%s, %s, %d, %d, %d"%(modelName,dataFolder,numElements,passCount,totalMismatch));
+
+# write into HTML
+savedResultElements = 0;
+with open(SummaryFileName) as savedResultFile:
+    savedResultFileCSV = csv.reader(savedResultFile)
+    next(savedResultFileCSV) # skip header
+    savedResultDataBase = [r for r in savedResultFileCSV]
+    savedResultElements = len(savedResultDataBase)
+
+sys.stdout = open(toolKit_dir+'/index.html','a')
+
+print("\t<!-- Compare Graph Script -->");
+print("\t<script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>");
+print("\t<script type=\"text/javascript\">");
+print("\t");
+lineNumber = 0;
+while lineNumber < savedResultElements:
+    print("\tgoogle.charts.load('current', {'packages':['bar']});");
+    print("\tgoogle.charts.setOnLoadCallback(drawChart_%d);"%(lineNumber));
+    print("\tfunction drawChart_%d(){"%(lineNumber));
+    print("\tvar data = google.visualization.arrayToDataTable([");
+    print("\t['  '     ,  'Match'  , 'Mismatch'],");
+    print("\t['Summary',   %d     , %d        ]"%(int(savedResultDataBase[lineNumber][3]),int(savedResultDataBase[lineNumber][4])));                        
+    print("\t]);");
+    print("\tvar options = { title: '%s Overall Result Summary', vAxis: { title: 'Images' }, width: 400, height: 400 };"%(modelName));
+    print("\tvar chart = new google.charts.Bar(document.getElementById('Model_Stats_%d'));"%(lineNumber));
+    print("\tchart.draw(data, google.charts.Bar.convertOptions(options));}");
+    print("\t");
+
+    lineNumber += 1;
+
+print("\t");
+
+# draw combined graph
+print("\tgoogle.charts.load('current', {'packages':['bar']});");
+print("\tgoogle.charts.setOnLoadCallback(drawChart_master);");
+print("\tfunction drawChart_master(){");
+print("\tvar data = google.visualization.arrayToDataTable([");
+print("\t['Model'   ,'Match',   'Mismatch'],");
+for i in range(savedResultElements):
+    if(i != (lineNumber-1)):
+        print("\t['%s'   ,%d ,   %d],"%(savedResultDataBase[i][0],int(savedResultDataBase[i][3]),int(savedResultDataBase[i][4])));
+    else:
+        print("\t['%s'   ,%d ,   %d]"%(savedResultDataBase[i][0],int(savedResultDataBase[i][3]),int(savedResultDataBase[i][4])));
+
+print("\t]);");
+print("\tvar options = { title: 'Overall Result Summary', vAxis: { title: 'Images' }, width: 800, height: 600, bar: { groupWidth: '30%' }, isStacked: true , series: { 0:{color:'green'},1:{color:'Indianred'} }};");
+print("\tvar chart = new google.charts.Bar(document.getElementById('Model_Stats_master'));");
+print("\tchart.draw(data, google.charts.Bar.convertOptions(options));}");
+print("\t");
+print("\t</script>");
+
+# draw graph
+print("\t");
+print("\t");
+print("\t<center><div id=\"Model_Stats_master\" style=\"border: 1px solid #ccc\"></div></center>");
+print("\t");
+print("\t<table align=\"center\" style=\"width: 90%\">");
+print("\t<tr>");
+for i in range(savedResultElements):
+    print("\t");
+    print("\t<td><center><div id=\"Model_Stats_%d\" style=\"border: 1px solid #ccc\"></div></center></td>"%(i));
+    if(i%3 == 0):
+        print("\t</tr>");
+        print("\t<tr>");
+
+print("\t</tr>");
+print("\t</table>");
 
 
 #Model Score
