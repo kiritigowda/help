@@ -338,35 +338,50 @@ print('Top1 matches -- '+str(top1Count));
 accuracyPer = float(top1Count);
 accuracyPer = (accuracyPer/netSummaryImages) * 100;
 print('Top1 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');          
-print('Avg Top1 pass prob -- '+str(np.around(top1TotProb/top1Count,decimals=4)));
+if top1Count > 0:
+    print('Avg Top1 pass prob -- '+str(np.around(top1TotProb/top1Count,decimals=4)));
+else:
+    print('Avg Top1 pass prob -- 0 %');
          
 print("\n*****Top2*****");   
 print('Top2 matches -- '+str(top2Count));
 accuracyPer = float(top2Count);
 accuracyPer = (accuracyPer/netSummaryImages) * 100;
 print('Top2 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
-print('Avg Top2 pass prob -- '+str(np.around(top2TotProb/top2Count,decimals=4)));
+if top2Count > 0:
+    print('Avg Top2 pass prob -- '+str(np.around(top2TotProb/top2Count,decimals=4)));
+else:
+    print('Avg Top2 pass prob -- 0 %');
 
 print("\n*****Top3*****");
 print('Top3 matches -- '+str(top3Count));
 accuracyPer = float(top3Count);
 accuracyPer = (accuracyPer/netSummaryImages) * 100;
 print('Top3 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
-print('Avg Top3 pass prob -- '+str(np.around(top3TotProb/top3Count,decimals=4)));
+if top3Count > 0:
+    print('Avg Top3 pass prob -- '+str(np.around(top3TotProb/top3Count,decimals=4)));
+else:
+    print('Avg Top3 pass prob -- 0 %');
 
 print("\n*****Top4*****");
 print('Top4 matches -- '+str(top4Count));
 accuracyPer = float(top4Count);
 accuracyPer = (accuracyPer/netSummaryImages) * 100;
 print('Top4 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
-print('Avg Top4 pass prob -- '+str(np.around(top4TotProb/top4Count,decimals=4)));
+if top4Count > 0:
+    print('Avg Top4 pass prob -- '+str(np.around(top4TotProb/top4Count,decimals=4)));
+else:
+    print('Avg Top4 pass prob -- 0 %');
 
 print("\n*****Top5*****");
 print('Top5 matches -- '+str(top5Count));
 accuracyPer = float(top5Count);
 accuracyPer = (accuracyPer/netSummaryImages) * 100;
 print('Top5 match Percentage -- '+str(np.around(accuracyPer,decimals=2))+' %');
-print('Avg Top5 pass prob -- '+str(np.around(top5TotProb/top5Count,decimals=4)));
+if top5Count > 0:
+    print('Avg Top5 pass prob -- '+str(np.around(top5TotProb/top5Count,decimals=4)));
+else:
+    print('Avg Top5 pass prob -- 0 %');
 print("\n");
 sys.stdout = orig_stdout
 print "resultsSummary.txt generated"
@@ -1659,7 +1674,7 @@ while lineNumber < savedResultElements:
     print("\t['  '     ,  'Match'  , 'Mismatch'],");
     print("\t['Summary',   %d     , %d        ]"%(int(savedResultDataBase[lineNumber][3]),int(savedResultDataBase[lineNumber][4])));                        
     print("\t]);");
-    print("\tvar options = { title: '%s Overall Result Summary', vAxis: { title: 'Images' }, width: 400, height: 400 };"%(modelName));
+    print("\tvar options = { title: '%s Overall Result Summary', vAxis: { title: 'Images' }, width: 400, height: 400 };"%(savedResultDataBase[lineNumber][0]));
     print("\tvar chart = new google.charts.Bar(document.getElementById('Model_Stats_%d'));"%(lineNumber));
     print("\tchart.draw(data, google.charts.Bar.convertOptions(options));}");
     print("\t");
