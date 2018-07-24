@@ -65,7 +65,9 @@ The summary also timestamps the results to avoid confusion with different iterat
 ![picture alt](img/graph.png "Graph")
 
 The graph section allows the user to visualize the dataset and model accurately. The graphs can help detect any anomalies with the data or the model from a higher level. The graphs can be saved or shared with others.
-Hierarchy
+
+
+## Hierarchy
 
 This section has AMD proprietary hierarchical result analysis. Please contact us to get more information.
 
@@ -78,6 +80,11 @@ Click on any of the label description and zoom into all the images from that cla
 ### Image Results
 
 The Image results has all the low level information about each of the individual images in the database. It reports on the results obtained for the image in the session and allows quick view of the image.
-Compare
+
+## Compare
 
 This section compares the results of a database or the model between different sessions. If the database was tested with different models, this section reports and compares results among them.
+
+## Model Score 
+
+The section does a experimental scoring for the given model.
