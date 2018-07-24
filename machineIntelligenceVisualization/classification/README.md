@@ -1,10 +1,10 @@
-# Classification Visualization
+# MIVision - Classification Visualization
 
-## AMD Neural Net ToolKit
+## MIVision ToolKit
 
-AMD Neural Net ToolKit is a comprehensive set of help tools for neural net creation, development, training and deployment. The ToolKit provides you with help tools to design, develop, quantize, prune, retrain, and infer your neural network work in any framework. The ToolKit is designed help you deploy your work to any AMD or 3rd party hardware, from embedded to servers.
+AMD MIVision is a comprehensive set of help tools for neural net creation, development, training and deployment. The ToolKit provides you with help tools to design, develop, quantize, prune, retrain, and infer your neural network work in any framework. The ToolKit is designed help you deploy your work to any AMD or 3rd party hardware, from embedded to servers.
 
-AMD Neural Net ToolKit provides you with tools for accomplishing your tasks throughout the whole neural net life-cycle, from creating a model to deploying them for your target platforms.
+MIVision ToolKit provides you with tools for accomplishing your tasks throughout the whole neural net life-cycle, from creating a model to deploying them for your target platforms.
 
 ## List of Features Available in this release
 
