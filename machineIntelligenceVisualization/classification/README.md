@@ -13,13 +13,14 @@ python generate-visualization.py
 ````
 ### Script Inputs:
 ````
--i [input Result CSV File - required]
--d [input Image Directory - required]
--l [input Label File - required]
--h [input Hierarchy File - optional]
+-i [input Result CSV File     - required]
+-d [input Image Directory     - required]
+-l [input Label File          - required]
+-h [input Hierarchy File        - optional]
+-m [input neural net model name - optional]
 -o [output Directory - required]
 -f [output file name - required]
--m [neural net model name - optional]
+
 ````
 
 ## List of Features Available in this release
