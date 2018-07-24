@@ -23,6 +23,12 @@ python generate-visualization.py
 
 ````
 
+## Sample 
+
+````
+python generate-visualization.py -i sample/inceptionV4-results.csv -d sample/AMD-tinyDataSet -l sample/labels.txt -h sample/hierarchy.csv -m inceptionV4 -o outputFolder -f classificationVisualized 
+````
+
 ## List of Features Available in this release
 
 * Overall Summary
