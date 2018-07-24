@@ -7,11 +7,11 @@ AMD MIVision is a comprehensive set of help tools for neural net creation, devel
 MIVision ToolKit provides you with tools for accomplishing your tasks throughout the whole neural net life-cycle, from creating a model to deploying them for your target platforms.
 
 ## Usage
-* Script
+### Visualization Tool Generation Script:
 ````
-python machineIntelligenceVisualization/classification/generate-visualization.py
+python generate-visualization.py
 ````
-* Inputs
+### Script Inputs:
 ````
 -i [input Result CSV File - required]
 -d [input Image Directory - required]
