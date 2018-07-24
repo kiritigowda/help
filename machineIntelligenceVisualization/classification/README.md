@@ -47,6 +47,7 @@ python generate-visualization.py -i sample/inceptionV4-results.csv -d sample/AMD
 * Labels
 * Image Results
 * Compare
+* Model Score
 * Help
 
 ### Overall Summary
