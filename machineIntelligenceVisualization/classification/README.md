@@ -26,12 +26,12 @@ python generate-visualization.py
 | Image File Name | Ground Truth Label | Output Label 1 | Output Label 2 | Output Label 3 | Output Label 4 | Output Label 5 | Prob 1 | Prob 2 | Prob 3 | Prob 4 | Prob 5 |
 | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
 
-* -d  : **Input Image Directory**
-* -l  : **Label File**
-* -h  : **Hierarchy File**
-* -m  : **Input Model Name**
-* -o  : **Output Directory**
-* -f  : **Output File Name**
+* -d    : **Input Image Directory**
+* -l    : **Input Label File**
+* -h    : **Input Hierarchy File**
+* -m    : **Input Model Name**
+* -o    : **Output Directory**
+* -f    : **Output File Name**
 
 ## Sample 
 
