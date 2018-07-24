@@ -52,6 +52,8 @@ python generate-visualization.py -i sample/inceptionV4-results.csv -d sample/AMD
 
 ### Overall Summary
 
+![picture alt](img/summary.png "Overall Summary")
+
 This section summarizes the results for the current session, with information on the dataset and the model. The section classifies the dataset into images with or without ground truth and only considers the images with ground truth for analysis to avoid skewing the results.
 
 The summary calculates all the metrics to evaluate the current run session, helps evaluate the quality of the data set, accuracy of the current version of the model and links all the high level result to individual images to help the user to quickly analyze and detect if there are any problems.
@@ -59,6 +61,8 @@ The summary calculates all the metrics to evaluate the current run session, help
 The summary also timestamps the results to avoid confusion with different iterations.
 
 ### Graphs
+
+![picture alt](img/graph.png "Graph")
 
 The graph section allows the user to visualize the dataset and model accurately. The graphs can help detect any anomalies with the data or the model from a higher level. The graphs can be saved or shared with others.
 Hierarchy
