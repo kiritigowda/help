@@ -1,3 +1,5 @@
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 # Machine Intelligence Visualization - MIVision
 
 AMD MIVision, is a comprehensive set of help tools for neural net creation, development, training and deployment. The ToolKit provides you with help tools to design, develop, quantize, prune, retrain, and infer your neural network work in any framework. The ToolKit is designed help you deploy your work to any AMD or 3rd party hardware, from embedded to servers.
