@@ -89,4 +89,4 @@ This section compares the results of a database or the model between different s
 
 ### Model Score 
 
-The section does a experimental scoring for the given model.
+The section does an experimental scoring for the given model.
