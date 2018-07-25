@@ -47,11 +47,12 @@ if inputCSVFile == '' or inputImageDirectory == '' or labelFile == '' or outputD
     print('Invalid command line arguments.\n'
         '\t\t\t\t-i [input Result CSV File - required](File Format:ImgFileName, GroundTruth, L1, L2, L3, L4, L5, P1, P2, P3, P4, P5)[L:Label P:Probability]\n'\
         '\t\t\t\t-d [input Image Directory - required]\n'\
-        '\t\t\t\t-l [input Label File - required]\n'\
-        '\t\t\t\t-h [input Hierarchy File - optional]\n'\
+        '\t\t\t\t-l [input Label File      - required]\n'\
+        '\t\t\t\t-h [input Hierarchy File  - optional]\n'\
+        '\t\t\t\t-m [input NN model name   - optional]\n'\
         '\t\t\t\t-o [output Directory - required]\n'\
-        '\t\t\t\t-f [output file name - required]\n'\
-        '\t\t\t\t-m [neural net model name - optional]\n')
+        '\t\t\t\t-f [output file name - required]\n')
+
     exit();
 
 if not os.path.exists(inputImageDirectory):
