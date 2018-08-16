@@ -1656,7 +1656,7 @@ else:
 savedResultElements = 0;
 with open(SummaryFileName) as savedResultFile:
     savedResultFileCSV = csv.reader(savedResultFile)
-    next(savedResultFileCSV) # skip header
+    next(savedResultFileCSV, None) # skip header
     savedResultDataBase = [r for r in savedResultFileCSV]
     savedResultElements = len(savedResultDataBase)
 
