@@ -53,7 +53,8 @@ else:
 	os.system('(cd '+deps_dir+'; git clone https://github.com/ROCmSoftwarePlatform/MIOpenGEMM.git )');
 	os.system('(cd '+deps_dir+'; wget https://github.com/ROCmSoftwarePlatform/MIOpen/archive/'+MIOpenVersion+'.zip )');
 	os.system('(cd '+deps_dir+'; unzip '+MIOpenVersion+'.zip )');
-	os.system('(cd '+deps_dir+'; git clone https://github.com/google/protobuf.git )');
+	os.system('(cd '+deps_dir+'; wget https://github.com/protocolbuffers/protobuf/archive/v3.5.2.zip )');
+	os.system('(cd '+deps_dir+'; unzip v3.5.2.zip )');
 	os.system('(cd '+deps_dir+'; wget https://github.com/opencv/opencv/archive/3.3.0.zip )');
 	os.system('(cd '+deps_dir+'; unzip 3.3.0.zip )');
 	os.system('(cd '+deps_dir+'; mkdir build )');
@@ -79,28 +80,28 @@ else:
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='(cd '+deps_dir+'/build/MIOpen; sudo -S apt autoclean )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt-get -y --allow-unauthenticated install autoconf automake libtool curl make g++ unzip )'
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S apt-get -y --allow-unauthenticated install autoconf automake libtool curl make g++ unzip )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt autoremove )'
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S apt autoremove )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt autoclean )'
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S apt autoclean )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	os.system('(cd '+deps_dir+'/protobuf; git submodule update --init --recursive )');
-	os.system('(cd '+deps_dir+'/protobuf; ./autogen.sh )');
-	os.system('(cd '+deps_dir+'/protobuf; ./configure )');
-	os.system('(cd '+deps_dir+'/protobuf; make -j16 )');
-	os.system('(cd '+deps_dir+'/protobuf; make check -j16 )');
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S make install )'
+	os.system('(cd '+deps_dir+'/protobuf-3.5.2; git submodule update --init --recursive )');
+	os.system('(cd '+deps_dir+'/protobuf-3.5.2; ./autogen.sh )');
+	os.system('(cd '+deps_dir+'/protobuf-3.5.2; ./configure )');
+	os.system('(cd '+deps_dir+'/protobuf-3.5.2; make -j16 )');
+	os.system('(cd '+deps_dir+'/protobuf-3.5.2; make check -j16 )');
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S make install )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S ldconfig )'
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S ldconfig )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S apt-get -y --allow-unauthenticated install python-pip )'
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S apt-get -y --allow-unauthenticated install python-pip )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install protobuf )'
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S yes | pip install protobuf )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install pytz )'
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S yes | pip install pytz )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
-	cmd='(cd '+deps_dir+'/protobuf; sudo -S yes | pip install numpy )'
+	cmd='(cd '+deps_dir+'/protobuf-3.5.2; sudo -S yes | pip install numpy )'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
 	cmd='sudo -S apt-get -y --allow-unauthenticated install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev'
 	call('echo {} | {}'.format(sudoPassword, cmd), shell=True)
