@@ -38,7 +38,7 @@ else:
 	setupDir_deps = setupDir+'deps'
 
 if MIOpenVersion == '':
-	MIOpenVersion = '1.3.0'
+	MIOpenVersion = '1.5.0'
 
 from subprocess import call
 deps_dir = os.path.expanduser(setupDir_deps)
