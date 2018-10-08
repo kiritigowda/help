@@ -1627,8 +1627,6 @@ print("</table>");
 
 
 # Compare result summary
-print("\t<!-- Compare ResultSummary -->");
-print("<A NAME=\"table5\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>Compare Results Summary</em></font></h1></A>");
 SummaryFileName = '';
 FolderName = os.path.expanduser("~/.adatCompare")
 if not os.path.exists(FolderName):
@@ -1640,8 +1638,6 @@ if not os.path.exists(ModelFolderName):
 
 SummaryFileName = FolderName; SummaryFileName += "/modelRunHistoryList.csv";
 
-sys.stdout = orig_stdout
-print "results saved in backup drive"
 
 # write summary details into csv
 if os.path.exists(SummaryFileName):
@@ -1652,6 +1648,8 @@ else:
     print("Model Name, Image DataBase, Number Of Images, Match, MisMatch");
     print("%s, %s, %d, %d, %d"%(modelName,dataFolder,numElements,passCount,totalMismatch));
 
+sys.stdout.close()
+
 # write into HTML
 savedResultElements = 0;
 with open(SummaryFileName) as savedResultFile:
@@ -1659,13 +1657,17 @@ with open(SummaryFileName) as savedResultFile:
     next(savedResultFileCSV, None) # skip header
     savedResultDataBase = [r for r in savedResultFileCSV]
     savedResultElements = len(savedResultDataBase)
+sys.stdout = orig_stdout
+print "results saved in backup drive"
 
 sys.stdout = open(toolKit_dir+'/index.html','a')
-
+print("\t<!-- Compare ResultSummary -->");
+print("<A NAME=\"table5\"><h1 align=\"center\"><font color=\"DodgerBlue\" size=\"6\"><br><br><br><em>Compare Results Summary</em></font></h1></A>");
 print("\t<!-- Compare Graph Script -->");
 print("\t<script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>");
 print("\t<script type=\"text/javascript\">");
 print("\t");
+
 lineNumber = 0;
 while lineNumber < savedResultElements:
     print("\tgoogle.charts.load('current', {'packages':['bar']});");
@@ -1683,7 +1685,6 @@ while lineNumber < savedResultElements:
     lineNumber += 1;
 
 print("\t");
-
 # draw combined graph
 print("\tgoogle.charts.load('current', {'packages':['bar']});");
 print("\tgoogle.charts.setOnLoadCallback(drawChart_master);");
