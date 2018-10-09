@@ -29,15 +29,15 @@ This tool allows you to do object detection for images. It is a command line uti
 
 2.	IOU Mismatch: The bounding box was present in both the files and their labels matched, but their parameters were beyond acceptable range.
 
-![picture alt](img/Result_2.png "Match")
+![picture alt](img/Result_2.png "Misatch")
 
 3.	Label Mismatch: The bounding box was present in both the files and their parameters were within acceptable range, but their labels did not match.
 
-![picture alt](img/Result_3.png "Match")
+![picture alt](img/Result_3.png "Misatch")
 
 4.	Unknown: The ground truth for the bounding box was not available.
 
-![picture alt](img/Result_4.png "Match")
+![picture alt](img/Result_4.png "Unknown")
 
 5.	Not Found: The bounding box was not detected by the tool but is present in Ground Truth.
 ## Usage:
