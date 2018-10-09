@@ -6,7 +6,7 @@ This tool allows you to do object detection for images. It is a command line uti
 3.	Width and height of the bounding box (w,h)
 
 ## Details:
-
+![picture alt](img/details.png "Block Diagram")
 ### 1.	Ground Truth Directory:
 •	The ground truth directory has one file (.ann: which is a text file) for each image. 
 •	Each image contains details on all the bounding boxes for that image.
@@ -25,22 +25,20 @@ This tool allows you to do object detection for images. It is a command line uti
 •	The results could be one of the following:
 1.	Match: The bounding box was present in both the files and their parameters were within acceptable range.
 
+![picture alt](img/Result_1.png "Match")
 
-(Labels for both images match and IOU within acceptable range)
 2.	IOU Mismatch: The bounding box was present in both the files and their labels matched, but their parameters were beyond acceptable range.
 
+![picture alt](img/Result_2.png "Match")
 
-
-(Labels for both images match and IOU not within acceptable range)
 3.	Label Mismatch: The bounding box was present in both the files and their parameters were within acceptable range, but their labels did not match.
 
+![picture alt](img/Result_3.png "Match")
 
-
-(IOU within acceptable range but their labels did not match)
 4.	Unknown: The ground truth for the bounding box was not available.
 
+![picture alt](img/Result_4.png "Match")
 
-(Bounding box found by tool but not in Ground Truth)
 5.	Not Found: The bounding box was not detected by the tool but is present in Ground Truth.
 ## Usage:
 The tool was written in C++
