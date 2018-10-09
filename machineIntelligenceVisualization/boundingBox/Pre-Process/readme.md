@@ -6,7 +6,7 @@ This tool allows you to do object detection for images. It is a command line uti
 3.	Width and height of the bounding box (w,h)
 
 ## Details:
-![picture alt](img/details.png "Block Diagram")
+![picture alt](help/machineIntelligenceVisualization/boundingBox/img/details.png "Block Diagram")
 ### 1.	Ground Truth Directory:
 •	The ground truth directory has one file (.ann: which is a text file) for each image. 
 •	Each image contains details on all the bounding boxes for that image.
