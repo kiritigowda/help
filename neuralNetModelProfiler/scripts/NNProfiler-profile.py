@@ -217,3 +217,48 @@ if profileMode == 6 or profileMode == 3 or profileMode == 5:
 	sys.stdout = orig_stdout
 	runAwk_md = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("|%-16s|%3d|%8.3f|%8.3f\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_fuse_output.log | tee -a '''+develop_dir+'''/caffe2nnir2openvx_fuse_profile.md'''
 	os.system(runAwk_md);
+	
+# run caffe2nnir2openvx with fuse flow
+if profileMode == 9:
+	modelCompilerScripts_dir = os.path.expanduser(buildDir_AMDOVX+'/amdovx-modules/utils/model_compiler/python')
+	for i in range(len(caffeModelConfig)):
+		modelName, channel, height, width = caffeModelConfig[i]
+		print "\n caffe2nnir2openvx --",modelName,"\n"
+		if(modelName == 'xyznet' or modelName == 'xyznet_18-04'):
+			x = 1
+			print "\n",modelName," - Batch size ", x 
+			x = str(x)
+			os.system('(cd '+develop_dir+'/'+modelName+'; mkdir nnir_fuse_build_'+x+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/caffe2nnir.py ../'+modelName+'/'+modelName+'.caffemodel . --input-dims '+x+','+str(channel)+','+str(height)+','+str(width)+')');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir-update.py -–convert-fp16 1 . .)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir2openvx.py . .)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; cmake .; make)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_fuse_output.log)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; MIOPEN_FIND_ENFORCE='+str(miopenFind)+' ./anntest weights.bin | tee -a ../../nnir_fuse_output.log)');
+		else:
+			for x in range(profileLevel):
+				x = 2**x
+				print "\n",modelName," - Batch size ", x 
+				x = str(x)
+				os.system('(cd '+develop_dir+'/'+modelName+'; mkdir nnir_fuse_build_'+x+')');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/caffe2nnir.py ../'+modelName+'/'+modelName+'.caffemodel . --input-dims '+x+','+str(channel)+','+str(height)+','+str(width)+')');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir-update.py –-convert-fp16 1 . .)');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir2openvx.py . .)');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; cmake .; make)');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_fuse_output.log)');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; MIOPEN_FIND_ENFORCE='+str(miopenFind)+' ./anntest weights.bin | tee -a ../../nnir_fuse_output.log)');
+
+	runAwk_csv = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s,%3d,%8.3f ms,%8.3f ms\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_fuse_output.log > '''+develop_dir+'''/caffe2nnir2openvx_fp16_profile.csv'''
+	os.system(runAwk_csv);
+	runAwk_txt = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("%-16s %3d %8.3f ms %8.3f ms\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_fuse_output.log > '''+develop_dir+'''/caffe2nnir2openvx_fp16_profile.txt'''
+	os.system(runAwk_txt);
+
+	orig_stdout = sys.stdout
+	sys.stdout = open(develop_dir+'/caffe2nnir2openvx_fuse_profile.md','a')
+	echo_1 = '| Model Name | Batch Size | Time/Batch (ms) | Time/Image (ms) |'
+	print(echo_1)
+	echo_2 = '|------------|------------|-----------------|-----------------|'
+	print(echo_2)
+	sys.stdout = orig_stdout
+	runAwk_md = r'''awk 'BEGIN { net = "xxx"; bsize = 1; } / - Batch size/ { net = $1; bsize = $5; } /average over 100 iterations/ { printf("|%-16s|%3d|%8.3f|%8.3f\n", net, bsize, $4, $4/bsize); }' '''+develop_dir+'''/nnir_fuse_output.log | tee -a '''+develop_dir+'''/caffe2nnir2openvx_fp16_profile.md'''
+	os.system(runAwk_md);
