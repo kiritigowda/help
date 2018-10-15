@@ -230,7 +230,7 @@ if profileMode == 9:
 			x = str(x)
 			os.system('(cd '+develop_dir+'/'+modelName+'; mkdir nnir_fuse_build_'+x+')');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/caffe2nnir.py ../'+modelName+'/'+modelName+'.caffemodel . --input-dims '+x+','+str(channel)+','+str(height)+','+str(width)+')');
-			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir-update.py -–convert-fp16 1 . .)');
+			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir-update.py --convert-fp16 1 . .)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir2openvx.py . .)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; cmake .; make)');
 			os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_fuse_output.log)');
@@ -242,7 +242,7 @@ if profileMode == 9:
 				x = str(x)
 				os.system('(cd '+develop_dir+'/'+modelName+'; mkdir nnir_fuse_build_'+x+')');
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/caffe2nnir.py ../'+modelName+'/'+modelName+'.caffemodel . --input-dims '+x+','+str(channel)+','+str(height)+','+str(width)+')');
-				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir-update.py –-convert-fp16 1 . .)');
+				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir-update.py --convert-fp16 1 . .)');
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; python '+modelCompilerScripts_dir+'/nnir2openvx.py . .)');
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; cmake .; make)');
 				os.system('(cd '+develop_dir+'/'+modelName+'/nnir_fuse_build_'+x+'; echo '+modelName+' - Batch size '+x+'  | tee -a ../../nnir_fuse_output.log)');
