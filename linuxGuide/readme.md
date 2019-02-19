@@ -25,3 +25,8 @@
 * 2>&1 | tee output.log - save error & output stream
 
 * sudo chmod -R a+wrX folder - write permission
+
+# Git Commands
+
+* Prune - `git remote prune origin`
+* Delete Branch -  `git branch -D branch_name`
