@@ -7,7 +7,7 @@ embedded systems (hardware, software, and architectures) to new levels; thereby,
 
 * **Fused Single Kernel Neural Network Model** - A pre-trained neural network model in ONNX or NNEF format needs to ingested by a tool to create a single kernel node in OpenVX using OpenCL (MIVisionX & MIOpen) which handles all optimizations within the kernel.
 
-* **Cascading Models** - train or use pre-trained models to develop an application which runs a lightweight model, which is optimized to use less power and resources, to detect some object or scene to trigger running of a more complex model, which does detection of a scene or segmentation, to complete any given task.
+* **Cascading Models** - Train or use pre-trained models to develop an application which runs a lightweight model, which is optimized to use less power and resources, to detect some object or scene to trigger running of a more complex model, which does detection of a scene or segmentation, to complete any given task.
 
 * **Image Style Transfers** - Use neural networks or traditional computer vision algorithms to create image styles library for different effects to a given image. This image style transfer kernels can be a module in MIVisionX which can be used in pre or post-processing.
 
@@ -15,8 +15,8 @@ embedded systems (hardware, software, and architectures) to new levels; thereby,
 
 * **Neural Network Plugin for Flight Simulation** - Create a model to learn flying an airplane using flight simulators
 
-* **Neural Network for DNA Analysis** - analysis for DNA for medical research using Neural Networks
+* **Neural Network for DNA Analysis** - Analysis for DNA for medical research using Neural Networks
 
 * **Security Cameras** - Use pre-trained or create new models to be used for automated surveillance in airports, malls etc
 
-* **E-mail scanning** - read emails to scan for spam using neural networks.
+* **E-mail scanning** - Read emails to scan for spam using neural networks.
