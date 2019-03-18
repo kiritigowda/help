@@ -36,7 +36,7 @@ Development of a lightweight model as in 1, for a second application. Start the 
 Profile the cascaded common model using AMD hardware, and make necessary adjustments for maximum saving in resources. Update ADAT as required.
 
 ### Quarter 4
-Thorough experimental evaluation of proposed models. A study on applications other than vision/image that utilizes a simple lightweight model that feeds a common complex model that also handles the applications in 1 and 2. Comphrehensive ADAT requests for the application.
+Thorough experimental evaluation of proposed models. A study on applications other than vision/image that utilizes a simple lightweight model that feeds a common complex model that also handles the applications in 1 and 2. Comphrehensive ADAT results for the application.
 
 ## Budget:
 $50K for a year.
