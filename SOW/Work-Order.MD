@@ -11,9 +11,9 @@ The NSF Center for Embedded Systems (CES) is a research collaboration between ac
 
 **Duration:** 1 year
 
-Develop an application which runs a lightweight model, which is optimized to use less power and resources, to detect some object or scene to trigger running of a more complex model, which does detection of a scene or segmentation, to complete a given task.
+Develop an application which runs a lightweight model, which is optimized to use less power and resources, to detect some object or scene to trigger running of a more complex model, which does detection of a scene, bounding box, or segmentation, to complete a given task.
 
-Considering this multi-layer cascading neural net model application, where the application relies on multiple neural network models. The first layer model, which is a small lightweight model, detects high-level hierarchy of object class and calls larger complex model to fine grain to detect the object, the complex model may be shared for multiple applications in order to accommodate limited resources.
+Considering this multi-layer cascading neural net model application, where the application relies on multiple neural network models. The first layer model, which is a small lightweight model, detects high-level hierarchy of object class and calls larger complex model to fine grain detect the object, the complex model may be shared for multiple applications in order to accommodate limited resources.
 
 Use AMD hierarchical analysis and AMD experimental model scoring methodology in the development of models. A simple example application is detecting different breeds of dogs and cats, here the lightweight model detects if the animal in the image frame is a dog, it calls the complex model to detect the breed of the dog, else if the animal detected by the lightweight model is a cat, it calls the complex model to detect the breed of the cat.
 
