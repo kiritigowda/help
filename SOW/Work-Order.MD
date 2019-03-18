@@ -1,12 +1,15 @@
-AMD - NSF I/UCRC Consortium - Work Order
-NSF I/UCRC Consortium for Embedded Systems at Southern Illinois University Carbondale
+# AMD - NSF I/UCRC Consortium - Work Order
+
+## NSF I/UCRC Consortium for Embedded Systems at Southern Illinois University Carbondale
 The NSF Center for Embedded Systems (CES) is a research collaboration between academia (Southern Illinois University Carbondale and Arizona State University), Industry (leading embedded systems companies throughout the world) and government agencies (the National Science Foundation and other agencies). Its purpose is to advance in the field of embedded systems (hardware, software, and architectures) to new levels; thereby, sharing resulting advancements and commercializing applications in automotive, aerospace and micro-electronics to advance commerce.
 
-Contact: Spyros Tragoudas, Professor & Department Chair, Electrical & Computer Engineering Department, SIUC
+**Contact:** Spyros Tragoudas, Professor & Department Chair, Electrical & Computer Engineering Department, SIUC
 
-AMD project summary
-Cascading models with a fused single kernel model as a lightweight model for each application
-Duration: 1 year
+## AMD project summary
+
+### Cascading Neural Network Models Application with a fused single kernel neural network model
+
+**Duration:** 1 year
 
 Develop an application which runs a lightweight model, which is optimized to use less power and resources, to detect some object or scene to trigger running of a more complex model, which does detection of a scene or segmentation, to complete a given task.
 
@@ -20,21 +23,21 @@ The smaller decision network is to be created as a fused single kernel network t
 
 All the results and studies need to be jointly published with AMD.
 
-Proposed Phases
-Quarter 1
+## Proposed Phases
+### Quarter 1
 Create a fused single kernel for the lightweight model in MIVisionX. Optimized for AMD hardware. The lightweight model will be designed to delegate certain tasks to a more complex model. Training this lightweight model can be done using transfer learning or trained using the ImageNet database.
 
-Quarter 2
+### Quarter 2
 Development of a lightweight model as in 1, for a second application. Start the development of the common larger model for the two applications.
 
-Quarter 3
+### Quarter 3
 Profile the cascaded common model using AMD hardware, and make necessary adjustments for maximum saving in resources.
 
-Quarter 4
+### Quarter 4
 Thorough experimental evaluation of proposed models. A study on applications other than vision/image that utilizes a simple lightweight model that feeds a common complex model that also handles the applications in 1 and 2.
 
-Budget:
+## Budget:
 $50K for a year.
 
-This will be an annual membership of AMD to the NSF IUCRC for Embedded Systems (CES). Matched by the NSF.
+**This will be an annual membership of AMD to the NSF IUCRC for Embedded Systems (CES). Matched by the NSF.**
 
