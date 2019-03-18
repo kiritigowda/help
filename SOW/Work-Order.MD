@@ -21,7 +21,7 @@ The simple model should trigger the larger model when it detects some defined ob
 
 The smaller decision network is to be created as a fused single kernel network that handles all the optimizations within the kernel using existing AMD MIVisionX Libraries. AMD will provide access to training hardware on the cloud.
 
-ADAT - AMD Data Analysis Toolkit, which is a part of MIVisionX can be used to verify models and make changes required to make the application robust.
+ADAT - AMD Data Analysis Toolkit, which is a part of MIVisionX can be used to verify models, ADAT could be updated to make changes required for application robustness.
 
 All the results and studies need to be jointly published with AMD.
 
