@@ -14,7 +14,7 @@ Develop an application which runs a lightweight model, which is optimized to use
 
 Considering this multi-layer cascading neural net model application, where the application relies on multiple neural network models. The first layer model, which is a small lightweight model, detects high-level hierarchy of object class and calls larger complex model to fine grain detect the object, the complex model may be shared across multiple applications in order to accommodate limited resources.
 
-Use AMD hierarchical analysis* and AMD experimental model scoring methodology* in the development of models. A simple example application is detecting different breeds of dogs and cats, here the lightweight model detects if the animal in the image frame is a dog, it calls the complex model to detect the breed of the dog, else if the animal detected by the lightweight model is a cat, it calls the complex model to detect the breed of the cat.
+Use AMD hierarchical analysis`*` and AMD experimental model scoring methodology`*` in the development of models. A simple example application is detecting different breeds of dogs and cats, here the lightweight model detects if the animal in the image frame is a dog, it calls the complex model to detect the breed of the dog, else if the animal detected by the lightweight model is a cat, it calls the complex model to detect the breed of the cat.
 
 The simple model should trigger the larger model when it detects some defined object or when the desired output is more complex than its specification. The assumption is that the common complex models will not be triggered on every frame in the application, hence multiple applications can run in real-time. A scheduler will handle collisions among different applications at the expense of a small increase in latency.
 
@@ -43,4 +43,4 @@ $50K for a year.
 
 **This will be an annual membership of AMD to the NSF IUCRC for Embedded Systems (CES). Matched by the NSF.**
 
-* **refer MIVisionX documentation for more details**
+`*` **refer MIVisionX documentation for more details**
