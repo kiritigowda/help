@@ -10,7 +10,7 @@ The NSF Center for Embedded Systems (CES) is a research collaboration between ac
 ### Cascading Neural Network Models Application
 **Duration:** 1 year
 
-Develop an application which runs a lightweight model, which is optimized to use less power and resources, to detect some object or scene to trigger running of a more complex model, which does fine-grain object detection, to complete a given task.
+Develop an application which runs a lightweight model, which is optimized to use less power and resources, to detect some object or scene to trigger running of a more complex model, which does fine-grain object detection, to complete a given task. The underlying assumption of the cascading neural network is to improve the probability of detection by using fine tuned models created for specific detections, this needs to be verified with the application.
 
 Considering this multi-layer cascading neural net model application, where the application relies on multiple neural network models. The first layer model, which is a small lightweight model, detects high-level hierarchy of object class and calls larger complex model to fine grain to detect the object, the complex model may be shared across multiple applications in order to accommodate limited resources.
 
