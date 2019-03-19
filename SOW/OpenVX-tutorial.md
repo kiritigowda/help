@@ -8,9 +8,9 @@
 
 #### Agenda
 
-* OpenVX Introduction - OpenVX Chair - 15 min
-* MIVisionX Neural Net Classification Application - AMD (Mike, Rajy & Kiriti) - 2 hrs
-* OpenVX Visual Graph representation - Axis - 30 min
+* OpenVX Introduction - OpenVX Chair (Frank Brill) - 15 min
+* MIVisionX Neural Net Classification Application - AMD (Mike, Rajy & Kiriti) - 1.5 hrs
+* An efficient workflow for portable computer vision algorithms using OpenVX - Axis (Niclas & Mikael) - 30 min
 
 ### OpenVX Introduction
 **Speaker:** Frank Brill - OpenVX Chair
@@ -27,7 +27,17 @@ Hands-on application creation using AMDs Open Source implementation of OpenVX, O
 
 * Convert Pre-trained models in NNEF/ONNX to OpenVX graph
 * Adding pre and post-processing nodes to the graph
-* Running the application on an image or pre-recorded video or live video 
+* Running the application on an image or pre-recorded video or live video
+* Beyond classification
 
-### OpenVX Visual Graph representation
-**Speaker:** AXIS
+
+### An efficient workflow for portable computer vision algorithms using OpenVX
+**Speaker:** Niclas & Mikael, AXIS
+* Graphical design of algorithms
+  * Going beyond the simple C-API
+  * Draw the algorithm and generate the code
+
+* Chasing portable performance
+  * How portable did it get?
+  * How long did it take to develop?
+  * Performance comparisons of ported code.
