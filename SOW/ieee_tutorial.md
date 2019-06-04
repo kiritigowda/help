@@ -33,7 +33,7 @@ The tutorial will give the attendees hands-on experience with neural nets and he
 * 2:30 pm - Register and network
 * 3:00 pm - Tutorial starts
   * Machine Learning & Industry Trends: Ajit Mathews - Corporate Vice President,  AMD 
-  * OpenVX & Machine learning with MIVisionX: Mike Schmit - Director Software Engineering, AMD
+  * OpenVX & Machine learning with MIVisionX: Mike Schmit - Director of Software Engineering, AMD
   * OpenVX Hands-on Inference: Kiriti & Rajy, AMD
 * 5:30 PM - Wrap up and adjourn
 
