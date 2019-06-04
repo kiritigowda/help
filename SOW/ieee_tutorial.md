@@ -14,6 +14,8 @@ graph efficiently on any target hardware.
 In this tutorial, we will also learn about AMD MIVisionX which delivers open source implementation of
 OpenVX and OpenVX Extensions along with Neural Net Model Compiler & Optimizer.
 
+<p align="center"><img width="40%" src="https://github.com/GPUOpen-ProfessionalCompute-Libraries/MIVisionX/raw/master/docs/images/MIVisionX.png" /></p>
+
 [MIVisionX](https://gpuopen-professionalcompute-libraries.github.io/MIVisionX/) toolkit is a set of comprehensive computer vision and machine intelligence libraries,
 utilities, and applications bundled into a single toolkit. AMD MIVisionX delivers highly optimized open source
 implementation of the Khronos OpenVX™ and OpenVX™ Extensions along with Convolution Neural Net Model Compiler
