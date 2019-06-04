@@ -27,7 +27,9 @@ The tutorial will give the attendees hands-on experience with neural nets and he
 
 ## Agenda
 **When:** Friday 14th June 2019
+
 **Where:** AMD 2485 Augustine Dr, Santa Clara, CA 95054
+
 **Start Time:** 2:30 PM
 
 * 2:30 pm - Register and network
