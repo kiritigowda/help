@@ -11,6 +11,8 @@ Do you need to run a different operating system entirely? You can “swap out”
 a different one within a Singularity container. As the user, you are in control of the extent to which your container 
 interacts with its host. There can be seamless integration, or little to no communication at all.
 
+Research clusters do not allow Dockers and virtual machines because it introduces huge security issues.
+
 ### Install Dependencies
 
 #### Install base deps with `apt-get` or `yum`
