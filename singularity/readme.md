@@ -1,9 +1,12 @@
 # Singularity
 
+Singularity is a free, cross-platform and open-source computer program that performs operating-system-level virtualization also known as containerization. One of the main uses of Singularity is to bring containers and reproducibility to scientific computing and the high-performance computing (HPC) world. Using Singularity containers, developers can work in reproducible environments of their choosing and design, and these complete environments can easily be copied and executed on other platforms.
+
 Singularity enables users to have full control of their environment. Singularity containers can be used to package 
 entire scientific workflows, software and libraries, and even data. This means that you don’t have to ask your 
-cluster admin to install anything for you - you can put it in a Singularity container and run. 
-Did you already invest in Docker? The Singularity software can import your Docker images without having 
+cluster admin to install anything for you - you can put it in a Singularity container and run.
+
+Did you already invest in Docker? The Singularity software can import Docker images without having 
 Docker installed or being a superuser. Need to share your code? Put it in a Singularity container and 
 your collaborator won’t have to go through the pain of installing missing dependencies. 
 
