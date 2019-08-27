@@ -56,5 +56,5 @@ cd && \
     cd singularity && \
     ./mconfig && \
     cd builddir && make && \
-    sudo make install && rm -rf ../../singularity-3.3.0.tar.gz
+    sudo make install && rm -rf ../../singularity-3.3.0.tar.gz && cd
 ```
