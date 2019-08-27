@@ -63,3 +63,30 @@ cd && \
     cd builddir && make && \
     sudo make install && rm -rf ../../singularity-3.3.0.tar.gz && cd
 ```
+## Singularity WorkFlow
+
+
+### Build
+* Build from docker
+````
+sudo singularity build ubuntu-18.04.simg docker://kiritigowda/ubuntu-18.04:latest
+````
+* Build from library
+````
+sudo singularity build ubuntu.simg library://kiritigowda/default/ubuntu-18.04:latest
+````
+### Secure Images
+
+* Authenticate
+````
+sudo singularity sign ubuntu-18.04.simg
+````
+* Verify
+````
+sudo singularity verify ubuntu-18.04.simg
+````
+### Shell 
+
+````
+sudo singularity shell ubuntu-18.04.simg
+````
