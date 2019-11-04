@@ -90,3 +90,5 @@ sudo singularity verify ubuntu-18.04.simg
 ````
 sudo singularity shell ubuntu-18.04.simg
 ````
+* export QT_X11_NO_MITSHM=1
+* export LC_ALL=C; unset LANGUAGE
