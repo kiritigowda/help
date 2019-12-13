@@ -24,7 +24,7 @@ MIVisionX roughly had around 5 - 15 unique clones a week
 
 ### December
 
-<p align="center"><img width="80%" src="MIVisionX-Dec-2019.PNG" /></p>
+<p align="center"><img width="80%" src="MIVisionX-Dec-2019.png" /></p>
 
 ## Docker Stats
 
