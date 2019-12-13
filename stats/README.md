@@ -22,6 +22,10 @@ MIVisionX roughly had around 5 - 15 unique clones a week
 <p align="center"><img width="80%" src="MIVision-biweekly-stats-04-02.PNG" /></p>
 <p align="center"><img width="80%" src="MIVision-biweekly-stats-04-16.PNG" /></p>
 
+### December
+
+<p align="center"><img width="80%" src="MIVisionX-Dec-2019.PNG" /></p>
+
 ## Docker Stats
 
 MIVisionX dockers were released on Dec 20th, 2018
