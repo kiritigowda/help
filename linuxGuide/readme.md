@@ -26,6 +26,10 @@
 
 * sudo chmod -R a+wrX folder - write permission
 
+* add text in the begining of file
+```
+sed -i -f - /path/to/*.customfile < <(sed 's/^/1i/' /path/to/beginning.txt)
+```
 # Git Commands
 
 * Prune - `git remote prune origin`
