@@ -30,6 +30,10 @@
 ```
 sed -i -f - /path/to/*.customfile < <(sed 's/^/1i/' /path/to/beginning.txt)
 ```
+* Find and replace
+```
+find ./ -type f -exec sed -i -e 's/2019 Advanced/2019 - 2020 Advanced/g' {} \;
+```
 # Git Commands
 
 * Prune - `git remote prune origin`
