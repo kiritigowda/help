@@ -34,6 +34,11 @@ sed -i -f - /path/to/*.customfile < <(sed 's/^/1i/' /path/to/beginning.txt)
 ```
 find ./ -type f -exec sed -i -e 's/2019 Advanced/2019 - 2020 Advanced/g' {} \;
 ```
+* Remove multiple empty lines in files
+```
+sed -i -e '/^$/N;/^\n$/D' amd_openvx_extensions/amd_rpp/source/*.cpp
+```
+
 # Git Commands
 
 * Prune - `git remote prune origin`
