@@ -181,7 +181,8 @@ As indicated in Step 7, you can enter the kubeadm join command on each worker no
 Switch to the worker01 system and enter the command you noted from Step 7:
 
 ```
-kubeadm join --discovery-token 4j9b95.1cdx9tadejremcm9 --discovery-token-ca-cert-hash sha256:6c136ea5116ea3cdcbcdc9e7fa0eb941f16ed85ca5e67c73b2d3f9b1e56fc2ea
+kubeadm join 10.217.70.62:6443 --token 4j9b95.1cdx9tadejremcm9 \
+    --discovery-token-ca-cert-hash sha256:6c136ea5116ea3cdcbcdc9e7fa0eb941f16ed85ca5e67c73b2d3f9b1e56fc2ea 
 ```
 
 Replace the alphanumeric codes with those from your master server. Repeat for each worker node on the cluster. Wait a few minutes; then you can check the status of the nodes.
