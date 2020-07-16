@@ -78,9 +78,8 @@ sudo apt-get install curl
 Kubernetes is not included in the default repositories. To add them, enter the following:
 ```
 sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
-Repeat on each server node.
 ```
-
+Repeat on each server node.
 
 **Step 5:** Kubernetes Installation Tools
 
