@@ -213,3 +213,10 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 ```
 
 **Note:** The UI can only be accessed from the machine where the command is executed. See kubectl proxy --help for more options.
+
+## Important
+**NOTE:** If you have are having problems with master and worker nodes reset the Kubernetes using the following commands
+
+```
+sudo kubeadm reset
+```
