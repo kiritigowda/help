@@ -197,19 +197,17 @@ The system should display the worker nodes that you joined to the cluster.
 **Step 11:** The Dashboard UI is not deployed by default. To deploy it, run the following command:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.3/aio/deploy/recommended.yaml
 ```
 
 **Step 12:** To create a sample user account follow the instructions [here](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md#creating-sample-user)
 
 **Step 13:** You can access Dashboard using the kubectl command-line tool by running the following command:
-
 ```
 kubectl proxy
 ```
 
 **Step 14:** Kubectl will make Dashboard available at 
-
 ```
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 ```
