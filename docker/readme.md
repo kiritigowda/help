@@ -40,6 +40,10 @@ sudo docker images
 sudo docker rm $(sudo docker ps -aq)
 ````
 
+```
+sudo docker image prune --all --filter "until=1500h"
+```
+
 4. Run Camera from docker
 
 ````
