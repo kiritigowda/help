@@ -38,6 +38,10 @@ find ./ -type f -exec sed -i -e 's/2019 Advanced/2019 - 2020 Advanced/g' {} \;
 ```
 sed -i -e '/^$/N;/^\n$/D' amd_openvx_extensions/amd_rpp/source/*.cpp
 ```
+* GPU Resource Track
+```
+watch -t -n 10 "(date '+AMD GPU Track-Time:%H:%M:%S'; rocm-smi; ps aux | grep -s "ROCm System Management" | wc -l) | tee -a GPUResourceTrackfile"
+```
 
 # Git Commands
 
